@@ -1,37 +1,43 @@
 .login-page {
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  background-color: var(--bg-dark);
+}
+
+.login-left {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--bg-dark);
-  background-image: url('/assets/login_bg.jpg');
+  padding: var(--spacing-xl);
+  background-color: var(--bg-panel);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+  z-index: 10;
+}
+
+.login-right {
+  flex: 1;
+  background-image: url('/assets/login_hero.jpg');
   background-size: cover;
   background-position: center;
-  position: relative;
-  padding: var(--spacing-xl);
 }
 
-.back-link {
-  position: absolute;
-  top: var(--spacing-xl);
-  left: var(--spacing-xl);
-  color: var(--text-muted);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.back-link:hover {
-  color: var(--text-main);
+@media (max-width: 768px) {
+  .login-right {
+    display: none;
+  }
+  .login-left {
+    max-width: 100%;
+  }
 }
 
 .login-card {
-  background-color: var(--bg-panel);
   padding: 40px;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .login-title {
