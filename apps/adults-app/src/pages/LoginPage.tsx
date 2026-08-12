@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { useNavigate } from 'react-router-dom';
+import loginHero from '../assets/login_hero.jpg';
 import './LoginPage.css';
 
 export const LoginPage: React.FC = () => {
@@ -96,7 +97,12 @@ export const LoginPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="login-right"></div>
+      <div className="login-right" style={{ backgroundImage: `url(${loginHero})` }}>
+        <div className="hero-overlay">
+          <h1>Experience Books, <span>Live.</span></h1>
+          <p>Join your favorite influencers as they read, react, and discuss novels in real-time with the community. Stream your reading journey and connect with fellow book lovers.</p>
+        </div>
+      </div>
     </div>
   );
 };
