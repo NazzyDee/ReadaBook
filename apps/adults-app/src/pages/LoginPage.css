@@ -1,0 +1,115 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-dark);
+  background-image: url('/assets/login_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  padding: var(--spacing-xl);
+}
+
+.back-link {
+  position: absolute;
+  top: var(--spacing-xl);
+  left: var(--spacing-xl);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--text-main);
+}
+
+.login-card {
+  background-color: var(--bg-panel);
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.login-title {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.login-title span {
+  color: var(--accent-primary);
+}
+
+.login-subtitle {
+  text-align: center;
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.form-group input {
+  background-color: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 12px 14px;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.login-footer {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.text-link {
+  color: var(--accent-secondary);
+  font-weight: 600;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+.login-error {
+  background-color: rgba(255, 59, 59, 0.1);
+  color: var(--accent-danger);
+  padding: var(--spacing-md);
+  border-radius: 6px;
+  margin-bottom: var(--spacing-lg);
+  font-size: 14px;
+  border: 1px solid rgba(255, 59, 59, 0.3);
+}
