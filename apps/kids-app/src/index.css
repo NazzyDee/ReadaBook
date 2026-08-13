@@ -1,0 +1,107 @@
+:root {
+  /* Playful Bright/Light Pastel Colors for Kids App */
+  --bg-dark: #f0f7ff; /* Very soft light blue sky */
+  --bg-panel: #ffffff; /* Crisp white for boxes */
+  --bg-hover: #e0f0ff; /* Light pastel blue hover */
+  
+  --text-main: #2d3748; /* Dark slate for high legibility */
+  --text-muted: #718096; /* Soft gray */
+  
+  --accent-primary: #ff477e; /* Fun Coral Pink */
+  --accent-secondary: #00b4d8; /* Bright Turquoise */
+  --accent-tertiary: #ffb703; /* Cheerful Yellow */
+  --accent-success: #2ec4b6; /* Mint Green */
+  --accent-danger: #e63946; /* Soft Red */
+
+  --border-color: rgba(0, 180, 216, 0.15);
+  --border-radius: 20px; /* Big rounded friendly corners */
+
+  /* Typography */
+  --font-heading: 'Outfit', system-ui, sans-serif;
+  --font-body: 'Outfit', system-ui, sans-serif; /* Keep kids font consistent and clean */
+
+  /* Spacing */
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  margin: 0;
+  font-weight: 800; /* Extra bold and bubbly */
+  color: #1a202c;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  outline: none;
+}
+
+/* Rounded friendly scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 10px;
+  border: 2px solid var(--bg-dark);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* Playful utility classes */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 10px 25px rgba(0, 180, 216, 0.08);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-primary) 0%, #e0285d 100%);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px; /* Fully rounded pill buttons */
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 6px 16px rgba(255, 71, 126, 0.3);
+  border: none;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05); /* Bounce slightly */
+  box-shadow: 0 8px 20px rgba(255, 71, 126, 0.45);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
