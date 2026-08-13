@@ -4,7 +4,7 @@ import { useAuth } from '../lib/AuthContext';
 import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, limit, doc, where, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { books, type Book } from '../lib/booksData';
-import { Users, Send, AlertCircle, Radio, LogOut, Heart } from 'lucide-react';
+import { Users, Send, AlertCircle, Radio, LogOut, Heart, Pin } from 'lucide-react';
 import '../App.css';
 
 interface ChatMessage {
@@ -12,6 +12,7 @@ interface ChatMessage {
   text: string;
   username: string;
   createdAt: any;
+  type?: 'announcement' | 'normal';
 }
 
 interface StreamData {
@@ -23,7 +24,10 @@ interface StreamData {
   currentPage: number;
   isLive: boolean;
   viewerCount: number;
+  emoteOnly?: boolean;
+  pinnedMessage?: string | null;
 }
+
 
 export const StreamPage: React.FC = () => {
   const { streamerId } = useParams<{ streamerId: string }>();
@@ -248,6 +252,10 @@ export const StreamPage: React.FC = () => {
     e.preventDefault();
     if (!newMessage.trim() || !user || !streamerId) return;
 
+    if (stream?.emoteOnly) {
+      return;
+    }
+
     const username = user.email ? user.email.split('@')[0] : 'Anonymous';
     const msgText = newMessage;
     setNewMessage('');
@@ -263,6 +271,23 @@ export const StreamPage: React.FC = () => {
       console.error("Error sending message: ", err);
     }
   };
+
+  const handleSendEmoji = async (emoji: string) => {
+    if (!user || !streamerId) return;
+    const username = user.email ? user.email.split('@')[0] : 'Anonymous';
+
+    try {
+      await addDoc(collection(db, 'messages'), {
+        text: emoji,
+        username,
+        streamId: streamerId,
+        createdAt: serverTimestamp()
+      });
+    } catch (err) {
+      console.error("Error sending emoji: ", err);
+    }
+  };
+
 
   if (loading) {
     return (
@@ -380,10 +405,18 @@ export const StreamPage: React.FC = () => {
               <span>{stream.viewerCount}</span>
             </div>
           </div>
+
+          {/* Pinned Message Banner */}
+          {stream.pinnedMessage && (
+            <div className="chat-pinned-message">
+              <Pin size={12} fill="currentColor" style={{ marginRight: '6px', transform: 'rotate(45deg)', flexShrink: 0 }} />
+              <span className="pinned-text">Pinned: "{stream.pinnedMessage}"</span>
+            </div>
+          )}
           
           <div className="chat-messages">
             {messages.map((msg) => (
-              <div key={msg.id} className="chat-message">
+              <div key={msg.id} className={`chat-message ${msg.type === 'announcement' ? 'announcement-msg' : ''}`}>
                 <span className="username">{msg.username}:</span>
                 <span className="message-text">{msg.text}</span>
               </div>
@@ -392,19 +425,37 @@ export const StreamPage: React.FC = () => {
           </div>
 
           <div className="chat-input-container">
-            <form onSubmit={handleSendMessage} style={{ display: 'flex', width: '100%', gap: '8px' }}>
-              <input 
-                type="text" 
-                className="chat-input" 
-                placeholder={user ? "Send a message..." : "Sign in to chat"} 
-                disabled={!user}
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-              />
-              <button type="submit" className="btn-primary" style={{ padding: '8px 16px' }} disabled={!user}>
-                <Send size={14} />
-              </button>
-            </form>
+            {stream.emoteOnly ? (
+              <div className="emote-only-panel">
+                <div className="emote-only-badge">Emote-Only Mode Active</div>
+                <div className="quick-emojis-row">
+                  {['👍', '❤️', '😂', '🎉', '😮', '📖'].map(emoji => (
+                    <button 
+                      key={emoji} 
+                      onClick={() => handleSendEmoji(emoji)} 
+                      disabled={!user}
+                      className="chat-quick-emoji-btn"
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSendMessage} style={{ display: 'flex', width: '100%', gap: '8px' }}>
+                <input 
+                  type="text" 
+                  className="chat-input" 
+                  placeholder={user ? "Send a message..." : "Sign in to chat"} 
+                  disabled={!user}
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                />
+                <button type="submit" className="btn-primary" style={{ padding: '8px 16px' }} disabled={!user}>
+                  <Send size={14} />
+                </button>
+              </form>
+            )}
           </div>
         </aside>
 

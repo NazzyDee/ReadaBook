@@ -1256,3 +1256,669 @@
   color: var(--text-main);
   background-color: rgba(255, 255, 255, 0.05);
 }
+
+/* ================= STREAMER STUDIO / CREATOR STUDIO STYLES ================= */
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.gap-sm {
+  gap: 8px;
+}
+
+.gap-md {
+  gap: 16px;
+}
+
+.studio-main {
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.studio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.studio-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Metrics Bar */
+.studio-metrics-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.metric-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.metric-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--accent-danger);
+}
+
+.red-pulse {
+  animation: beacon 1.5s infinite;
+}
+
+.metric-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-info .label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.metric-info .value {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.font-mono {
+  font-family: monospace;
+}
+
+.font-bold {
+  font-weight: 800;
+}
+
+.text-red {
+  color: var(--accent-danger);
+}
+
+.text-green {
+  color: var(--accent-success);
+}
+
+/* Studio Grid Layout */
+.studio-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr 340px;
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+.studio-left-column, .studio-center-column, .studio-right-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.studio-card {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.studio-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px var(--spacing-md);
+  background-color: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.border-glow {
+  border: 1.5px solid var(--accent-primary);
+}
+
+.preview-info-panel {
+  padding: var(--spacing-md);
+}
+
+.preview-info-panel h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.card-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.btn-edit-info {
+  background-color: var(--bg-hover);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-edit-info:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.mic-muted-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(230, 57, 70, 0.85);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Quick Actions Widget */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: var(--spacing-md);
+}
+
+.action-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 80px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.action-tile:hover {
+  background-color: var(--bg-hover);
+  transform: scale(1.02);
+}
+
+.action-tile.active-red {
+  background-color: rgba(230, 57, 70, 0.1);
+  border-color: var(--accent-danger);
+  color: var(--accent-danger);
+}
+
+.action-tile.active-purple {
+  background-color: rgba(157, 78, 221, 0.1);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.action-tile.danger-tile:hover {
+  background-color: rgba(230, 57, 70, 0.1);
+  border-color: var(--accent-danger);
+  color: var(--accent-danger);
+}
+
+.announcement-inline-form {
+  padding: 0 var(--spacing-md) var(--spacing-md) var(--spacing-md);
+  display: flex;
+  gap: 8px;
+}
+
+.announcement-inline-form input {
+  flex: 1;
+  background-color: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 6px 12px;
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+/* Streamer Book Reader Widget */
+.streamer-reader-card {
+  height: 480px;
+}
+
+.reader-meta-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.studio-mini-cover {
+  width: 48px;
+  height: 68px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.studio-mini-cover + div {
+  flex: 1;
+}
+
+.studio-mini-cover + div h3 {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.studio-mini-cover + div p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.studio-page-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.studio-nav-btn {
+  background-color: var(--bg-hover);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.studio-nav-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.studio-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.studio-page-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-lg);
+  font-family: serif;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #d1d5db; /* Warm light gray */
+}
+
+.scrollbar-paper::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+}
+
+.btn-tts-speaker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--bg-hover);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-tts-speaker:hover {
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.btn-tts-speaker.active {
+  background-color: rgba(0, 180, 216, 0.15);
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+}
+
+/* Activity Feed Widget */
+.studio-activity-card {
+  height: 250px;
+}
+
+.activity-feed-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.activity-event-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+
+.event-time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.event-icon {
+  font-size: 0.9rem;
+}
+
+.event-text {
+  flex: 1;
+  color: var(--text-main);
+}
+
+.no-activity {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Live Chat Moderation Widget */
+.studio-chat-card {
+  height: 755px; /* Alignment height to match left panels */
+}
+
+.pinned-indicator {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  background-color: rgba(0, 180, 216, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.studio-pinned-preview {
+  background-color: rgba(0, 180, 216, 0.08);
+  border-bottom: 2px solid rgba(0, 180, 216, 0.15);
+  padding: 8px var(--spacing-md);
+  font-size: 0.8rem;
+  color: var(--accent-secondary);
+  font-weight: 700;
+}
+
+.pinned-preview-text {
+  font-style: italic;
+}
+
+.btn-unpin {
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.btn-unpin:hover {
+  color: var(--accent-danger);
+}
+
+.studio-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.studio-chat-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.01);
+  border: 1px solid transparent;
+}
+
+.studio-chat-msg:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.studio-chat-msg.announcement-msg {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(157, 78, 221, 0.2);
+}
+
+.msg-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.msg-user {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+}
+
+.msg-body {
+  font-size: 0.85rem;
+  color: var(--text-main);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.moderator-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.studio-chat-msg:hover .moderator-actions {
+  opacity: 1;
+}
+
+.btn-mod-action {
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  padding: 4px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-mod-action:hover {
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.btn-mod-action.pinned {
+  color: var(--accent-secondary);
+}
+
+.btn-mod-action.delete-action:hover {
+  color: var(--accent-danger);
+  background-color: rgba(230, 57, 70, 0.1);
+}
+
+.no-chat {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* Pinned Message in Viewer Chat Feed */
+.chat-pinned-message {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 180, 216, 0.1);
+  border-bottom: 2px solid rgba(0, 180, 216, 0.2);
+  padding: 10px var(--spacing-md);
+  font-size: 0.85rem;
+  color: var(--accent-secondary);
+  font-weight: 700;
+}
+
+.pinned-text {
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Emote-Only Mode Panel in Chat input */
+.emote-only-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px var(--spacing-sm);
+  background-color: rgba(157, 78, 221, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(157, 78, 221, 0.15);
+}
+
+.emote-only-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+  text-align: center;
+}
+
+.quick-emojis-row {
+  display: flex;
+  justify-content: space-around;
+  gap: 6px;
+}
+
+.chat-quick-emoji-btn {
+  font-size: 1.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s;
+  padding: 4px;
+}
+
+.chat-quick-emoji-btn:hover:not(:disabled) {
+  transform: scale(1.2);
+}
+
+.chat-quick-emoji-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Modals */
+.studio-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.85);
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+}
+
+.studio-modal-card {
+  width: 100%;
+  max-width: 500px;
+  padding: var(--spacing-xl);
+}
+
+/* Form layouts helper */
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.flex-2 {
+  flex: 2;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.card-instructions {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+/* Theme color modifiers */
+.text-red {
+  color: var(--accent-danger);
+}
+
+.text-green {
+  color: var(--accent-success);
+}
+
+/* Media Responsive Rules for Studio Layout */
+@media (max-width: 1200px) {
+  .studio-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .studio-left-column, .studio-center-column, .studio-right-column {
+    width: 100%;
+  }
+
+  .studio-chat-card {
+    height: 400px;
+  }
+}
+
