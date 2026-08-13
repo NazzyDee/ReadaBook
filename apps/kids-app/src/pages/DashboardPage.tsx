@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../lib/AuthContext';
-import { doc, setDoc, updateDoc, onSnapshot, collection, query, where, orderBy, limit, addDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, onSnapshot, collection, query, where, addDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { books } from '../lib/booksData';
 import { ChevronLeft, ChevronRight, Play, Square, Users, BookOpen, Plus, Clipboard, Smile } from 'lucide-react';
@@ -87,9 +87,7 @@ export const DashboardPage: React.FC = () => {
 
     const q = query(
       collection(db, 'messages_kids'),
-      where('streamId', '==', user.uid),
-      orderBy('createdAt', 'desc'),
-      limit(50)
+      where('streamId', '==', user.uid)
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -97,7 +95,13 @@ export const DashboardPage: React.FC = () => {
       snapshot.forEach((doc) => {
         msgs.push({ id: doc.id, ...doc.data() } as ChatReaction);
       });
-      setChatReactions(msgs.reverse());
+      // Sort client-side by createdAt ascending, then limit to 50
+      msgs.sort((a, b) => {
+        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds || 0);
+        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds || 0);
+        return timeA - timeB;
+      });
+      setChatReactions(msgs.slice(-50));
     });
 
     return () => unsubscribe();
