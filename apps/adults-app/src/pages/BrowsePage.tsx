@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { Flame, Compass, Radio, Users, BookOpen } from 'lucide-react';
-import { books } from '../lib/booksData';
+import { Flame, Compass, Radio, Users, BookOpen, Search } from 'lucide-react';
+import { books, type Book } from '../lib/booksData';
 
 interface ActiveStream {
   id: string;
@@ -17,7 +17,10 @@ interface ActiveStream {
 
 export const BrowsePage: React.FC = () => {
   const [liveStreams, setLiveStreams] = useState<ActiveStream[]>([]);
+  const [customBooks, setCustomBooks] = useState<Book[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search') || '';
 
   // Simulated recommended channels
   const mockStreams = [
@@ -57,8 +60,8 @@ export const BrowsePage: React.FC = () => {
     { name: "Mystery", count: "650 readers", color: "from-red-600 to-pink-600" }
   ];
 
+  // 1. Listen for live streams in Firestore
   useEffect(() => {
-    // Listen for live streams in Firestore
     const q = query(collection(db, 'streams'), where('isLive', '==', true));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const active: ActiveStream[] = [];
@@ -71,25 +74,63 @@ export const BrowsePage: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  // Merge real live streams with mock ones
+  // 2. Listen for custom books in Firestore
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'books'), (snapshot) => {
+      const list: Book[] = [];
+      snapshot.forEach((doc) => {
+        list.push({ id: doc.id, ...doc.data() } as Book);
+      });
+      setCustomBooks(list);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const allLiveStreams = [
     ...liveStreams,
     ...mockStreams.filter(m => !liveStreams.some(r => r.id === m.id))
   ];
 
-  // Filter by genre if selected
-  const filteredStreams = selectedGenre 
-    ? allLiveStreams.filter(s => s.genre.toLowerCase().includes(selectedGenre.toLowerCase()))
-    : allLiveStreams;
+  const allBooks = [...books, ...customBooks];
 
-  // Pick the top stream to feature on the homepage banner
+  // Filter by genre AND search query
+  const filteredStreams = allLiveStreams.filter((s) => {
+    const matchesGenre = selectedGenre 
+      ? s.genre.toLowerCase().includes(selectedGenre.toLowerCase())
+      : true;
+
+    const activeBook = allBooks.find(b => b.id === s.bookId);
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = searchQuery
+      ? s.title.toLowerCase().includes(searchLower) ||
+        s.streamerName.toLowerCase().includes(searchLower) ||
+        s.genre.toLowerCase().includes(searchLower) ||
+        (activeBook?.title.toLowerCase().includes(searchLower) || false) ||
+        (activeBook?.author.toLowerCase().includes(searchLower) || false)
+      : true;
+
+    return matchesGenre && matchesSearch;
+  });
+
   const featuredStream = allLiveStreams[0];
-  const featuredBook = featuredStream ? books.find(b => b.id === featuredStream.bookId) : null;
+  const featuredBook = featuredStream ? allBooks.find(b => b.id === featuredStream.bookId) : null;
 
   return (
     <div className="browse-container">
-      {/* Featured Stream Banner */}
-      {featuredStream && (
+      {/* Search Header Banner (when searching) */}
+      {searchQuery && (
+        <div className="search-results-header">
+          <h2>
+            <Search size={20} style={{ marginRight: '8px' }} />
+            Search Results for "{searchQuery}"
+          </h2>
+          <p className="search-results-subtext">Found {filteredStreams.length} active streams</p>
+        </div>
+      )}
+
+      {/* Featured Stream Banner (Only show if not searching) */}
+      {!searchQuery && featuredStream && (
         <div className="featured-banner">
           <div className="banner-content">
             <div className="live-pill">
@@ -159,7 +200,7 @@ export const BrowsePage: React.FC = () => {
         {filteredStreams.length === 0 ? (
           <div className="empty-state">
             <BookOpen size={48} color="var(--text-muted)" />
-            <p>No active streams found for this genre. Be the first to go live!</p>
+            <p>No active streams found. Try searching for something else or be the first to go live!</p>
             <Link to="/dashboard" className="btn-primary" style={{ textDecoration: 'none', marginTop: '12px' }}>
               Go Live
             </Link>
@@ -167,7 +208,7 @@ export const BrowsePage: React.FC = () => {
         ) : (
           <div className="streams-grid">
             {filteredStreams.map((stream) => {
-              const activeBook = books.find(b => b.id === stream.bookId);
+              const activeBook = allBooks.find(b => b.id === stream.bookId);
               return (
                 <Link key={stream.id} to={`/stream/${stream.id}`} className="stream-card-link">
                   <div className="stream-card">

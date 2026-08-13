@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, limit, doc, where } from 'firebase/firestore';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, limit, doc, where, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { books } from '../lib/booksData';
-import { Users, Send, AlertCircle, Radio, LogOut } from 'lucide-react';
+import { books, type Book } from '../lib/booksData';
+import { Users, Send, AlertCircle, Radio, LogOut, Heart } from 'lucide-react';
 import '../App.css';
 
 interface ChatMessage {
@@ -29,9 +29,11 @@ export const StreamPage: React.FC = () => {
   const { streamerId } = useParams<{ streamerId: string }>();
   const { user, logout } = useAuth();
   const [stream, setStream] = useState<StreamData | null>(null);
+  const [activeBook, setActiveBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [isFollowing, setIsFollowing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Mock streams database for static viewing
@@ -72,12 +74,10 @@ export const StreamPage: React.FC = () => {
   useEffect(() => {
     if (!streamerId) return;
 
-    // Check if it is a mock stream
     if (streamerId.startsWith('mock-')) {
       setStream(mockStreams[streamerId]);
       setLoading(false);
 
-      // Simulate streamer slowly flipping pages in mock stream
       const interval = setInterval(() => {
         setStream(prev => {
           if (!prev) return null;
@@ -86,12 +86,11 @@ export const StreamPage: React.FC = () => {
           const nextPage = (prev.currentPage + 1) % book.pages.length;
           return { ...prev, currentPage: nextPage };
         });
-      }, 30000); // turn page every 30 seconds
+      }, 30000);
 
       return () => clearInterval(interval);
     }
 
-    // Real Firestore stream subscription
     const streamDocRef = doc(db, 'streams', streamerId);
     const unsubscribe = onSnapshot(streamDocRef, (docSnap) => {
       if (docSnap.exists()) {
@@ -108,12 +107,51 @@ export const StreamPage: React.FC = () => {
     return () => unsubscribe();
   }, [streamerId]);
 
-  // 2. Fetch and subscribe to Chat Messages
+  // 2. Resolve active book (static or custom Firestore book)
+  useEffect(() => {
+    if (!stream) {
+      setActiveBook(null);
+      return;
+    }
+
+    const staticBook = books.find(b => b.id === stream.bookId);
+    if (staticBook) {
+      setActiveBook(staticBook);
+    } else {
+      // Listen to custom book dynamically in Firestore
+      const bookDocRef = doc(db, 'books', stream.bookId);
+      const unsubscribe = onSnapshot(bookDocRef, (docSnap) => {
+        if (docSnap.exists()) {
+          setActiveBook({ id: docSnap.id, ...docSnap.data() } as Book);
+        }
+      });
+      return () => unsubscribe();
+    }
+  }, [stream]);
+
+  // 3. Subscribe to Follow status
+  useEffect(() => {
+    if (!user || !streamerId) return;
+
+    if (streamerId.startsWith('mock-')) {
+      const mockFollows = JSON.parse(localStorage.getItem('mockFollows') || '[]');
+      setIsFollowing(mockFollows.includes(streamerId));
+      return;
+    }
+
+    const followDocRef = doc(db, 'users', user.uid, 'follows', streamerId);
+    const unsubscribe = onSnapshot(followDocRef, (docSnap) => {
+      setIsFollowing(docSnap.exists());
+    });
+
+    return () => unsubscribe();
+  }, [user, streamerId]);
+
+  // 4. Fetch and subscribe to Chat Messages
   useEffect(() => {
     if (!streamerId) return;
 
     if (streamerId.startsWith('mock-')) {
-      // Setup mock initial messages
       const initialMockMsgs = [
         { id: 'm1', text: 'I love this chapter so much!', username: 'ReaderPro', createdAt: new Date() },
         { id: 'm2', text: 'Lofi beats are perfect for this book.', username: 'ChillVibes', createdAt: new Date() },
@@ -121,7 +159,6 @@ export const StreamPage: React.FC = () => {
       ];
       setMessages(initialMockMsgs);
 
-      // Periodically append mock viewer chat messages to simulate active Twitch stream
       const mockChatUsers = ['AuraReader', 'BookWorm99', 'PageTurner', 'Shelfishly', 'LitCritique', 'NovelEnthusiast'];
       const mockChatPhrases = [
         'Oh wow, I did not expect that!',
@@ -147,12 +184,11 @@ export const StreamPage: React.FC = () => {
             createdAt: new Date()
           }
         ]);
-      }, 7000); // new message every 7 seconds
+      }, 7000);
 
       return () => clearInterval(interval);
     }
 
-    // Real Firestore chat subscription (scoped by streamId)
     const q = query(
       collection(db, 'messages'),
       where('streamId', '==', streamerId),
@@ -176,14 +212,45 @@ export const StreamPage: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const handleFollowToggle = async () => {
+    if (!user || !streamerId) return;
+
+    if (streamerId.startsWith('mock-')) {
+      const mockFollows = JSON.parse(localStorage.getItem('mockFollows') || '[]');
+      let updatedFollows = [];
+      if (isFollowing) {
+        updatedFollows = mockFollows.filter((id: string) => id !== streamerId);
+      } else {
+        updatedFollows = [...mockFollows, streamerId];
+      }
+      localStorage.setItem('mockFollows', JSON.stringify(updatedFollows));
+      setIsFollowing(!isFollowing);
+      window.dispatchEvent(new Event('storage'));
+      return;
+    }
+
+    const followDocRef = doc(db, 'users', user.uid, 'follows', streamerId);
+    try {
+      if (isFollowing) {
+        await deleteDoc(followDocRef);
+      } else {
+        await setDoc(followDocRef, {
+          streamerName: stream?.streamerName || 'Streamer',
+          followedAt: new Date()
+        });
+      }
+    } catch (err) {
+      console.error("Error toggling follow: ", err);
+    }
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !user || !streamerId) return;
 
-    // Scoped message to this streamer's ID
     const username = user.email ? user.email.split('@')[0] : 'Anonymous';
     const msgText = newMessage;
-    setNewMessage(''); // optimistic clear
+    setNewMessage('');
 
     try {
       await addDoc(collection(db, 'messages'), {
@@ -206,7 +273,6 @@ export const StreamPage: React.FC = () => {
     );
   }
 
-  // Handle stream offline state
   if (!stream || !stream.isLive) {
     return (
       <div className="offline-container">
@@ -219,8 +285,6 @@ export const StreamPage: React.FC = () => {
       </div>
     );
   }
-
-  const activeBook = books.find(b => b.id === stream.bookId) || books[0];
 
   return (
     <div className="app-container">
@@ -235,6 +299,16 @@ export const StreamPage: React.FC = () => {
             <span>LIVE</span>
           </div>
           <span className="header-stream-title">{stream.title}</span>
+          
+          {user && user.uid !== streamerId && (
+            <button 
+              onClick={handleFollowToggle} 
+              className={`btn-follow ${isFollowing ? 'following' : ''}`}
+            >
+              <Heart size={14} fill={isFollowing ? "currentColor" : "none"} />
+              <span>{isFollowing ? 'Following' : 'Follow'}</span>
+            </button>
+          )}
         </div>
         <div className="user-profile">
           {user ? (
@@ -260,22 +334,29 @@ export const StreamPage: React.FC = () => {
         <section className="reader-section">
           
           {/* The E-Book Text (Dynamically synced) */}
-          <div className="book-display">
-            <div className="book-display-header">
-               <img src={activeBook.coverUrl} alt="Book Cover" className="book-cover-img" />
-               <div className="book-display-details">
-                  <h1>{activeBook.title}</h1>
-                  <h3>By {activeBook.author}</h3>
-                  <span className="chapter-indicator">Page {stream.currentPage + 1} of {activeBook.pages.length}</span>
-               </div>
+          {activeBook ? (
+            <div className="book-display">
+              <div className="book-display-header">
+                 <img src={activeBook.coverUrl} alt="Book Cover" className="book-cover-img" />
+                 <div className="book-display-details">
+                    <h1>{activeBook.title}</h1>
+                    <h3>By {activeBook.author}</h3>
+                    <span className="chapter-indicator">Page {stream.currentPage + 1} of {activeBook.pages.length}</span>
+                 </div>
+              </div>
+              
+              <div className="book-text-content">
+                <p>
+                  {activeBook.pages[stream.currentPage] || "Loading page text..."}
+                </p>
+              </div>
             </div>
-            
-            <div className="book-text-content">
-              <p>
-                {activeBook.pages[stream.currentPage] || "Loading page text..."}
-              </p>
+          ) : (
+            <div className="book-display" style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <div className="spinner"></div>
+              <p style={{ marginTop: '16px', color: 'var(--text-muted)' }}>Loading novel content...</p>
             </div>
-          </div>
+          )}
 
           {/* The Live Video Feed overlay */}
           <div className="video-overlay">

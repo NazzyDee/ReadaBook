@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { Home, Tv, ChevronLeft, ChevronRight, User, Flame } from 'lucide-react';
+import { useAuth } from '../lib/AuthContext';
+import { Home, Tv, ChevronLeft, ChevronRight, User, Flame, Heart } from 'lucide-react';
 import { books } from '../lib/booksData';
 
 interface ActiveStream {
@@ -17,6 +18,8 @@ interface ActiveStream {
 export const Sidebar: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [liveStreams, setLiveStreams] = useState<ActiveStream[]>([]);
+  const [followedStreams, setFollowedStreams] = useState<ActiveStream[]>([]);
+  const { user } = useAuth();
   const location = useLocation();
 
   // Simulated recommended channels to make the site look like Twitch
@@ -47,8 +50,8 @@ export const Sidebar: React.FC = () => {
     }
   ];
 
+  // 1. Listen for ALL live streams in Firestore (for recommendations)
   useEffect(() => {
-    // Listen for live streams in Firestore
     const q = query(collection(db, 'streams'), where('isLive', '==', true));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const active: ActiveStream[] = [];
@@ -61,10 +64,46 @@ export const Sidebar: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  // Merge real live streams with mock ones (excluding duplication if same ID)
-  const allLiveStreams = [
-    ...liveStreams,
-    ...mockStreams.filter(m => !liveStreams.some(r => r.id === m.id))
+  // 2. Listen for followed channels dynamically
+  useEffect(() => {
+    if (!user) {
+      setFollowedStreams([]);
+      return;
+    }
+
+    // Subscribe to follows collection
+    const followsRef = collection(db, 'users', user.uid, 'follows');
+    const unsubscribeFollows = onSnapshot(followsRef, (snapshot) => {
+      const ids: string[] = [];
+      snapshot.forEach((doc) => {
+        ids.push(doc.id);
+      });
+
+      if (ids.length === 0) {
+        setFollowedStreams([]);
+        return;
+      }
+
+      // Query streams for those followed IDs
+      const streamsQuery = query(collection(db, 'streams'), where('streamerId', 'in', ids));
+      const unsubscribeStreams = onSnapshot(streamsQuery, (streamsSnap) => {
+        const streams: ActiveStream[] = [];
+        streamsSnap.forEach((doc) => {
+          streams.push({ id: doc.id, ...doc.data() } as ActiveStream);
+        });
+        setFollowedStreams(streams);
+      });
+
+      return () => unsubscribeStreams();
+    });
+
+    return () => unsubscribeFollows();
+  }, [user]);
+
+  // Merge real live streams with mock ones (excluding duplication)
+  const recommendedStreams = [
+    ...liveStreams.filter(s => !followedStreams.some(f => f.id === s.id)),
+    ...mockStreams.filter(m => !liveStreams.some(r => r.id === m.id) && !followedStreams.some(f => f.id === m.id))
   ];
 
   return (
@@ -90,7 +129,56 @@ export const Sidebar: React.FC = () => {
 
       <hr className="sidebar-divider" />
 
-      {/* Live Channels */}
+      {/* Followed Channels */}
+      {user && followedStreams.length > 0 && (
+        <div className="sidebar-channels-section" style={{ flex: 'none', maxHeight: '200px' }}>
+          {!collapsed && (
+            <div className="sidebar-section-header">
+              <Heart size={14} color="var(--accent-primary)" fill="var(--accent-primary)" />
+              <span>Followed Channels</span>
+            </div>
+          )}
+          <div className="sidebar-channels-list">
+            {followedStreams.map((stream) => {
+              const activeBook = books.find(b => b.id === stream.bookId);
+              return (
+                <Link 
+                  key={stream.id} 
+                  to={`/stream/${stream.id}`} 
+                  className={`sidebar-channel-item ${location.pathname === `/stream/${stream.id}` ? 'active' : ''}`}
+                >
+                  <div className="channel-avatar">
+                    <User size={18} />
+                    {stream.isLive && <div className="live-badge-dot"></div>}
+                  </div>
+                  
+                  {!collapsed && (
+                    <div className="channel-info">
+                      <div className="channel-name-row">
+                        <span className="channel-name">{stream.streamerName}</span>
+                        {stream.isLive ? (
+                          <span className="channel-viewers">{(stream.viewerCount / 1000).toFixed(1)}k</span>
+                        ) : (
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Offline</span>
+                        )}
+                      </div>
+                      <span className="channel-stream-title">{stream.isLive ? stream.title : 'Offline'}</span>
+                      {stream.isLive && (
+                        <span className="channel-book">
+                          📖 {activeBook?.title || 'Reading...'}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+          <hr className="sidebar-divider" />
+        </div>
+      )}
+
+      {/* Recommended Live Channels */}
       <div className="sidebar-channels-section">
         {!collapsed && (
           <div className="sidebar-section-header">
@@ -100,7 +188,7 @@ export const Sidebar: React.FC = () => {
         )}
         
         <div className="sidebar-channels-list">
-          {allLiveStreams.map((stream) => {
+          {recommendedStreams.map((stream) => {
             const activeBook = books.find(b => b.id === stream.bookId);
             return (
               <Link 

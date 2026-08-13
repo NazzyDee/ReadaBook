@@ -5,6 +5,7 @@ import { StreamPage } from './pages/StreamPage';
 import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { Sidebar } from './components/Sidebar';
+import { Header } from './components/Header';
 import { useAuth } from './lib/AuthContext';
 import './index.css';
 
@@ -16,13 +17,16 @@ const ProtectedRoute = ({ children }: { children: ReactElement }) => {
   return children;
 };
 
-// Layout wrapper including the Twitch-like sidebar
+// Layout wrapper including the global header and Twitch-like sidebar
 const AppLayout = ({ children }: { children: ReactElement }) => {
   return (
-    <div className="app-layout">
-      <Sidebar />
-      <div className="app-main-content">
-        {children}
+    <div className="app-container-root">
+      <Header />
+      <div className="app-layout">
+        <Sidebar />
+        <div className="app-main-content">
+          {children}
+        </div>
       </div>
     </div>
   );
