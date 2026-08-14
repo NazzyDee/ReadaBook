@@ -37,37 +37,6 @@ export const BrowsePage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
 
-  // Simulated recommended channels
-  const mockStreams = [
-    {
-      id: "mock-stream-1",
-      streamerName: "LibraryLofi",
-      title: "Cozy Lofi Reading Session ☕ | Frankenstein",
-      bookId: "frankenstein",
-      genre: "Sci-Fi / Classics",
-      viewerCount: 1420,
-      isLive: true
-    },
-    {
-      id: "mock-stream-2",
-      streamerName: "AliceInWonderReader",
-      title: "Falling down the Rabbit Hole! ✨ Live Q&A",
-      bookId: "alice-in-wonderland",
-      genre: "Fantasy",
-      viewerCount: 843,
-      isLive: true
-    },
-    {
-      id: "mock-stream-3",
-      streamerName: "SherlockQuotes",
-      title: "Solving cases live. Reading H.G. Wells tonight!",
-      bookId: "the-time-machine",
-      genre: "Sci-Fi",
-      viewerCount: 312,
-      isLive: true
-    }
-  ];
-
   const genres = [
     { name: "Fantasy", count: "1.2k readers", color: "from-purple-600 to-indigo-600" },
     { name: "Sci-Fi", count: "980 readers", color: "from-blue-600 to-cyan-500" },
@@ -121,10 +90,7 @@ export const BrowsePage: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  const allLiveStreams = [
-    ...liveStreams,
-    ...mockStreams.filter(m => !liveStreams.some(r => r.id === m.id))
-  ];
+  const allLiveStreams = liveStreams;
 
   const allBooks = [...books, ...customBooks];
 

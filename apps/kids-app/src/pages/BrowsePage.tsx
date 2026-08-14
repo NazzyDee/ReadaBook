@@ -131,37 +131,6 @@ export const BrowsePage: React.FC = () => {
     }
   };
 
-  // Simulated kids channels
-  const mockStreams = [
-    {
-      id: "mock-kids-1",
-      streamerName: "StoryTimeRabbit",
-      title: "🐰 Let's Read Peter Pan Together! (Bubbly Voice)",
-      bookId: "peter-pan",
-      genre: "Adventure",
-      viewerCount: 245,
-      isLive: true
-    },
-    {
-      id: "mock-kids-2",
-      streamerName: "NurseryTales",
-      title: "🧸 The Secret Garden | Relaxing Voice before bedtime",
-      bookId: "secret-garden",
-      genre: "Nature / Friendship",
-      viewerCount: 189,
-      isLive: true
-    },
-    {
-      id: "mock-kids-3",
-      streamerName: "MagicVelveteen",
-      title: "✨ Story of a Real Rabbit! Reading The Velveteen Rabbit",
-      bookId: "velveteen-rabbit",
-      genre: "Classics",
-      viewerCount: 92,
-      isLive: true
-    }
-  ];
-
   const genres = [
     { name: "Adventure", count: "1.2k listening", color: "#ff477e" },
     { name: "Nature / Friendship", count: "890 listening", color: "#00b4d8" },
@@ -215,13 +184,7 @@ export const BrowsePage: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  const allLiveStreams = [
-    ...liveStreams,
-    ...mockStreams.filter(m => !liveStreams.some(r => r.id === m.id))
-  ].filter(s => {
-    if (s.id.startsWith('mock-')) {
-      return connectedAdults.length === 0;
-    }
+  const allLiveStreams = liveStreams.filter(s => {
     return connectedAdults.includes(s.id);
   });
 

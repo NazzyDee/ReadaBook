@@ -684,7 +684,7 @@ export const DashboardPage: React.FC = () => {
         bookTitle: selectedBook.title,
         bookAuthor: selectedBook.author,
         bookPages: selectedBook.pages,
-        bookCoverUrl: selectedBook.coverUrl || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400',
+        bookCoverUrl: selectedBook.coverUrl || '',
         pageFlips: syncPageFlips,
         duration: videoDuration,
         readerId: user!.uid,
@@ -1388,13 +1388,45 @@ export const DashboardPage: React.FC = () => {
       return;
     }
 
+    const generateBookCoverSvgUrl = (title: string, author: string, genre: string): string => {
+      let bgSolidColor = '#1e1e24';
+      let textAccent = '#ffde6a';
+      if (genre === 'Sci-Fi') {
+        bgSolidColor = '#0077b6';
+        textAccent = '#ffffff';
+      } else if (genre === 'Classics') {
+        bgSolidColor = '#fb8500';
+        textAccent = '#2b2d42';
+      } else if (genre === 'Mystery') {
+        bgSolidColor = '#8f0030';
+        textAccent = '#ffffff';
+      }
+
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+          <rect width="300" height="400" fill="${bgSolidColor}" rx="15"/>
+          <rect x="15" y="15" width="270" height="370" fill="none" stroke="${textAccent}" stroke-width="2" rx="10" opacity="0.6"/>
+          <text x="50%" y="150" font-family="'Comic Sans MS', cursive, sans-serif" font-size="20" font-weight="bold" fill="${textAccent}" text-anchor="middle">
+            ${title.substring(0, 20)}${title.length > 20 ? '...' : ''}
+          </text>
+          <text x="50%" y="200" font-family="sans-serif" font-size="14" fill="#aaa" text-anchor="middle">
+            By ${author}
+          </text>
+          <text x="50%" y="300" font-family="sans-serif" font-size="12" font-weight="bold" fill="${textAccent}" text-anchor="middle" opacity="0.8">
+            📖 ${genre.toUpperCase()}
+          </text>
+        </svg>
+      `;
+      return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg.trim())));
+    };
+
     try {
       const bookRef = await addDoc(collection(db, 'books'), {
         title: newBookTitle,
         author: newBookAuthor,
         genre: newBookGenre,
         pages,
-        coverUrl: '/assets/book_cover.jpg',
+        coverUrl: generateBookCoverSvgUrl(newBookTitle, newBookAuthor, newBookGenre),
         uploaderId: user.uid,
         createdAt: new Date()
       });

@@ -22,34 +22,6 @@ export const Sidebar: React.FC = () => {
   const { user } = useAuth();
   const location = useLocation();
 
-  // Simulated recommended channels to make the site look like Twitch
-  const mockStreams = [
-    {
-      id: "mock-stream-1",
-      streamerName: "LibraryLofi",
-      title: "Cozy Lofi Reading Session ☕ | Frankenstein",
-      bookId: "frankenstein",
-      viewerCount: 1420,
-      isLive: true
-    },
-    {
-      id: "mock-stream-2",
-      streamerName: "AliceInWonderReader",
-      title: "Falling down the Rabbit Hole! ✨ Live Q&A",
-      bookId: "alice-in-wonderland",
-      viewerCount: 843,
-      isLive: true
-    },
-    {
-      id: "mock-stream-3",
-      streamerName: "SherlockQuotes",
-      title: "Solving cases live. Reading H.G. Wells tonight!",
-      bookId: "the-time-machine",
-      viewerCount: 312,
-      isLive: true
-    }
-  ];
-
   // 1. Listen for ALL live streams in Firestore (for recommendations)
   useEffect(() => {
     const q = query(collection(db, 'streams'), where('isLive', '==', true));
@@ -100,11 +72,7 @@ export const Sidebar: React.FC = () => {
     return () => unsubscribeFollows();
   }, [user]);
 
-  // Merge real live streams with mock ones (excluding duplication)
-  const recommendedStreams = [
-    ...liveStreams.filter(s => !followedStreams.some(f => f.id === s.id)),
-    ...mockStreams.filter(m => !liveStreams.some(r => r.id === m.id) && !followedStreams.some(f => f.id === m.id))
-  ];
+  const recommendedStreams = liveStreams.filter(s => !followedStreams.some(f => f.id === s.id));
 
   return (
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>

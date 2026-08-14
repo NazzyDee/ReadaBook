@@ -19,34 +19,6 @@ export const Sidebar: React.FC = () => {
   const [liveStreams, setLiveStreams] = useState<ActiveStream[]>([]);
   const location = useLocation();
 
-  // Bubbly friendly kids channels
-  const mockStreams = [
-    {
-      id: "mock-kids-1",
-      streamerName: "StoryTimeRabbit",
-      title: "🐰 Let's Read Peter Pan Together! (Bubbly Voice)",
-      bookId: "peter-pan",
-      viewerCount: 245,
-      isLive: true
-    },
-    {
-      id: "mock-kids-2",
-      streamerName: "NurseryTales",
-      title: "🧸 The Secret Garden | Relaxing Voice before bedtime",
-      bookId: "secret-garden",
-      viewerCount: 189,
-      isLive: true
-    },
-    {
-      id: "mock-kids-3",
-      streamerName: "MagicVelveteen",
-      title: "✨ Story of a Real Rabbit! Reading The Velveteen Rabbit",
-      bookId: "velveteen-rabbit",
-      viewerCount: 92,
-      isLive: true
-    }
-  ];
-
   useEffect(() => {
     // Only fetch streams that are designated for kids if they went live from kids dashboard
     const q = query(collection(db, 'streams_kids'), where('isLive', '==', true));
@@ -61,10 +33,7 @@ export const Sidebar: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-  const recommendedStreams = [
-    ...liveStreams,
-    ...mockStreams.filter(m => !liveStreams.some(r => r.id === m.id))
-  ];
+  const recommendedStreams = liveStreams;
 
   return (
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>

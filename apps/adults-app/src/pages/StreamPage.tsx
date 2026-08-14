@@ -40,60 +40,9 @@ export const StreamPage: React.FC = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Mock streams database for static viewing
-  const mockStreams: Record<string, StreamData> = {
-    "mock-stream-1": {
-      streamerId: "mock-stream-1",
-      streamerName: "LibraryLofi",
-      title: "Cozy Lofi Reading Session ☕ | Frankenstein",
-      bookId: "frankenstein",
-      genre: "Sci-Fi / Classics",
-      currentPage: 0,
-      isLive: true,
-      viewerCount: 1420
-    },
-    "mock-stream-2": {
-      streamerId: "mock-stream-2",
-      streamerName: "AliceInWonderReader",
-      title: "Falling down the Rabbit Hole! ✨ Live Q&A",
-      bookId: "alice-in-wonderland",
-      genre: "Fantasy",
-      currentPage: 2,
-      isLive: true,
-      viewerCount: 843
-    },
-    "mock-stream-3": {
-      streamerId: "mock-stream-3",
-      streamerName: "SherlockQuotes",
-      title: "Solving cases live. Reading H.G. Wells tonight!",
-      bookId: "the-time-machine",
-      genre: "Sci-Fi",
-      currentPage: 1,
-      isLive: true,
-      viewerCount: 312
-    }
-  };
-
   // 1. Fetch and subscribe to Stream Document
   useEffect(() => {
     if (!streamerId) return;
-
-    if (streamerId.startsWith('mock-')) {
-      setStream(mockStreams[streamerId]);
-      setLoading(false);
-
-      const interval = setInterval(() => {
-        setStream(prev => {
-          if (!prev) return null;
-          const book = books.find(b => b.id === prev.bookId);
-          if (!book) return prev;
-          const nextPage = (prev.currentPage + 1) % book.pages.length;
-          return { ...prev, currentPage: nextPage };
-        });
-      }, 30000);
-
-      return () => clearInterval(interval);
-    }
 
     const streamDocRef = doc(db, 'streams', streamerId);
     const unsubscribe = onSnapshot(streamDocRef, (docSnap) => {

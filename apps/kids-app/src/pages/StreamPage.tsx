@@ -38,60 +38,9 @@ export const StreamPage: React.FC = () => {
   const safeEmojis = ['👍', '❤️', '😂', '🎉', '😮', '📖', '🧸', '🎈', '🌟'];
   const safePhrases = ['Amazing!', 'I love this!', 'Super fun!', 'Hello! 👋', 'Thank you! 💖', 'Fun characters!'];
 
-  // Mock streams database for static kids viewing
-  const mockStreams: Record<string, StreamData> = {
-    "mock-kids-1": {
-      streamerId: "mock-kids-1",
-      streamerName: "StoryTimeRabbit",
-      title: "🐰 Let's Read Peter Pan Together! (Bubbly Voice)",
-      bookId: "peter-pan",
-      genre: "Adventure",
-      currentPage: 0,
-      isLive: true,
-      viewerCount: 245
-    },
-    "mock-kids-2": {
-      streamerId: "mock-kids-2",
-      streamerName: "NurseryTales",
-      title: "🧸 The Secret Garden | Relaxing Voice before bedtime",
-      bookId: "secret-garden",
-      genre: "Nature / Friendship",
-      currentPage: 1,
-      isLive: true,
-      viewerCount: 189
-    },
-    "mock-kids-3": {
-      streamerId: "mock-kids-3",
-      streamerName: "MagicVelveteen",
-      title: "✨ Story of a Real Rabbit! Reading The Velveteen Rabbit",
-      bookId: "velveteen-rabbit",
-      genre: "Classics",
-      currentPage: 0,
-      isLive: true,
-      viewerCount: 92
-    }
-  };
-
   // 1. Fetch and subscribe to Stream Document
   useEffect(() => {
     if (!streamerId) return;
-
-    if (streamerId.startsWith('mock-')) {
-      setStream(mockStreams[streamerId]);
-      setLoading(false);
-
-      const interval = setInterval(() => {
-        setStream(prev => {
-          if (!prev) return null;
-          const book = books.find(b => b.id === prev.bookId);
-          if (!book) return prev;
-          const nextPage = (prev.currentPage + 1) % book.pages.length;
-          return { ...prev, currentPage: nextPage };
-        });
-      }, 30000);
-
-      return () => clearInterval(interval);
-    }
 
     const streamDocRef = doc(db, 'streams_kids', streamerId);
     const unsubscribe = onSnapshot(streamDocRef, (docSnap) => {
