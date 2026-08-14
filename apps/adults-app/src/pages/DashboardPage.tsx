@@ -83,6 +83,7 @@ export const DashboardPage: React.FC = () => {
   const syncVideoRef = useRef<HTMLVideoElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [skipCloudUpload, setSkipCloudUpload] = useState(false);
   
   // Child Profiles States
   const [childProfiles, setChildProfiles] = useState<{ id: string; displayName: string; pin: string }[]>([]);
@@ -608,6 +609,27 @@ export const DashboardPage: React.FC = () => {
     
     setRecordingError('');
     setRecordingSuccess('');
+    
+    // Check if we should skip Cloud upload for testing
+    if (skipCloudUpload || [
+      'Person_reading_a_book.mp4',
+      'Person_reading_a_book_into_the.mp4',
+      'Make_a_high_reto_video_of_a_pe.mp4'
+    ].includes(uploadedVideoFile.name)) {
+      setIsUploading(true);
+      setUploadProgress(100);
+      setRecordingSuccess("Local mode: Loading pre-copied asset video...");
+      setTimeout(() => {
+        setUploadedVideoUrl(`/assets/${uploadedVideoFile.name}`);
+        setRecordingSuccess('');
+        setIsUploading(false);
+        setSyncPageFlips([{ pageIndex: 0, time: 0 }]);
+        setSyncCurrentPageIndex(0);
+        setDashboardMode('sync-editor');
+      }, 600);
+      return;
+    }
+
     setIsUploading(true);
     setUploadProgress(0);
     
@@ -2054,12 +2076,33 @@ export const DashboardPage: React.FC = () => {
                       accept="video/*"
                       onChange={(e) => {
                         if (e.target.files && e.target.files[0]) {
-                          setUploadedVideoFile(e.target.files[0]);
+                          const file = e.target.files[0];
+                          setUploadedVideoFile(file);
+                          // Auto-detect local pre-copied assets
+                          const isLocal = [
+                            'Person_reading_a_book.mp4',
+                            'Person_reading_a_book_into_the.mp4',
+                            'Make_a_high_reto_video_of_a_pe.mp4'
+                          ].includes(file.name);
+                          setSkipCloudUpload(isLocal);
                         }
                       }}
                       required
                       style={{ padding: '8px', border: '1px dashed var(--border-color)', width: '100%', borderRadius: '4px', background: 'rgba(255,255,255,0.02)', color: '#fff' }}
                     />
+                  </div>
+
+                  <div className="form-group flex-row gap-xs" style={{ display: 'flex', alignItems: 'center', margin: '12px 0' }}>
+                    <input 
+                      type="checkbox" 
+                      id="skip-cloud-upload" 
+                      checked={skipCloudUpload}
+                      onChange={(e) => setSkipCloudUpload(e.target.checked)}
+                      style={{ width: 'auto', marginRight: '8px', cursor: 'pointer' }}
+                    />
+                    <label htmlFor="skip-cloud-upload" style={{ cursor: 'pointer', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                      ⚡ Skip Firebase upload and use local `/assets/` version (recommended for fast testing)
+                    </label>
                   </div>
 
                   <button type="submit" className="btn-primary flex-center gap-sm" style={{ background: 'var(--accent-primary)' }} disabled={isUploading}>
