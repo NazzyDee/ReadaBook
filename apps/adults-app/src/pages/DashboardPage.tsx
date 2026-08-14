@@ -614,7 +614,8 @@ export const DashboardPage: React.FC = () => {
     if (skipCloudUpload || [
       'Person_reading_a_book.mp4',
       'Person_reading_a_book_into_the.mp4',
-      'Make_a_high_reto_video_of_a_pe.mp4'
+      'Make_a_high_reto_video_of_a_pe.mp4',
+      'Make_a_high_reso_video_of_a_pe.mp4'
     ].includes(uploadedVideoFile.name)) {
       setIsUploading(true);
       setUploadProgress(100);
@@ -2082,7 +2083,8 @@ export const DashboardPage: React.FC = () => {
                           const isLocal = [
                             'Person_reading_a_book.mp4',
                             'Person_reading_a_book_into_the.mp4',
-                            'Make_a_high_reto_video_of_a_pe.mp4'
+                            'Make_a_high_reto_video_of_a_pe.mp4',
+                            'Make_a_high_reso_video_of_a_pe.mp4'
                           ].includes(file.name);
                           setSkipCloudUpload(isLocal);
                         }
