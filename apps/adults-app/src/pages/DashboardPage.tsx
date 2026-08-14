@@ -622,13 +622,16 @@ export const DashboardPage: React.FC = () => {
         setRecordingSuccess(`Uploading video: ${progress}%`);
       },
       (error) => {
-        console.error("Video upload failed:", error);
+        console.error("Video upload failed, using local asset fallback:", error);
         setIsUploading(false);
-        setUploadedVideoUrl(`https://readabook-b8675.firebasestorage.app/mock-video-${recId}.webm`);
-        setRecordingSuccess('');
-        setSyncPageFlips([{ pageIndex: 0, time: 0 }]);
-        setSyncCurrentPageIndex(0);
-        setDashboardMode('sync-editor');
+        setUploadedVideoUrl(`/assets/${uploadedVideoFile.name}`);
+        setRecordingSuccess('Using local pre-copied asset fallback for offline testing!');
+        setTimeout(() => {
+          setRecordingSuccess('');
+          setSyncPageFlips([{ pageIndex: 0, time: 0 }]);
+          setSyncCurrentPageIndex(0);
+          setDashboardMode('sync-editor');
+        }, 1500);
       },
       async () => {
         try {
