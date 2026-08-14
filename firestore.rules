@@ -17,7 +17,8 @@ service cloud.firestore {
       allow read: if isLoggedIn() && (
         request.auth.uid == userId ||
         resource.data.familyCode == currentUserData().familyCode ||
-        resource.data.parentUid == userId ||
+        resource.data.parentUid == request.auth.uid ||
+        resource.data.parentUid == currentUserData().familyAdminId ||
         resource.data.familyAdminId == request.auth.uid ||
         resource.data.familyCode != null // Allow queries searching by family code
       );
