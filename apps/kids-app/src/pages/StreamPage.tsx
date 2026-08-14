@@ -67,7 +67,19 @@ export const StreamPage: React.FC = () => {
 
     const staticBook = books.find(b => b.id === stream.bookId);
     if (staticBook) {
-      setActiveBook(staticBook);
+      fetch(`/books/${stream.bookId}.json`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.pages) {
+            setActiveBook({ ...staticBook, pages: data.pages });
+          } else {
+            setActiveBook(staticBook);
+          }
+        })
+        .catch(err => {
+          console.error("Failed to load book pages:", err);
+          setActiveBook(staticBook);
+        });
     } else {
       const bookDocRef = doc(db, 'books_kids', stream.bookId);
       const unsubscribe = onSnapshot(bookDocRef, (docSnap) => {

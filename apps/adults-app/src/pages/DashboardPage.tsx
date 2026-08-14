@@ -84,6 +84,7 @@ export const DashboardPage: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [skipCloudUpload, setSkipCloudUpload] = useState(false);
+  const [activeBookPages, setActiveBookPages] = useState<string[]>([]);
   
   // Child Profiles States
   const [childProfiles, setChildProfiles] = useState<{ id: string; displayName: string; pin: string }[]>([]);
@@ -213,7 +214,37 @@ export const DashboardPage: React.FC = () => {
 
   // Merge static books and custom books
   const allBooks = [...books, ...customBooks];
-  const selectedBook = allBooks.find(b => b.id === selectedBookId) || books[0];
+  const selectedBookRaw = allBooks.find(b => b.id === selectedBookId) || books[0];
+
+  // Fetch full book pages dynamically
+  useEffect(() => {
+    const activeBook = allBooks.find(b => b.id === selectedBookId);
+    if (!activeBook) return;
+    
+    const isDefaultBook = books.some(b => b.id === selectedBookId);
+    if (isDefaultBook) {
+      fetch(`/books/${selectedBookId}.json`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.pages) {
+            setActiveBookPages(data.pages);
+          } else {
+            setActiveBookPages(activeBook.pages || []);
+          }
+        })
+        .catch(err => {
+          console.error("Failed to load book pages:", err);
+          setActiveBookPages(activeBook.pages || []);
+        });
+    } else {
+      setActiveBookPages(activeBook.pages || []);
+    }
+  }, [selectedBookId, customBooks]);
+
+  const selectedBook = {
+    ...selectedBookRaw,
+    pages: activeBookPages.length > 0 ? activeBookPages : selectedBookRaw.pages
+  };
 
   // Helper to add activity events
   const addEvent = (text: string, icon: string) => {
