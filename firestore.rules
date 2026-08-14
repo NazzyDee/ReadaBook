@@ -46,6 +46,11 @@ service cloud.firestore {
           currentUserData().familyCode == get(/databases/$(database)/documents/users/$(userId)).data.familyCode
         );
       }
+
+      // Followed channels sub-collection: A user can follow or unfollow other stream channels
+      match /follows/{followId} {
+        allow read, write: if isLoggedIn() && request.auth.uid == userId;
+      }
     }
     
     // Stream control room rules
