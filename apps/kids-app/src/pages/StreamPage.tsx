@@ -239,9 +239,13 @@ export const StreamPage: React.FC = () => {
               </div>
               
               <div className="book-text-content">
-                <p>
-                  {activeBook.pages[stream.currentPage] || "Loading story page..."}
-                </p>
+                {activeBook.pages[stream.currentPage] ? (
+                  activeBook.pages[stream.currentPage].split('\n\n').map((para: string, idx: number) => (
+                    <p key={idx} style={{ marginBottom: '16px', lineHeight: '1.6', fontSize: '1.25rem', textIndent: '16px' }}>{para}</p>
+                  ))
+                ) : (
+                  <p>Loading story page...</p>
+                )}
               </div>
             </div>
           ) : (

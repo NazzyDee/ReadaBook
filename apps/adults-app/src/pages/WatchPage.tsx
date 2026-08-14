@@ -303,9 +303,13 @@ export const WatchPage: React.FC = () => {
             </div>
             
             <div className="book-text-content">
-              <p>
-                {recording.bookPages[currentPage] || "End of Story."}
-              </p>
+              {recording.bookPages[currentPage] ? (
+                recording.bookPages[currentPage].split('\n\n').map((para, idx) => (
+                  <p key={idx} style={{ marginBottom: '16px', lineHeight: '1.6', fontSize: '1.2rem', textIndent: '16px' }}>{para}</p>
+                ))
+              ) : (
+                <p>End of Story.</p>
+              )}
             </div>
 
             {/* Manual navigation arrows */}

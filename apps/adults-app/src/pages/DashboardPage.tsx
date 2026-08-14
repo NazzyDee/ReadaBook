@@ -2482,7 +2482,13 @@ export const DashboardPage: React.FC = () => {
                 </div>
 
                 <div className="studio-page-content scrollbar-paper" style={{ minHeight: '300px' }}>
-                  <p>{selectedBook.pages[currentPageIndex] || "Opening story text..."}</p>
+                  {selectedBook.pages[currentPageIndex] ? (
+                    selectedBook.pages[currentPageIndex].split('\n\n').map((para, idx) => (
+                      <p key={idx} style={{ marginBottom: '16px', lineHeight: '1.6', fontSize: '1.1rem', textIndent: '16px' }}>{para}</p>
+                    ))
+                  ) : (
+                    <p>Opening story text...</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -2760,7 +2766,13 @@ export const DashboardPage: React.FC = () => {
                     </div>
 
                     <div className="studio-page-content scrollbar-paper">
-                      <p>{selectedBook.pages[currentPageIndex] || "Opening story text..."}</p>
+                      {selectedBook.pages[currentPageIndex] ? (
+                        selectedBook.pages[currentPageIndex].split('\n\n').map((para, idx) => (
+                          <p key={idx} style={{ marginBottom: '16px', lineHeight: '1.6', fontSize: '1.1rem', textIndent: '16px' }}>{para}</p>
+                        ))
+                      ) : (
+                        <p>Opening story text...</p>
+                      )}
                     </div>
                   </div>
                 )}

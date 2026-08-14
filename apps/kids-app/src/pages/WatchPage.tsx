@@ -51,47 +51,93 @@ export const WatchPage: React.FC = () => {
     }
     
     // Find current page start and end times
+    // Find current page start and end times
     const flips = [...recording.pageFlips].sort((a, b) => a.time - b.time);
     const currentFlip = flips.find(f => f.pageIndex === currentPage);
-    if (!currentFlip) return <p>{pageText}</p>;
+    if (!currentFlip) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {pageText.split('\n\n').map((para, idx) => (
+            <p key={idx} style={{ marginBottom: '16px', lineHeight: '1.6', fontSize: '1.25rem', textIndent: '16px' }}>{para}</p>
+          ))}
+        </div>
+      );
+    }
     
     const nextFlip = flips.find(f => f.time > currentFlip.time);
     const startTime = currentFlip.time;
     const endTime = nextFlip ? nextFlip.time : recording.duration || 120;
     const duration = endTime - startTime;
     
-    if (duration <= 0) return <p>{pageText}</p>;
+    if (duration <= 0) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {pageText.split('\n\n').map((para, idx) => (
+            <p key={idx} style={{ marginBottom: '16px', lineHeight: '1.6', fontSize: '1.25rem', textIndent: '16px' }}>{para}</p>
+          ))}
+        </div>
+      );
+    }
     
     const elapsed = currentTime - startTime;
-    const words = pageText.split(/\s+/);
+    
+    // Split the page into paragraphs
+    const paragraphs = pageText.split('\n\n');
+    
+    // Pre-calculate the total words and start indices for each paragraph to maintain global word counting
+    let totalWordsCount = 0;
+    const parsedParagraphs = paragraphs.map(p => {
+      const pWords = p.trim().split(/\s+/).filter(w => w.length > 0);
+      const startIdx = totalWordsCount;
+      totalWordsCount += pWords.length;
+      return { words: pWords, startIdx };
+    });
+    
     const activeWordIndex = Math.min(
-      words.length - 1,
-      Math.max(0, Math.floor((elapsed / duration) * words.length))
+      totalWordsCount - 1,
+      Math.max(0, Math.floor((elapsed / duration) * totalWordsCount))
     );
     
     return (
-      <p style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', rowGap: '12px', margin: 0 }}>
-        {words.map((word, idx) => {
-          const isActive = idx === activeWordIndex && isPlaying;
-          return (
-            <span 
-              key={idx}
-              style={{
-                background: isActive ? 'rgba(255, 183, 3, 0.25)' : 'transparent',
-                borderBottom: isActive ? '3px solid #ffb703' : 'none',
-                color: isActive ? '#d81159' : 'inherit',
-                fontWeight: isActive ? 'bold' : 'normal',
-                padding: '2px 4px',
-                borderRadius: '4px',
-                transition: 'background-color 0.15s, color 0.15s, border-bottom 0.15s',
-                display: 'inline-block'
-              }}
-            >
-              {word}
-            </span>
-          );
-        })}
-      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {parsedParagraphs.map((pInfo, pIdx) => (
+          <p 
+            key={pIdx} 
+            style={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              gap: '6px', 
+              rowGap: '10px', 
+              margin: 0, 
+              lineHeight: '1.6', 
+              fontSize: '1.25rem',
+              textIndent: pIdx > 0 ? '16px' : '0px'
+            }}
+          >
+            {pInfo.words.map((word, wIdx) => {
+              const globalIdx = pInfo.startIdx + wIdx;
+              const isActive = globalIdx === activeWordIndex && isPlaying;
+              return (
+                <span 
+                  key={wIdx}
+                  style={{
+                    background: isActive ? 'rgba(255, 183, 3, 0.25)' : 'transparent',
+                    borderBottom: isActive ? '3px solid #ffb703' : 'none',
+                    color: isActive ? '#d81159' : 'inherit',
+                    fontWeight: isActive ? 'bold' : 'normal',
+                    padding: '2px 4px',
+                    borderRadius: '4px',
+                    transition: 'background-color 0.15s, color 0.15s, border-bottom 0.15s',
+                    display: 'inline-block'
+                  }}
+                >
+                  {word}
+                </span>
+              );
+            })}
+          </p>
+        ))}
+      </div>
     );
   };
 
