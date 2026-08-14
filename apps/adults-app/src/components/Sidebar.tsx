@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { useAuth } from '../lib/AuthContext';
-import { Home, Tv, ChevronLeft, ChevronRight, User, Flame, Heart } from 'lucide-react';
+import { Home, Tv, ChevronLeft, ChevronRight, User, Flame, Heart, Users } from 'lucide-react';
 import { books } from '../lib/booksData';
 
 interface ActiveStream {
@@ -124,6 +124,10 @@ export const Sidebar: React.FC = () => {
         <Link to="/dashboard" className={`sidebar-nav-item ${location.pathname === '/dashboard' ? 'active' : ''}`}>
           <Tv size={20} />
           {!collapsed && <span>Go Live (Dashboard)</span>}
+        </Link>
+        <Link to="/clubs" className={`sidebar-nav-item ${location.pathname === '/clubs' ? 'active' : ''}`}>
+          <Users size={20} />
+          {!collapsed && <span>Book Clubs</span>}
         </Link>
       </nav>
 

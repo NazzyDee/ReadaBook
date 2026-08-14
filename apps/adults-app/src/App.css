@@ -1975,3 +1975,272 @@
   }
 }
 
+/* ================= TWITCH STREAM MANAGER ENHANCEMENTS ================= */
+
+/* Layout Customizer */
+.btn-layout-toggle {
+  background-color: var(--bg-hover);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-layout-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.layout-checklist {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.layout-check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--bg-dark);
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  user-select: none;
+}
+
+.layout-check-item input {
+  accent-color: var(--accent-primary);
+  width: 16px;
+  height: 16px;
+}
+
+/* Quick Actions Customizer */
+.btn-action-cog {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-action-cog:hover {
+  color: var(--text-main);
+  background-color: var(--bg-hover);
+}
+
+.quick-action-checklist {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Chat Moderation Additions */
+.shield-mode-btn {
+  background-color: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  color: var(--accent-danger);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.shield-mode-btn.active {
+  background-color: var(--accent-danger);
+  color: #fff;
+  border-color: var(--accent-danger);
+  animation: beacon 1.5s infinite;
+}
+
+.studio-chat-card.shield-active {
+  border: 2px solid var(--accent-danger);
+  box-shadow: 0 0 15px rgba(230, 57, 70, 0.25);
+}
+
+.chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Chat Username Link & Popup */
+.chat-user-clickable {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.chat-user-clickable:hover {
+  text-decoration: underline;
+}
+
+.user-mod-tooltip {
+  position: absolute;
+  background-color: #1f1a24;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  padding: 8px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.user-mod-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.btn-mod-action-item {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  padding: 6px 10px;
+  text-align: left;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.btn-mod-action-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.btn-mod-action-item.danger-action:hover {
+  background-color: rgba(230, 57, 70, 0.15);
+  color: var(--accent-danger);
+}
+
+/* Interactive Poll Widget */
+.poll-widget-container {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.poll-active-view {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.poll-option-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.poll-option-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.poll-progress-bar {
+  background-color: var(--bg-dark);
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.poll-progress-fill {
+  background-color: var(--accent-primary);
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.poll-progress-fill-alt {
+  background-color: var(--accent-secondary);
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Simulated Overlay Banners */
+.preview-overlay-banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  color: #fff;
+  text-align: center;
+  padding: 16px;
+}
+
+.preview-overlay-banner h4 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.preview-overlay-banner p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.countdown-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  margin-top: 8px;
+  font-family: monospace;
+}
+
+/* SFX Sound alerts controller */
+.btn-sfx-toggle {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.btn-sfx-toggle:hover {
+  color: var(--text-main);
+  background-color: var(--bg-hover);
+}
+
+.btn-sfx-toggle.active {
+  color: var(--accent-success);
+}
+

@@ -1,0 +1,12 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /recordings/{allPaths=**} {
+      // Authenticated users can read recordings
+      allow read: if request.auth != null;
+      // Only authenticated adults/parents can upload or modify video files
+      allow write: if request.auth != null && 
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'adult';
+    }
+  }
+}

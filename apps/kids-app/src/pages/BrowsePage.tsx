@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, arrayUnion, getDocs, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { Star, Compass, Radio, Users, BookOpen, Search } from 'lucide-react';
+import { useAuth } from '../lib/AuthContext';
+import { Star, Compass, Radio, Users, BookOpen, Search, Video, Clock } from 'lucide-react';
 import { books, type Book } from '../lib/booksData';
 
 interface ActiveStream {
@@ -15,12 +16,120 @@ interface ActiveStream {
   isLive: boolean;
 }
 
+interface Recording {
+  id: string;
+  title: string;
+  genre: string;
+  bookId: string;
+  bookTitle: string;
+  bookAuthor: string;
+  bookCoverUrl: string;
+  duration: number;
+  readerId: string;
+  readerName: string;
+  createdAt: any;
+}
+
 export const BrowsePage: React.FC = () => {
+  const { user } = useAuth();
+  const [connectedAdults, setConnectedAdults] = useState<string[]>([]);
+  const [inviteCode, setInviteCode] = useState('');
+  const [connectSuccess, setConnectSuccess] = useState('');
+  const [connectError, setConnectError] = useState('');
+
   const [liveStreams, setLiveStreams] = useState<ActiveStream[]>([]);
+  const [recordings, setRecordings] = useState<Recording[]>([]);
   const [customBooks, setCustomBooks] = useState<Book[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
+
+  // Listen to connected family members (including co-parents sharing the familyCode)
+  useEffect(() => {
+    if (!user) return;
+    const userRef = doc(db, 'users', user.uid);
+    let unsubscribeFamily: (() => void) | null = null;
+
+    const unsubscribeUser = onSnapshot(userRef, async (userSnap) => {
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const pUid = userData.parentUid || (userData.connectedAdults && userData.connectedAdults[0]);
+        if (pUid) {
+          try {
+            const parentSnap = await getDoc(doc(db, 'users', pUid));
+            if (parentSnap.exists()) {
+              const parentCode = parentSnap.data().familyCode;
+              if (parentCode) {
+                if (unsubscribeFamily) unsubscribeFamily();
+                
+                const q = query(
+                  collection(db, 'users'), 
+                  where('familyCode', '==', parentCode), 
+                  where('role', '==', 'adult')
+                );
+                unsubscribeFamily = onSnapshot(q, (famSnap) => {
+                  const uids: string[] = [];
+                  famSnap.forEach((d) => {
+                    uids.push(d.id);
+                  });
+                  setConnectedAdults(uids);
+                });
+              }
+            }
+          } catch (err) {
+            console.error("Error updating connected family members:", err);
+          }
+        }
+      }
+    });
+
+    return () => {
+      unsubscribeUser();
+      if (unsubscribeFamily) unsubscribeFamily();
+    };
+  }, [user]);
+
+  const handleConnectInviteCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setConnectError('');
+    setConnectSuccess('');
+    if (!inviteCode || inviteCode.trim().length !== 6) {
+      setConnectError('Invite code must be exactly 6 characters.');
+      return;
+    }
+    
+    try {
+      const usersRef = collection(db, 'users');
+      const q = query(usersRef, where('familyCode', '==', inviteCode.trim().toUpperCase()));
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) {
+        setConnectError('Invite code not found. Please double check with your parent.');
+        return;
+      }
+      
+      const adultDoc = querySnapshot.docs[0];
+      const adultId = adultDoc.id;
+      
+      if (user) {
+        const kidDocRef = doc(db, 'users', user.uid);
+        await updateDoc(kidDocRef, {
+          connectedAdults: arrayUnion(adultId)
+        });
+        
+        const adultDocRef = doc(db, 'users', adultId);
+        await updateDoc(adultDocRef, {
+          connectedChildren: arrayUnion(user.uid)
+        });
+        
+        setConnectSuccess(`Successfully connected with ${adultDoc.data().email?.split('@')[0] || 'Parent'}!`);
+        setInviteCode('');
+      }
+    } catch (err: any) {
+      console.error("Failed to connect family code:", err);
+      setConnectError(err.message || 'Failed to connect. Please try again.');
+    }
+  };
 
   // Simulated kids channels
   const mockStreams = [
@@ -86,10 +195,39 @@ export const BrowsePage: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
+  // 3. Listen for recordings in Firestore
+  useEffect(() => {
+    // Listen to shared recordings (adults recorded stories for kids!)
+    const q = query(collection(db, 'recordings'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const list: Recording[] = [];
+      snapshot.forEach((doc) => {
+        list.push({ id: doc.id, ...doc.data() } as Recording);
+      });
+      list.sort((a, b) => {
+        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds || 0);
+        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds || 0);
+        return timeB - timeA;
+      });
+      setRecordings(list);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const allLiveStreams = [
     ...liveStreams,
     ...mockStreams.filter(m => !liveStreams.some(r => r.id === m.id))
-  ];
+  ].filter(s => {
+    if (s.id.startsWith('mock-')) {
+      return connectedAdults.length === 0;
+    }
+    return connectedAdults.includes(s.id);
+  });
+
+  const filteredRecordings = recordings.filter(rec => {
+    return connectedAdults.includes(rec.readerId);
+  });
 
   const allBooks = [...books, ...customBooks];
 
@@ -117,6 +255,27 @@ export const BrowsePage: React.FC = () => {
 
   return (
     <div className="browse-container">
+      {/* Family Connection Code Section */}
+      <div className="glass-panel" style={{ padding: '20px', borderRadius: '16px', marginBottom: '24px', backgroundColor: 'rgba(255, 255, 255, 0.4)' }}>
+        <h3 style={{ margin: '0 0 8px 0', fontSize: '1.2rem', color: 'var(--text-main)' }}>🧸 Connect with Family</h3>
+        <p style={{ margin: '0 0 16px 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+          Enter your parent's 6-character Family Code to see their live readings and recorded storybooks.
+        </p>
+        
+        {connectError && <div style={{ color: 'var(--accent-danger)', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '12px' }}>⚠️ {connectError}</div>}
+        {connectSuccess && <div style={{ color: 'var(--accent-success)', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '12px' }}>🎉 {connectSuccess}</div>}
+        
+        <form onSubmit={handleConnectInviteCode} style={{ display: 'flex', gap: '12px', maxWidth: '400px' }}>
+          <input 
+            type="text" 
+            placeholder="Invite Code (e.g. FA123B)" 
+            value={inviteCode}
+            onChange={(e) => setInviteCode(e.target.value)}
+            style={{ flex: 1, padding: '10px 14px', borderRadius: '8px', border: '1px solid var(--border-color)', textTransform: 'uppercase', fontWeight: 'bold', background: '#fff', outline: 'none' }}
+          />
+          <button type="submit" className="btn-primary" style={{ padding: '10px 20px', cursor: 'pointer' }}>Connect</button>
+        </form>
+      </div>
       {/* Search Header Banner */}
       {searchQuery && (
         <div className="search-results-header">
@@ -237,6 +396,63 @@ export const BrowsePage: React.FC = () => {
                         <p className="stream-card-host">Host: 🌟 {stream.streamerName}</p>
                         <p className="stream-card-book">📖 {activeBook?.title}</p>
                         <span className="stream-card-tag" style={{ backgroundColor: 'var(--bg-hover)', color: 'var(--accent-primary)' }}>{stream.genre}</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* Recorded Storybooks Grid */}
+      <section className="browse-section" style={{ marginTop: '40px' }}>
+        <h2 className="section-title" style={{ borderLeftColor: 'var(--accent-secondary)' }}>
+          <Video size={22} color="var(--accent-secondary)" />
+          <span>Recorded Storybooks (Watch Later)</span>
+        </h2>
+
+        {filteredRecordings.length === 0 ? (
+          <div className="empty-state">
+            <Video size={48} color="var(--text-muted)" />
+            <p>No recorded storybooks found yet. Connect with your parents using their Family Code to see their recordings!</p>
+          </div>
+        ) : (
+          <div className="streams-grid">
+            {filteredRecordings.map((rec) => {
+              const minutes = Math.floor(rec.duration / 60);
+              const seconds = rec.duration % 60;
+              const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+              return (
+                <Link key={rec.id} to={`/watch/${rec.id}`} className="stream-card-link">
+                  <div className="stream-card" style={{ border: '2px solid rgba(0, 180, 216, 0.15)', borderRadius: '16px' }}>
+                    <div className="stream-thumbnail-container" style={{ borderRadius: '14px 14px 0 0' }}>
+                      <img src="/assets/streamer_feed.jpg" alt={rec.title} className="stream-thumbnail" style={{ filter: 'grayscale(20%)' }} />
+                      <div className="live-indicator" style={{ background: 'var(--accent-secondary)' }}>RECORDED 🎥</div>
+                      <div className="viewer-count" style={{ background: 'rgba(0,0,0,0.5)' }}>
+                        <Clock size={12} />
+                        <span>{formattedDuration}</span>
+                      </div>
+                      <div className="mini-book-badge">
+                        <img src={rec.bookCoverUrl} alt="Cover" />
+                      </div>
+                    </div>
+
+                    <div className="stream-card-info">
+                      <div className="stream-avatar" style={{ border: '2px solid var(--accent-secondary)', backgroundColor: 'var(--accent-secondary)' }}>
+                        <div className="avatar-placeholder">
+                          {rec.readerName.substring(0, 2).toUpperCase()}
+                        </div>
+                      </div>
+                      <div className="stream-metadata">
+                        <h4 className="stream-card-title">{rec.title}</h4>
+                        <p className="stream-card-host">Told by: 🌟 {rec.readerName}</p>
+                        <p className="stream-card-book">📖 {rec.bookTitle}</p>
+                        <span className="stream-card-tag" style={{ background: 'rgba(0, 180, 216, 0.1)', color: 'var(--accent-secondary)' }}>
+                          {rec.genre}
+                        </span>
                       </div>
                     </div>
                   </div>

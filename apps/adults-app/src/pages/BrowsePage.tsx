@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { Flame, Compass, Radio, Users, BookOpen, Search } from 'lucide-react';
+import { Flame, Compass, Radio, Users, BookOpen, Search, Video, Clock } from 'lucide-react';
 import { books, type Book } from '../lib/booksData';
 
 interface ActiveStream {
@@ -15,8 +15,23 @@ interface ActiveStream {
   isLive: boolean;
 }
 
+interface Recording {
+  id: string;
+  title: string;
+  genre: string;
+  bookId: string;
+  bookTitle: string;
+  bookAuthor: string;
+  bookCoverUrl: string;
+  duration: number;
+  readerId: string;
+  readerName: string;
+  createdAt: any;
+}
+
 export const BrowsePage: React.FC = () => {
   const [liveStreams, setLiveStreams] = useState<ActiveStream[]>([]);
+  const [recordings, setRecordings] = useState<Recording[]>([]);
   const [customBooks, setCustomBooks] = useState<Book[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
@@ -82,6 +97,25 @@ export const BrowsePage: React.FC = () => {
         list.push({ id: doc.id, ...doc.data() } as Book);
       });
       setCustomBooks(list);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // 3. Listen for recordings in Firestore
+  useEffect(() => {
+    const q = query(collection(db, 'recordings'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const list: Recording[] = [];
+      snapshot.forEach((doc) => {
+        list.push({ id: doc.id, ...doc.data() } as Recording);
+      });
+      list.sort((a, b) => {
+        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds || 0);
+        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds || 0);
+        return timeB - timeA;
+      });
+      setRecordings(list);
     });
 
     return () => unsubscribe();
@@ -237,6 +271,63 @@ export const BrowsePage: React.FC = () => {
                         <p className="stream-card-host">{stream.streamerName}</p>
                         <p className="stream-card-book">📖 {activeBook?.title}</p>
                         <span className="stream-card-tag">{stream.genre}</span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </section>
+
+      {/* Recorded Storytimes Grid */}
+      <section className="browse-section" style={{ marginTop: '40px' }}>
+        <h2 className="section-title" style={{ color: 'var(--accent-secondary)' }}>
+          <Video size={22} color="var(--accent-secondary)" />
+          <span>Recorded Storytimes (Watch Later)</span>
+        </h2>
+
+        {recordings.length === 0 ? (
+          <div className="empty-state">
+            <Video size={48} color="var(--text-muted)" />
+            <p>No recorded sessions found. Go to the dashboard to record your first storytime reading!</p>
+          </div>
+        ) : (
+          <div className="streams-grid">
+            {recordings.map((rec) => {
+              const minutes = Math.floor(rec.duration / 60);
+              const seconds = rec.duration % 60;
+              const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+              return (
+                <Link key={rec.id} to={`/watch/${rec.id}`} className="stream-card-link">
+                  <div className="stream-card" style={{ border: '1px solid rgba(138, 43, 226, 0.15)' }}>
+                    <div className="stream-thumbnail-container">
+                      <img src="/assets/streamer_feed.jpg" alt={rec.title} className="stream-thumbnail" style={{ filter: 'grayscale(30%)' }} />
+                      <div className="live-indicator" style={{ background: 'var(--accent-secondary)' }}>RECORDED</div>
+                      <div className="viewer-count" style={{ background: 'rgba(0,0,0,0.6)' }}>
+                        <Clock size={12} />
+                        <span>{formattedDuration}</span>
+                      </div>
+                      <div className="mini-book-badge">
+                        <img src={rec.bookCoverUrl} alt="Cover" />
+                      </div>
+                    </div>
+
+                    <div className="stream-card-info">
+                      <div className="stream-avatar" style={{ border: '2px solid var(--accent-secondary)' }}>
+                        <div className="avatar-placeholder" style={{ background: 'var(--accent-secondary)' }}>
+                          {rec.readerName.substring(0, 2).toUpperCase()}
+                        </div>
+                      </div>
+                      <div className="stream-metadata">
+                        <h4 className="stream-card-title">{rec.title}</h4>
+                        <p className="stream-card-host">Recorded by {rec.readerName}</p>
+                        <p className="stream-card-book">📖 {rec.bookTitle}</p>
+                        <span className="stream-card-tag" style={{ background: 'rgba(138, 43, 226, 0.1)', color: 'var(--accent-secondary)' }}>
+                          {rec.genre}
+                        </span>
                       </div>
                     </div>
                   </div>

@@ -14,6 +14,20 @@ export const Header: React.FC = () => {
     setSearchQuery(query);
   }, [searchParams]);
 
+  const [profileName, setProfileName] = useState('Friend');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('readabook_active_profile');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.displayName) {
+          setProfileName(parsed.displayName);
+        }
+      } catch (e) {}
+    }
+  }, [user]);
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -55,9 +69,16 @@ export const Header: React.FC = () => {
             </Link>
             <div className="kids-avatar-badge">
               <Smile size={18} color="#fff" />
-              <span className="header-username">{user.email?.split('@')[0]}</span>
+              <span className="header-username">{profileName}</span>
             </div>
-            <button onClick={logout} className="btn-signout" title="Sign Out">
+            <button 
+              onClick={() => {
+                localStorage.removeItem('readabook_active_profile');
+                logout();
+              }} 
+              className="btn-signout" 
+              title="Sign Out"
+            >
               <LogOut size={16} />
             </button>
           </div>

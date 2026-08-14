@@ -1,0 +1,111 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is logged in
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+    
+    // Helper function to get current user data
+    function currentUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    // User profile rules
+    match /users/{userId} {
+      // Allow read to own profile, family members, or for family code searches
+      allow read: if isLoggedIn() && (
+        request.auth.uid == userId ||
+        resource.data.familyCode == currentUserData().familyCode ||
+        resource.data.parentUid == userId ||
+        resource.data.familyAdminId == request.auth.uid ||
+        resource.data.familyCode != null // Allow queries searching by family code
+      );
+      
+      // Allow write to own document, co-parent updates, or kids connecting
+      allow write: if isLoggedIn() && (
+        request.auth.uid == userId ||
+        resource.data.familyAdminId == request.auth.uid ||
+        // Allow kids to append their UID to parent's connectedChildren
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['connectedChildren']))
+      );
+      
+      // Children sub-profiles rules: Strictly locked to the family group
+      match /children/{childId} {
+        // ONLY the admin parent or co-parent can create/modify child profiles
+        allow write: if isLoggedIn() && (
+          request.auth.uid == userId || 
+          currentUserData().familyAdminId == userId
+        );
+        // Visible only to parents in the group, or child devices connected to the group
+        allow read: if isLoggedIn() && (
+          request.auth.uid == userId ||
+          currentUserData().familyAdminId == userId ||
+          currentUserData().parentUid == userId ||
+          currentUserData().familyCode == get(/databases/$(database)/documents/users/$(userId)).data.familyCode
+        );
+      }
+    }
+    
+    // Stream control room rules: Visible only to family members
+    match /streams/{streamId} {
+      allow read: if isLoggedIn() && (
+        streamId == request.auth.uid || 
+        currentUserData().familyCode == get(/databases/$(database)/documents/users/$(streamId)).data.familyCode
+      );
+      allow write: if isLoggedIn() && request.auth.uid == streamId;
+    }
+    
+    // Chat messages rules
+    match /messages/{messageId} {
+      allow read: if isLoggedIn();
+      // Users can only write messages where they are the sender
+      allow write: if isLoggedIn() && request.resource.data.senderId == request.auth.uid;
+    }
+    
+    // Books rules
+    match /books/{bookId} {
+      allow read: if isLoggedIn();
+      allow write: if isLoggedIn() && request.resource.data.uploaderId == request.auth.uid;
+    }
+    
+    // Video recordings rules: Visible only to family members
+    match /recordings/{recordingId} {
+      allow read: if isLoggedIn() && (
+        resource.data.readerId == request.auth.uid || 
+        currentUserData().familyCode == get(/databases/$(database)/documents/users/$(resource.data.readerId)).data.familyCode
+      );
+      // Only the reader who recorded it can create, update, or delete
+      allow write: if isLoggedIn() && (
+        (request.method == 'create' && request.resource.data.readerId == request.auth.uid) ||
+        (request.method == 'update' && resource.data.readerId == request.auth.uid) ||
+        (request.method == 'delete' && resource.data.readerId == request.auth.uid)
+      );
+    }
+
+    // Book Clubs rules
+    match /book_clubs/{clubId} {
+      allow read: if isLoggedIn();
+      allow create: if isLoggedIn();
+      allow update: if isLoggedIn() && (
+        request.auth.uid == resource.data.adminId ||
+        request.resource.data.groupCode == resource.data.groupCode
+      );
+      allow delete: if isLoggedIn() && request.auth.uid == resource.data.adminId;
+
+      // Sub-collections under book clubs (messages, polls, meetings)
+      match /messages/{messageId} {
+        allow read, write: if isLoggedIn() && 
+          request.auth.uid in get(/databases/$(database)/documents/book_clubs/$(clubId)).data.members;
+      }
+      match /polls/{pollId} {
+        allow read, write: if isLoggedIn() && 
+          request.auth.uid in get(/databases/$(database)/documents/book_clubs/$(clubId)).data.members;
+      }
+      match /meetings/{meetingId} {
+        allow read, write: if isLoggedIn() && 
+          request.auth.uid in get(/databases/$(database)/documents/book_clubs/$(clubId)).data.members;
+      }
+    }
+  }
+}

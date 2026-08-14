@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { auth, db } from '../lib/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import loginHero from '../assets/login_hero.jpg';
 import './LoginPage.css';
@@ -12,11 +13,41 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const ensureUserDoc = async (userId: string, userEmail: string) => {
+    try {
+      const userDocRef = doc(db, 'users', userId);
+      const userSnapshot = await getDoc(userDocRef);
+      if (!userSnapshot.exists()) {
+        const generateFamilyCode = () => {
+          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+          let code = '';
+          for (let i = 0; i < 6; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+          }
+          return code;
+        };
+        await setDoc(userDocRef, {
+          uid: userId,
+          email: userEmail,
+          role: 'adult',
+          familyCode: generateFamilyCode(),
+          connectedChildren: [],
+          createdAt: new Date()
+        });
+      }
+    } catch (err) {
+      console.error("Failed to ensure user doc in firestore:", err);
+    }
+  };
+
   const handleGoogleSignIn = async () => {
     setError('');
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      if (result.user) {
+        await ensureUserDoc(result.user.uid, result.user.email || '');
+      }
       navigate('/');
     } catch (err: any) {
       setError(err.message || 'An error occurred during Google authentication.');
@@ -29,9 +60,15 @@ export const LoginPage: React.FC = () => {
 
     try {
       if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        if (result.user) {
+          await ensureUserDoc(result.user.uid, result.user.email || email);
+        }
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const result = await createUserWithEmailAndPassword(auth, email, password);
+        if (result.user) {
+          await ensureUserDoc(result.user.uid, result.user.email || email);
+        }
       }
       navigate('/');
     } catch (err: any) {

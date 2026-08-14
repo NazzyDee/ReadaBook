@@ -12,7 +12,7 @@ export const books: Book[] = [
     id: "alice-in-wonderland",
     title: "Alice's Adventures in Wonderland",
     author: "Lewis Carroll",
-    coverUrl: "/assets/book_cover.jpg", // Using our fantasy book cover as placeholder
+    coverUrl: "/assets/book_cover.jpg",
     genre: "Fantasy",
     pages: [
       "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversations?'",
@@ -46,6 +46,45 @@ export const books: Book[] = [
       "Our chairs, being his patents, embraced and caressed us rather than submitted to being sat upon, and there was that luxurious after-dinner atmosphere when thought runs gracefully free of the trammels of precision. And he put it to us in this way, marking the points with a lean forefinger, as we sat and lazily admired his earnestness over this new paradox (as we thought it) which he had thought fit to lay before us.",
       "'You must follow me carefully. I shall have to uncontrovert one or two ideas that are almost universally accepted. The geometry, for instance, they taught you at school is founded on a misconception.'",
       "'Is not that rather a large thing to expect us to begin upon?' said Filby, an argumentative person with red hair. 'I do not mean to ask you to accept anything without reasonable ground for it. You will soon admit as much as I need from you. You know of course that a mathematical line, a line of thickness nil, has no real existence. They taught you that? Nor a mathematical plane. These things are mere abstractions.'"
+    ]
+  },
+  {
+    id: "metamorphosis",
+    title: "The Metamorphosis",
+    author: "Franz Kafka",
+    coverUrl: "/assets/book_cover.jpg",
+    genre: "Fiction / Classics",
+    pages: [
+      "One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections.",
+      "The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. 'What's happened to me?' he thought. It wasn't a dream.",
+      "His room, a proper human room although a little too small, lay peacefully between its four familiar walls. A collection of textile samples lay spread out on the table—Samsa was a travelling salesman—and above it there hung a picture that he had recently cut out of an illustrated magazine and housed in a nice, gilded frame.",
+      "It showed a lady fitted out with a fur hat and fur boa who sat upright, raising a heavy fur muff that covered the whole of her lower arm towards the viewer. Gregor then turned to look out the window at the dull weather. Drops of rain could be heard hitting the pane, which made him feel quite sad."
+    ]
+  },
+  {
+    id: "scarlet-letter",
+    title: "The Scarlet Letter",
+    author: "Nathaniel Hawthorne",
+    coverUrl: "/assets/book_cover.jpg",
+    genre: "Drama / Classics",
+    pages: [
+      "A throng of bearded men, in sad-colored garments and gray, steeple-crowned hats, intermixed with women, some wearing hoods, and others bareheaded, was assembled in front of a wooden edifice, the door of which was heavily timbered with oak, and studded with iron spikes.",
+      "The founders of a new colony, whatever Utopia of human virtue and happiness they might originally project, have invariably recognized it among their earliest practical necessities to allot a portion of the virgin soil as a cemetery, and another portion as the site of a prison.",
+      "In accordance with this rule, it may safely be assumed that the forefathers of Boston had built the first prison-house, somewhere in the vicinity of Cornhill, almost as seasonably as they marked out the first burial-ground, on Isaac Johnson's lot, and round about his grave, which subsequently became the nucleus of all the congregated sepulchres in the old churchyard of King's Chapel.",
+      "Certain it is, that, some fifteen or twenty years after the settlement of the town, the wooden jail was already marked with weather-stains and other indications of age, which gave a yet darker aspect to its beetle-browed and gloomy front."
+    ]
+  },
+  {
+    id: "dracula",
+    title: "Dracula",
+    author: "Bram Stoker",
+    coverUrl: "/assets/book_cover.jpg",
+    genre: "Horror / Gothic",
+    pages: [
+      "3 May. Bistritz.—Left Munich at 8:35 P.M., on 1st May, arriving at Vienna early next morning; should have arrived at 6:46, but train was an hour late. Buda-Pesth seems a wonderful place, from the glimpse which I got of it from the train and the little walk I had through the streets.",
+      "I feared to go very far from the station, as we had arrived late and would start as near the correct time as possible. The impression I had was that we were leaving the West and entering the East; the most western of splendid bridges over the Danube, which is here of noble width and depth, took us among the traditions of Turkish rule.",
+      "We left in pretty good time, and came after nightfall to Klausenburgh. Here I stopped for the night at the Hotel Royale. I had for dinner, or rather supper, a chicken done up some way with red pepper, which was very good but made me thirsty. (Mem., get recipe for Mina.)",
+      "I asked the waiter, and he said it was called 'paprika hendl,' and that, as it was a national dish, I should be able to get it anywhere along the Carpathians. I found my smattering of German very useful; indeed, I don't know how I should be able to get on without it."
     ]
   }
 ];

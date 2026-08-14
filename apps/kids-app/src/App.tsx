@@ -4,6 +4,7 @@ import { BrowsePage } from './pages/BrowsePage';
 import { StreamPage } from './pages/StreamPage';
 import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { WatchPage } from './pages/WatchPage';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { useAuth } from './lib/AuthContext';
@@ -63,6 +64,16 @@ function App() {
             <ProtectedRoute>
               <AppLayout>
                 <DashboardPage />
+              </AppLayout>
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/watch/:recordingId" 
+          element={
+            <ProtectedRoute>
+              <AppLayout>
+                <WatchPage />
               </AppLayout>
             </ProtectedRoute>
           } 
