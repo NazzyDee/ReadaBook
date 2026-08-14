@@ -12,7 +12,7 @@ export const books: Book[] = [
     id: "peter-pan",
     title: "Peter Pan",
     author: "J.M. Barrie",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/peter-pan.jpg",
     genre: "Adventure",
     pages: [
       "All children, except one, grow up. They soon know that they will grow up, and the way Wendy knew was this. One day when she was two years old she was playing in a garden, and she plucked another flower and ran with it to her mother.",
@@ -25,7 +25,7 @@ export const books: Book[] = [
     id: "secret-garden",
     title: "The Secret Garden",
     author: "Frances Hodgson Burnett",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/secret-garden.jpg",
     genre: "Nature / Friendship",
     pages: [
       "When Mary Lennox was sent to Misselthwaite Manor to live with her uncle everybody said she was the most disagreeable-looking child ever seen. It was true, too. She had a little thin face, a little thin body, thin light hair and a sour expression.",
@@ -38,7 +38,7 @@ export const books: Book[] = [
     id: "velveteen-rabbit",
     title: "The Velveteen Rabbit",
     author: "Margery Williams",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/velveteen-rabbit.jpg",
     genre: "Classics",
     pages: [
       "There was once a velveteen rabbit, and in the beginning he was really splendid. He was fat and bunchy, as a rabbit should be; his coat was spotted with brown and white, he had real thread whiskers, and his ears were lined with pink sateen.",
@@ -51,7 +51,7 @@ export const books: Book[] = [
     id: "peter-rabbit",
     title: "The Tale of Peter Rabbit",
     author: "Beatrix Potter",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/peter-rabbit.jpg",
     genre: "Nature / Adventure",
     pages: [
       "Once upon a time there were four little Rabbits, and their names were—Flopsy, Mopsy, Cotton-tail, and Peter. They lived with their Mother in a sand-bank, underneath the root of a very big fir-tree.",
@@ -64,7 +64,7 @@ export const books: Book[] = [
     id: "wizard-of-oz",
     title: "The Wonderful Wizard of Oz",
     author: "L. Frank Baum",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/wizard-of-oz.jpg",
     genre: "Adventure / Fantasy",
     pages: [
       "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the lumber to build it had to be carried by wagon many miles.",
@@ -77,7 +77,7 @@ export const books: Book[] = [
     id: "alice-in-wonderland",
     title: "Alice's Adventures in Wonderland",
     author: "Lewis Carroll",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/alice-in-wonderland.jpg",
     genre: "Fantasy / Classics",
     pages: [
       "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversations?'",

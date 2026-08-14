@@ -12,7 +12,7 @@ export const books: Book[] = [
     id: "alice-in-wonderland",
     title: "Alice's Adventures in Wonderland",
     author: "Lewis Carroll",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/alice-in-wonderland.jpg",
     genre: "Fantasy",
     pages: [
       "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversations?'",
@@ -26,7 +26,7 @@ export const books: Book[] = [
     id: "frankenstein",
     title: "Frankenstein",
     author: "Mary Shelley",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/frankenstein.jpg",
     genre: "Sci-Fi / Classics",
     pages: [
       "You will rejoice to hear that no disaster has accompanied the commencement of an enterprise which you have regarded with such evil forebodings. I arrived here yesterday, and my first task is to assure my dear sister of my welfare and increasing confidence in the success of my undertaking.",
@@ -39,7 +39,7 @@ export const books: Book[] = [
     id: "the-time-machine",
     title: "The Time Machine",
     author: "H.G. Wells",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/the-time-machine.jpg",
     genre: "Sci-Fi",
     pages: [
       "The Time Traveller (for so it will be convenient to speak of him) was expounding a recondite matter to us. His grey eyes shone and twinkled, and his usually pale face was flushed and animated. The fire burned brightly, and the soft radiance of the incandescent lights in the lilies of silver caught the bubbles that flashed and passed in our glasses.",
@@ -52,7 +52,7 @@ export const books: Book[] = [
     id: "metamorphosis",
     title: "The Metamorphosis",
     author: "Franz Kafka",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/metamorphosis.jpg",
     genre: "Fiction / Classics",
     pages: [
       "One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections.",
@@ -65,7 +65,7 @@ export const books: Book[] = [
     id: "scarlet-letter",
     title: "The Scarlet Letter",
     author: "Nathaniel Hawthorne",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/scarlet-letter.jpg",
     genre: "Drama / Classics",
     pages: [
       "A throng of bearded men, in sad-colored garments and gray, steeple-crowned hats, intermixed with women, some wearing hoods, and others bareheaded, was assembled in front of a wooden edifice, the door of which was heavily timbered with oak, and studded with iron spikes.",
@@ -78,7 +78,7 @@ export const books: Book[] = [
     id: "dracula",
     title: "Dracula",
     author: "Bram Stoker",
-    coverUrl: "/assets/book_cover.jpg",
+    coverUrl: "/assets/dracula.jpg",
     genre: "Horror / Gothic",
     pages: [
       "3 May. Bistritz.—Left Munich at 8:35 P.M., on 1st May, arriving at Vienna early next morning; should have arrived at 6:46, but train was an hour late. Buda-Pesth seems a wonderful place, from the glimpse which I got of it from the train and the little walk I had through the streets.",
