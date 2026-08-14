@@ -37,12 +37,7 @@ export const BrowsePage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
 
-  const genres = [
-    { name: "Fantasy", count: "1.2k readers", color: "from-purple-600 to-indigo-600" },
-    { name: "Sci-Fi", count: "980 readers", color: "from-blue-600 to-cyan-500" },
-    { name: "Classics", count: "2.4k readers", color: "from-amber-600 to-orange-500" },
-    { name: "Mystery", count: "650 readers", color: "from-red-600 to-pink-600" }
-  ];
+
 
   // 1. Listen for live streams in Firestore
   useEffect(() => {
@@ -93,6 +88,25 @@ export const BrowsePage: React.FC = () => {
   const allLiveStreams = liveStreams;
 
   const allBooks = [...books, ...customBooks];
+
+  const genres = [
+    { 
+      name: "Fantasy", 
+      count: `${allBooks.filter(b => b.genre.toLowerCase().includes('fantasy')).length} book${allBooks.filter(b => b.genre.toLowerCase().includes('fantasy')).length !== 1 ? 's' : ''}`
+    },
+    { 
+      name: "Sci-Fi", 
+      count: `${allBooks.filter(b => b.genre.toLowerCase().includes('sci-fi')).length} book${allBooks.filter(b => b.genre.toLowerCase().includes('sci-fi')).length !== 1 ? 's' : ''}`
+    },
+    { 
+      name: "Classics", 
+      count: `${allBooks.filter(b => b.genre.toLowerCase().includes('classics')).length} book${allBooks.filter(b => b.genre.toLowerCase().includes('classics')).length !== 1 ? 's' : ''}`
+    },
+    { 
+      name: "Mystery", 
+      count: `${allBooks.filter(b => b.genre.toLowerCase().includes('mystery')).length} book${allBooks.filter(b => b.genre.toLowerCase().includes('mystery')).length !== 1 ? 's' : ''}`
+    }
+  ];
 
   // Filter by genre AND search query
   const filteredStreams = allLiveStreams.filter((s) => {

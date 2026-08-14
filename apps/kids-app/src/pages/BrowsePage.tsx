@@ -131,11 +131,7 @@ export const BrowsePage: React.FC = () => {
     }
   };
 
-  const genres = [
-    { name: "Adventure", count: "1.2k listening", color: "#ff477e" },
-    { name: "Nature / Friendship", count: "890 listening", color: "#00b4d8" },
-    { name: "Classics", count: "2.1k listening", color: "#ffb703" }
-  ];
+
 
   // 1. Listen for live kids streams in Firestore
   useEffect(() => {
@@ -193,6 +189,24 @@ export const BrowsePage: React.FC = () => {
   });
 
   const allBooks = [...books, ...customBooks];
+
+  const genres = [
+    { 
+      name: "Adventure", 
+      count: `${allBooks.filter(b => b.genre.toLowerCase().includes('adventure')).length} book${allBooks.filter(b => b.genre.toLowerCase().includes('adventure')).length !== 1 ? 's' : ''}`, 
+      color: "#ff477e" 
+    },
+    { 
+      name: "Nature / Friendship", 
+      count: `${allBooks.filter(b => b.genre.toLowerCase().includes('nature') || b.genre.toLowerCase().includes('friendship')).length} book${allBooks.filter(b => b.genre.toLowerCase().includes('nature') || b.genre.toLowerCase().includes('friendship')).length !== 1 ? 's' : ''}`, 
+      color: "#00b4d8" 
+    },
+    { 
+      name: "Classics", 
+      count: `${allBooks.filter(b => b.genre.toLowerCase().includes('classics')).length} book${allBooks.filter(b => b.genre.toLowerCase().includes('classics')).length !== 1 ? 's' : ''}`, 
+      color: "#ffb703" 
+    }
+  ];
 
   // Filter streams
   const filteredStreams = allLiveStreams.filter((s) => {
