@@ -269,7 +269,7 @@ export const BrowsePage: React.FC = () => {
             </Link>
           </div>
           <div className="banner-preview-video">
-            <img src="/assets/streamer_feed.jpg" alt="Featured Stream" />
+            <img src={featuredBook?.coverUrl || ''} alt="Featured Stream" />
             <div className="banner-overlay-badge">
               <Users size={14} />
               <span>{featuredStream.viewerCount} Kids Listening</span>
@@ -338,7 +338,7 @@ export const BrowsePage: React.FC = () => {
                 <Link key={stream.id} to={`/stream/${stream.id}`} className="stream-card-link">
                   <div className="stream-card">
                     <div className="stream-thumbnail-container">
-                      <img src="/assets/streamer_feed.jpg" alt={stream.title} className="stream-thumbnail" />
+                      <img src={activeBook?.coverUrl || ''} alt={stream.title} className="stream-thumbnail" />
                       <div className="live-indicator">LIVE 🎈</div>
                       <div className="viewer-count" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
                         <Users size={12} />
@@ -392,7 +392,7 @@ export const BrowsePage: React.FC = () => {
                 <Link key={rec.id} to={`/watch/${rec.id}`} className="stream-card-link">
                   <div className="stream-card" style={{ border: '2px solid rgba(0, 180, 216, 0.15)', borderRadius: '16px' }}>
                     <div className="stream-thumbnail-container" style={{ borderRadius: '14px 14px 0 0' }}>
-                      <img src="/assets/streamer_feed.jpg" alt={rec.title} className="stream-thumbnail" style={{ filter: 'grayscale(20%)' }} />
+                      <img src={rec.bookCoverUrl || ''} alt={rec.title} className="stream-thumbnail" style={{ filter: 'grayscale(20%)' }} />
                       <div className="live-indicator" style={{ background: 'var(--accent-secondary)' }}>RECORDED 🎥</div>
                       <div className="viewer-count" style={{ background: 'rgba(0,0,0,0.5)' }}>
                         <Clock size={12} />

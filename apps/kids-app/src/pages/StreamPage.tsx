@@ -240,9 +240,36 @@ export const StreamPage: React.FC = () => {
           )}
 
           {/* Video Feed */}
-          <div className="video-overlay" style={{ border: '3px solid var(--accent-secondary)', borderRadius: 'var(--border-radius)' }}>
-            <div className="live-camera-feed-sim">
-              <img src="/assets/streamer_feed.jpg" alt="Storyteller feed" />
+          <div className="video-overlay" style={{ border: '3px solid var(--accent-secondary)', borderRadius: 'var(--border-radius)', overflow: 'hidden' }}>
+            <div className="live-camera-feed-sim" style={{ background: '#11032a', position: 'relative' }}>
+              <div style={{
+                width: '100%',
+                height: '100%',
+                background: 'linear-gradient(135deg, #0b011d 0%, #00b4d8 100%)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontSize: '0.85rem'
+              }}>
+                <div style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  background: 'var(--accent-secondary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  fontSize: '1.1rem',
+                  marginBottom: '8px',
+                  boxShadow: '0 0 16px rgba(0, 180, 216, 0.4)'
+                }}>
+                  {stream.streamerName.substring(0, 2).toUpperCase()}
+                </div>
+                <span style={{ fontSize: '0.8rem', opacity: 0.9 }}>Camera Active 🎥</span>
+              </div>
               <div className="feed-watermark" style={{ background: 'rgba(0, 180, 216, 0.7)' }}>
                 <span>📖 Storyteller: {stream.streamerName}</span>
               </div>

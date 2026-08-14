@@ -379,8 +379,24 @@ export const WatchPage: React.FC = () => {
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               ) : (
-                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                  <img src="/assets/streamer_feed.jpg" alt="Reader" style={{ filter: isPlaying ? 'none' : 'grayscale(30%)' }} />
+                <div style={{ position: 'relative', width: '100%', height: '100%', background: 'linear-gradient(135deg, #0b011d 0%, #00b4d8 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{
+                    width: '50px',
+                    height: '50px',
+                    borderRadius: '50%',
+                    background: 'var(--accent-secondary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '1.2rem',
+                    color: '#fff',
+                    marginBottom: '8px',
+                    boxShadow: '0 0 16px rgba(0, 180, 216, 0.4)'
+                  }}>
+                    {recording.readerName ? recording.readerName.substring(0, 2).toUpperCase() : 'RE'}
+                  </div>
+                  <span style={{ fontSize: '0.8rem', color: '#fff', opacity: 0.9 }}>Simulated Video Active</span>
                   {isPlaying ? (
                     <div className="mic-muted-badge flex-center" style={{ background: 'transparent' }}>
                       <div className="pulse-circle" style={{ borderColor: '#ff477e' }}></div>

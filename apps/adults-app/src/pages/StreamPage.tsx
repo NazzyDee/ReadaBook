@@ -336,10 +336,36 @@ export const StreamPage: React.FC = () => {
             </div>
           )}
 
-          {/* The Live Video Feed overlay */}
           <div className="video-overlay">
-            <div className="live-camera-feed-sim">
-              <img src="/assets/streamer_feed.jpg" alt="Live Stream Feed" />
+            <div className="live-camera-feed-sim" style={{ background: '#11032a', position: 'relative', overflow: 'hidden' }}>
+              <div style={{
+                width: '100%',
+                height: '100%',
+                background: 'linear-gradient(135deg, #15023a 0%, #6247aa 100%)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                fontSize: '0.85rem'
+              }}>
+                <div style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  background: 'var(--accent-secondary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  fontSize: '1.1rem',
+                  marginBottom: '8px',
+                  boxShadow: '0 0 16px rgba(138, 43, 226, 0.4)'
+                }}>
+                  {stream.streamerName.substring(0, 2).toUpperCase()}
+                </div>
+                <span style={{ fontSize: '0.8rem', opacity: 0.9 }}>Camera Feed Active</span>
+              </div>
               <div className="feed-watermark">
                 <span>{stream.streamerName}</span>
                 <span className="rec-dot"></span>

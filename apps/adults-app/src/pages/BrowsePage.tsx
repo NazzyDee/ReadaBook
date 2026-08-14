@@ -148,7 +148,7 @@ export const BrowsePage: React.FC = () => {
             </Link>
           </div>
           <div className="banner-preview-video">
-            <img src="/assets/streamer_feed.jpg" alt="Featured Stream" />
+            <img src={featuredBook?.coverUrl || ''} alt="Featured Stream" />
             <div className="banner-overlay-badge">
               <Users size={14} />
               <span>{(featuredStream.viewerCount).toLocaleString()} Watching</span>
@@ -214,7 +214,7 @@ export const BrowsePage: React.FC = () => {
                   <div className="stream-card">
                     {/* Thumbnail */}
                     <div className="stream-thumbnail-container">
-                      <img src="/assets/streamer_feed.jpg" alt={stream.title} className="stream-thumbnail" />
+                      <img src={activeBook?.coverUrl || ''} alt={stream.title} className="stream-thumbnail" />
                       <div className="live-indicator">LIVE</div>
                       <div className="viewer-count">
                         <Users size={12} />
@@ -270,7 +270,7 @@ export const BrowsePage: React.FC = () => {
                 <Link key={rec.id} to={`/watch/${rec.id}`} className="stream-card-link">
                   <div className="stream-card" style={{ border: '1px solid rgba(138, 43, 226, 0.15)' }}>
                     <div className="stream-thumbnail-container">
-                      <img src="/assets/streamer_feed.jpg" alt={rec.title} className="stream-thumbnail" style={{ filter: 'grayscale(30%)' }} />
+                      <img src={rec.bookCoverUrl || ''} alt={rec.title} className="stream-thumbnail" style={{ filter: 'grayscale(30%)' }} />
                       <div className="live-indicator" style={{ background: 'var(--accent-secondary)' }}>RECORDED</div>
                       <div className="viewer-count" style={{ background: 'rgba(0,0,0,0.6)' }}>
                         <Clock size={12} />
