@@ -22,6 +22,7 @@ interface StreamData {
   bookId: string;
   genre: string;
   currentPage: number;
+  currentParagraph?: number;
   isLive: boolean;
   viewerCount: number;
   emoteOnly?: boolean;
@@ -337,9 +338,27 @@ export const StreamPage: React.FC = () => {
               
               <div className="book-text-content">
                 {activeBook.pages[stream.currentPage] ? (
-                  activeBook.pages[stream.currentPage].split('\n\n').map((para: string, idx: number) => (
-                    <p key={idx} style={{ marginBottom: '16px', lineHeight: '1.6', fontSize: '1.2rem', textIndent: '16px' }}>{para}</p>
-                  ))
+                  activeBook.pages[stream.currentPage].split('\n\n').map((para: string, idx: number) => {
+                    const isActive = stream.currentParagraph !== undefined ? idx === stream.currentParagraph : false;
+                    return (
+                      <p 
+                        key={idx} 
+                        style={{ 
+                          marginBottom: '16px', 
+                          lineHeight: '1.6', 
+                          fontSize: '1.2rem', 
+                          textIndent: '16px',
+                          padding: '6px 12px',
+                          borderRadius: '6px',
+                          backgroundColor: isActive ? 'rgba(0, 229, 255, 0.08)' : 'transparent',
+                          borderLeft: isActive ? '3px solid var(--accent-secondary)' : '3px solid transparent',
+                          transition: 'all 0.15s'
+                        }}
+                      >
+                        {para}
+                      </p>
+                    );
+                  })
                 ) : (
                   <p>Loading page text...</p>
                 )}

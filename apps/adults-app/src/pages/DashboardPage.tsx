@@ -85,6 +85,7 @@ export const DashboardPage: React.FC = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [skipCloudUpload, setSkipCloudUpload] = useState(false);
   const [activeBookPages, setActiveBookPages] = useState<string[]>([]);
+  const [activeParagraphIndex, setActiveParagraphIndex] = useState<number>(0);
   
   // Child Profiles States
   const [childProfiles, setChildProfiles] = useState<{ id: string; displayName: string; pin: string }[]>([]);
@@ -1089,6 +1090,20 @@ export const DashboardPage: React.FC = () => {
     }
   };
 
+  const handleParagraphClick = async (pIdx: number) => {
+    setActiveParagraphIndex(pIdx);
+    if (!user || !isLive) return;
+
+    try {
+      const streamRef = doc(db, 'streams', user.uid);
+      const streamKidsRef = doc(db, 'streams_kids', user.uid);
+      await updateDoc(streamRef, { currentParagraph: pIdx });
+      await updateDoc(streamKidsRef, { currentParagraph: pIdx });
+    } catch (err) {
+      console.error("Error syncing active paragraph:", err);
+    }
+  };
+
   const handlePageChange = async (newIndex: number) => {
     if (!user || !isLive) return;
     if (newIndex < 0 || newIndex >= selectedBook.pages.length) return;
@@ -1096,14 +1111,21 @@ export const DashboardPage: React.FC = () => {
     try {
       await updateDoc(doc(db, 'streams', user.uid), {
         currentPage: newIndex,
+        currentParagraph: 0,
+        updatedAt: new Date()
+      });
+      await updateDoc(doc(db, 'streams_kids', user.uid), {
+        currentPage: newIndex,
+        currentParagraph: 0,
         updatedAt: new Date()
       });
       setCurrentPageIndex(newIndex);
+      setActiveParagraphIndex(0);
       addEvent(`Flipped to Page ${newIndex + 1}`, "📖");
       
       // Stop speech synthesis if it was speaking and restart on the new page
       if (isTtsReading) {
-        speakPageText(selectedBook.pages[newIndex]);
+        speakPageText(selectedBook.pages[newIndex], 0);
       }
     } catch (err) {
       console.error("Error changing page: ", err);
@@ -1124,37 +1146,57 @@ export const DashboardPage: React.FC = () => {
     } else {
       setIsTtsReading(true);
       addEvent("Text-to-speech reading active.", "🔊");
-      speakPageText(selectedBook.pages[currentPageIndex]);
+      const startIdx = activeParagraphIndex >= 0 ? activeParagraphIndex : 0;
+      speakPageText(selectedBook.pages[currentPageIndex], startIdx);
     }
   };
 
-  const speakPageText = (text: string) => {
+  const speakPageText = (text: string, startParagraphIdx: number = 0) => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel(); // clear queue
 
     if (!text) return;
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    
-    utterance.onend = () => {
-      // If we are still live and have more pages, flip page automatically!
-      if (currentPageIndex < selectedBook.pages.length - 1) {
-        handlePageChange(currentPageIndex + 1);
-      } else {
-        setIsTtsReading(false);
-        addEvent("Reached the end of the story.", "🏁");
+    const paras = text.split('\n\n').map(p => p.trim()).filter(p => p.length > 0);
+    if (paras.length === 0) return;
+
+    const speakParagraph = (idx: number) => {
+      if (idx >= paras.length) {
+        // Finished all paragraphs on this page - turn page!
+        if (currentPageIndex < selectedBook.pages.length - 1) {
+          handlePageChange(currentPageIndex + 1);
+        } else {
+          setIsTtsReading(false);
+          setActiveParagraphIndex(-1);
+          addEvent("Reached the end of the story.", "🏁");
+        }
+        return;
       }
+
+      // Highlight this paragraph & sync to kids
+      handleParagraphClick(idx);
+
+      const utterance = new SpeechSynthesisUtterance(paras[idx]);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+
+      utterance.onend = () => {
+        if (window.speechSynthesis && !window.speechSynthesis.paused) {
+          // Speak next paragraph
+          speakParagraph(idx + 1);
+        }
+      };
+
+      utterance.onerror = (e) => {
+        console.error("TTS utterance error: ", e);
+        setIsTtsReading(false);
+      };
+
+      ttsUtteranceRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
     };
 
-    utterance.onerror = (e) => {
-      console.error("TTS utterance error: ", e);
-      setIsTtsReading(false);
-    };
-
-    ttsUtteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
+    speakParagraph(startParagraphIdx);
   };
 
   // Moderation: Clear Chat
@@ -2483,9 +2525,29 @@ export const DashboardPage: React.FC = () => {
 
                 <div className="studio-page-content scrollbar-paper" style={{ minHeight: '300px' }}>
                   {selectedBook.pages[currentPageIndex] ? (
-                    selectedBook.pages[currentPageIndex].split('\n\n').map((para, idx) => (
-                      <p key={idx} style={{ marginBottom: '16px', lineHeight: '1.6', fontSize: '1.1rem', textIndent: '16px' }}>{para}</p>
-                    ))
+                    selectedBook.pages[currentPageIndex].split('\n\n').map((para, idx) => {
+                      const isActive = idx === activeParagraphIndex;
+                      return (
+                        <p 
+                          key={idx} 
+                          onClick={() => handleParagraphClick(idx)}
+                          style={{ 
+                            marginBottom: '16px', 
+                            lineHeight: '1.6', 
+                            fontSize: '1.1rem', 
+                            textIndent: '16px',
+                            cursor: 'pointer',
+                            padding: '6px 12px',
+                            borderRadius: '6px',
+                            backgroundColor: isActive ? 'rgba(0, 229, 255, 0.08)' : 'transparent',
+                            borderLeft: isActive ? '3px solid var(--accent-secondary)' : '3px solid transparent',
+                            transition: 'all 0.15s'
+                          }}
+                        >
+                          {para}
+                        </p>
+                      );
+                    })
                   ) : (
                     <p>Opening story text...</p>
                   )}
@@ -2767,9 +2829,29 @@ export const DashboardPage: React.FC = () => {
 
                     <div className="studio-page-content scrollbar-paper">
                       {selectedBook.pages[currentPageIndex] ? (
-                        selectedBook.pages[currentPageIndex].split('\n\n').map((para, idx) => (
-                          <p key={idx} style={{ marginBottom: '16px', lineHeight: '1.6', fontSize: '1.1rem', textIndent: '16px' }}>{para}</p>
-                        ))
+                        selectedBook.pages[currentPageIndex].split('\n\n').map((para, idx) => {
+                          const isActive = idx === activeParagraphIndex;
+                          return (
+                            <p 
+                              key={idx} 
+                              onClick={() => handleParagraphClick(idx)}
+                              style={{ 
+                                marginBottom: '16px', 
+                                lineHeight: '1.6', 
+                                fontSize: '1.1rem', 
+                                textIndent: '16px',
+                                cursor: 'pointer',
+                                padding: '6px 12px',
+                                borderRadius: '6px',
+                                backgroundColor: isActive ? 'rgba(0, 229, 255, 0.08)' : 'transparent',
+                                borderLeft: isActive ? '3px solid var(--accent-secondary)' : '3px solid transparent',
+                                transition: 'all 0.15s'
+                              }}
+                            >
+                              {para}
+                            </p>
+                          );
+                        })
                       ) : (
                         <p>Opening story text...</p>
                       )}
