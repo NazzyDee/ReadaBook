@@ -68,6 +68,8 @@ export const DashboardPage: React.FC = () => {
   const [newBookText, setNewBookText] = useState('');
   const [addBookError, setAddBookError] = useState('');
   const [addBookSuccess, setAddBookSuccess] = useState('');
+  const [isParsingFile, setIsParsingFile] = useState(false);
+  const [parsingStatus, setParsingStatus] = useState('');
 
   // Info modal state
   const [showEditInfo, setShowEditInfo] = useState(false);
@@ -1231,6 +1233,144 @@ export const DashboardPage: React.FC = () => {
     }
   };
 
+  const loadScript = (src: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) {
+        resolve();
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`Failed to load script ${src}`));
+      document.head.appendChild(script);
+    });
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setAddBookError('');
+    setAddBookSuccess('');
+    setIsParsingFile(true);
+    setParsingStatus('Loading document parser...');
+
+    // Auto-fill title from filename
+    const cleanTitle = file.name
+      .replace(/\.[^/.]+$/, "") // remove extension
+      .replace(/[_-]/g, " ")    // replace underscores/dashes with spaces
+      .replace(/\b\w/g, c => c.toUpperCase()); // capitalize words
+    setNewBookTitle(cleanTitle);
+
+    const reader = new FileReader();
+
+    if (file.name.endsWith('.pdf')) {
+      try {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js');
+        const pdfjsLib = (window as any)['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+        reader.onload = async () => {
+          try {
+            setParsingStatus('Extracting pages from PDF...');
+            const arrayBuffer = reader.result as ArrayBuffer;
+            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+            const pdf = await loadingTask.promise;
+            
+            let extractedPages: string[] = [];
+            for (let i = 1; i <= pdf.numPages; i++) {
+              setParsingStatus(`Reading page ${i} of ${pdf.numPages}...`);
+              const page = await pdf.getPage(i);
+              const textContent = await page.getTextContent();
+              const pageText = textContent.items
+                .map((item: any) => item.str)
+                .join(' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+              
+              if (pageText) {
+                extractedPages.push(pageText);
+              }
+            }
+
+            if (extractedPages.length === 0) {
+              setAddBookError('Could not extract any text from this PDF. Is it scanned?');
+            } else {
+              setNewBookText(extractedPages.join('\n\n'));
+              setAddBookSuccess(`Successfully extracted ${extractedPages.length} pages from PDF!`);
+              setTimeout(() => setAddBookSuccess(''), 4000);
+            }
+            setIsParsingFile(false);
+          } catch (err: any) {
+            console.error(err);
+            setAddBookError('Failed to parse PDF: ' + err.message);
+            setIsParsingFile(false);
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      } catch (err: any) {
+        setAddBookError('Failed to load PDF library: ' + err.message);
+        setIsParsingFile(false);
+      }
+    } else if (file.name.endsWith('.docx') || file.name.endsWith('.doc')) {
+      try {
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
+        const mammoth = (window as any).mammoth;
+
+        reader.onload = async () => {
+          try {
+            setParsingStatus('Parsing Word document...');
+            const arrayBuffer = reader.result as ArrayBuffer;
+            const result = await mammoth.extractRawText({ arrayBuffer });
+            const rawText = result.value;
+            
+            // Split docx text into paragraphs and chunk them into pages of ~3-4 paragraphs each
+            const paragraphs = rawText
+              .split('\n')
+              .map((p: string) => p.trim())
+              .filter((p: string) => p.length > 0);
+
+            if (paragraphs.length === 0) {
+              setAddBookError('The Word document appears to be empty.');
+            } else {
+              // Group paragraphs into pages
+              const pageSize = 3;
+              const extractedPages: string[] = [];
+              for (let i = 0; i < paragraphs.length; i += pageSize) {
+                const chunk = paragraphs.slice(i, i + pageSize);
+                extractedPages.push(chunk.join('\n\n'));
+              }
+
+              setNewBookText(extractedPages.join('\n\n'));
+              setAddBookSuccess(`Successfully parsed Word document into ${extractedPages.length} pages!`);
+              setTimeout(() => setAddBookSuccess(''), 4000);
+            }
+            setIsParsingFile(false);
+          } catch (err: any) {
+            console.error(err);
+            setAddBookError('Failed to parse Word document: ' + err.message);
+            setIsParsingFile(false);
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      } catch (err: any) {
+        setAddBookError('Failed to load Word document library: ' + err.message);
+        setIsParsingFile(false);
+      }
+    } else {
+      // Treat as plain text
+      reader.onload = () => {
+        const text = reader.result as string;
+        setNewBookText(text);
+        setAddBookSuccess('Successfully loaded text file!');
+        setTimeout(() => setAddBookSuccess(''), 4000);
+        setIsParsingFile(false);
+      };
+      reader.readAsText(file);
+    }
+  };
+
   // Add new custom book to Firestore
   const handleAddBookSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1496,6 +1636,105 @@ export const DashboardPage: React.FC = () => {
             {addBookSuccess && <div className="login-success">{addBookSuccess}</div>}
 
             <form onSubmit={handleAddBookSubmit} className="dashboard-form">
+              {/* File Drop/Upload Zone */}
+              <div 
+                style={{
+                  border: '2px dashed var(--accent-secondary)',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  textAlign: 'center',
+                  background: 'rgba(157, 78, 221, 0.04)',
+                  marginBottom: '20px',
+                  cursor: 'pointer',
+                  position: 'relative',
+                  transition: 'background-color 0.2s, border-color 0.2s'
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.style.background = 'rgba(157, 78, 221, 0.08)';
+                  e.currentTarget.style.borderColor = 'var(--accent-primary)';
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.style.background = 'rgba(157, 78, 221, 0.04)';
+                  e.currentTarget.style.borderColor = 'var(--accent-secondary)';
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.currentTarget.style.background = 'rgba(157, 78, 221, 0.04)';
+                  e.currentTarget.style.borderColor = 'var(--accent-secondary)';
+                  const file = e.dataTransfer.files?.[0];
+                  if (file) {
+                    const inputEl = document.getElementById('book-file-input') as HTMLInputElement;
+                    if (inputEl) {
+                      const dataTransfer = new DataTransfer();
+                      dataTransfer.items.add(file);
+                      inputEl.files = dataTransfer.files;
+                      const event = new Event('change', { bubbles: true });
+                      inputEl.dispatchEvent(event);
+                    }
+                  }
+                }}
+              >
+                <input 
+                  type="file" 
+                  id="book-file-input"
+                  accept=".pdf,.docx,.doc,.txt"
+                  onChange={handleFileUpload}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    opacity: 0,
+                    cursor: 'pointer'
+                  }}
+                  disabled={isParsingFile}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '2.5rem' }}>📄</span>
+                  <strong style={{ fontSize: '1rem', color: '#fff' }}>
+                    Drag & drop PDF, Word (.docx) or Text (.txt) files here
+                  </strong>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                    or click to browse your files
+                  </span>
+                  
+                  <div style={{
+                    marginTop: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '6px 12px',
+                    background: 'rgba(255, 183, 3, 0.12)',
+                    border: '1px solid rgba(255, 183, 3, 0.25)',
+                    borderRadius: '20px',
+                    fontSize: '0.8rem',
+                    color: '#ffde6a',
+                    fontWeight: '500'
+                  }}>
+                    <span>💡 Using Google Docs? Go to **File &gt; Download** as **PDF (.pdf)** or **Word (.docx)**</span>
+                  </div>
+                </div>
+              </div>
+
+              {isParsingFile && (
+                <div style={{
+                  padding: '12px 16px',
+                  background: 'rgba(157, 78, 221, 0.1)',
+                  border: '1px solid var(--accent-primary)',
+                  borderRadius: '8px',
+                  marginBottom: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}>
+                  <span style={{ fontSize: '1.2rem', animation: 'spin 1.5s linear infinite' }}>⏳</span>
+                  <span style={{ fontSize: '0.9rem', color: '#fff' }}>{parsingStatus}</span>
+                </div>
+              )}
+
               <div className="form-row">
                 <div className="form-group flex-2">
                   <label>Book Title</label>
@@ -1532,7 +1771,7 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label>Book Content (Paste paragraphs/pages separated by empty lines)</label>
+                <label>Book Content (Extracted content will appear here, edit as needed)</label>
                 <textarea 
                   value={newBookText}
                   onChange={(e) => setNewBookText(e.target.value)}
