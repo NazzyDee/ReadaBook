@@ -79,6 +79,11 @@ export const DashboardPage: React.FC = () => {
   const [coverSearchQuery, setCoverSearchQuery] = useState('');
   const [coverSearchResult, setCoverSearchResult] = useState<{ found: boolean; coverUrl: string | null } | null>(null);
   const [isSearchingCover, setIsSearchingCover] = useState(false);
+  
+  // OBS Studio configuration states
+  const [broadcastSource, setBroadcastSource] = useState<'webcam' | 'obs'>('webcam');
+  const [showStreamKey, setShowStreamKey] = useState(false);
+  const [isObsConnected, setIsObsConnected] = useState(false);
 
   // Info modal state
   const [showEditInfo, setShowEditInfo] = useState(false);
@@ -1325,6 +1330,8 @@ export const DashboardPage: React.FC = () => {
         slowMode: false,
         subscribersOnly: false,
         pinnedMessage: null,
+        broadcastSource,
+        isObsConnected: broadcastSource === 'webcam', // auto-connected for webcam
         updatedAt: new Date()
       };
 
@@ -1335,12 +1342,28 @@ export const DashboardPage: React.FC = () => {
       setIsLive(true);
       setViewerCount(randomViewers);
       setCurrentPageIndex(initialPageIndex);
+      setIsObsConnected(broadcastSource === 'webcam');
       
       setActivityFeed([]); // reset activity feed
       addEvent(`Broadcast Started: ${streamTitle}`, "🔴");
+      addEvent(`Source Type: ${broadcastSource.toUpperCase()}`, "📡");
       addEvent(`Active Book: ${finalBookTitle}`, "📖");
 
-      await startCamera();
+      if (broadcastSource === 'webcam') {
+        await startCamera();
+      } else {
+        // Auto-simulate OBS connecting after 1.5 seconds so the stream becomes active automatically
+        setTimeout(async () => {
+          try {
+            await updateDoc(doc(db, 'streams', user.uid), { isObsConnected: true });
+            await updateDoc(doc(db, 'streams_kids', user.uid), { isObsConnected: true });
+            setIsObsConnected(true);
+            addEvent("OBS Encoder signal connected successfully!", "🟢");
+          } catch (connErr) {
+            console.error("Failed to connect simulated OBS signal:", connErr);
+          }
+        }, 1500);
+      }
     } catch (err) {
       console.error("Error going live: ", err);
     }
@@ -3548,6 +3571,109 @@ export const DashboardPage: React.FC = () => {
                   </div>
 
                   <div className="form-group" style={{ marginBottom: '16px' }}>
+                    <label>Broadcast Source</label>
+                    <div style={{ display: 'flex', gap: '20px', margin: '8px 0' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: '#fff', fontSize: '0.9rem' }}>
+                        <input 
+                          type="radio" 
+                          name="broadcastSource" 
+                          value="webcam" 
+                          checked={broadcastSource === 'webcam'} 
+                          onChange={() => setBroadcastSource('webcam')} 
+                        />
+                        📷 Web Browser Webcam Feed
+                      </label>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: '#fff', fontSize: '0.9rem' }}>
+                        <input 
+                          type="radio" 
+                          name="broadcastSource" 
+                          value="obs" 
+                          checked={broadcastSource === 'obs'} 
+                          onChange={() => setBroadcastSource('obs')} 
+                        />
+                        📡 OBS Studio (RTMP Stream Key)
+                      </label>
+                    </div>
+                  </div>
+
+                  {broadcastSource === 'obs' && (
+                    <div style={{
+                      background: 'rgba(255, 255, 255, 0.03)',
+                      border: '1px solid var(--border-color)',
+                      borderRadius: '12px',
+                      padding: '16px',
+                      marginBottom: '20px'
+                    }}>
+                      <h3 style={{ margin: '0 0 10px 0', fontSize: '0.95rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        📡 OBS Ingestion Details
+                      </h3>
+                      
+                      <div className="form-group" style={{ marginBottom: '12px' }}>
+                        <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>RTMP Server URL</label>
+                        <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                          <input 
+                            type="text" 
+                            value="rtmp://stream.readabook.live/live" 
+                            readOnly 
+                            style={{ flex: 1, fontSize: '0.85rem', padding: '6px 10px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--border-color)', borderRadius: '4px', color: '#fff' }}
+                          />
+                          <button 
+                            type="button" 
+                            onClick={() => navigator.clipboard.writeText("rtmp://stream.readabook.live/live")} 
+                            style={{ background: 'var(--accent-secondary)', border: 'none', borderRadius: '4px', padding: '6px 12px', color: '#fff', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}
+                          >
+                            Copy
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="form-group">
+                        <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Stream Key</label>
+                        <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                          <input 
+                            type={showStreamKey ? "text" : "password"} 
+                            value={`live_${user?.uid.substring(0, 6)}_${user?.uid.substring(user?.uid.length - 6)}`} 
+                            readOnly 
+                            style={{ flex: 1, fontSize: '0.85rem', padding: '6px 10px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--border-color)', borderRadius: '4px', color: '#fff', fontFamily: 'monospace' }}
+                          />
+                          <button 
+                            type="button" 
+                            onClick={() => setShowStreamKey(!showStreamKey)} 
+                            style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '6px 12px', color: '#fff', cursor: 'pointer', fontSize: '0.8rem' }}
+                          >
+                            {showStreamKey ? "Hide" : "Show"}
+                          </button>
+                          <button 
+                            type="button" 
+                            onClick={() => navigator.clipboard.writeText(`live_${user?.uid.substring(0, 6)}_${user?.uid.substring(user?.uid.length - 6)}`)} 
+                            style={{ background: 'var(--accent-secondary)', border: 'none', borderRadius: '4px', padding: '6px 12px', color: '#fff', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}
+                          >
+                            Copy
+                          </button>
+                        </div>
+                      </div>
+
+                      <div style={{
+                        marginTop: '12px',
+                        padding: '10px 12px',
+                        background: 'rgba(0, 180, 216, 0.08)',
+                        border: '1px solid rgba(0, 180, 216, 0.2)',
+                        borderRadius: '8px',
+                        fontSize: '0.75rem',
+                        color: 'var(--text-muted)',
+                        lineHeight: '1.4'
+                      }}>
+                        <strong>💡 How to setup OBS Studio:</strong>
+                        <ol style={{ margin: '6px 0 0 16px', padding: 0 }}>
+                          <li>Open OBS settings, click on the <strong>Stream</strong> tab.</li>
+                          <li>Change Service dropdown to <strong>Custom...</strong>.</li>
+                          <li>Paste the Server URL and Stream Key into the fields and save!</li>
+                        </ol>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="form-group" style={{ marginBottom: '16px' }}>
                     <label>Reading Mode</label>
                     <div style={{ display: 'flex', gap: '20px', margin: '8px 0' }}>
                       <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: '#fff', fontSize: '0.9rem' }}>
@@ -4071,7 +4197,53 @@ export const DashboardPage: React.FC = () => {
                         </div>
                       )}
 
-                      {performanceMode ? (
+                      {broadcastSource === 'obs' ? (
+                        !isObsConnected ? (
+                          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#11032a', color: '#ffde6a', padding: '20px', textAlign: 'center' }}>
+                            <span style={{ fontSize: '2rem', animation: 'pulse 1.5s infinite', display: 'block', marginBottom: '8px' }}>📡</span>
+                            <strong style={{ fontSize: '0.9rem' }}>Waiting for OBS Signal...</strong>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>Configure and Start Streaming in OBS.</span>
+                            <button 
+                              type="button"
+                              onClick={async () => {
+                                if (user) {
+                                  try {
+                                    await updateDoc(doc(db, 'streams', user.uid), { isObsConnected: true });
+                                    await updateDoc(doc(db, 'streams_kids', user.uid), { isObsConnected: true });
+                                    setIsObsConnected(true);
+                                    addEvent("OBS Encoder signal connected manually!", "🟢");
+                                  } catch(e) {}
+                                }
+                              }}
+                              style={{ marginTop: '10px', background: 'var(--accent-secondary)', border: 'none', borderRadius: '4px', padding: '6px 12px', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', cursor: 'pointer' }}
+                            >
+                              Simulate OBS Connect
+                            </button>
+                          </div>
+                        ) : (
+                          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0b011d', color: '#fff', padding: '20px', textAlign: 'center', position: 'relative' }}>
+                            <span style={{ fontSize: '2rem', marginBottom: '8px' }}>🎬</span>
+                            <strong style={{ color: 'var(--accent-success)', fontSize: '0.9rem' }}>🟢 OBS Connected</strong>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>Feed: 1080p @ 60fps</span>
+                            <button 
+                              type="button"
+                              onClick={async () => {
+                                if (user) {
+                                  try {
+                                    await updateDoc(doc(db, 'streams', user.uid), { isObsConnected: false });
+                                    await updateDoc(doc(db, 'streams_kids', user.uid), { isObsConnected: false });
+                                    setIsObsConnected(false);
+                                    addEvent("OBS Encoder signal disconnected.", "🔴");
+                                  } catch(e) {}
+                                }
+                              }}
+                              style={{ marginTop: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '4px 8px', color: 'var(--text-muted)', fontSize: '0.7rem', cursor: 'pointer' }}
+                            >
+                              Simulate OBS Disconnect
+                            </button>
+                          </div>
+                        )
+                      ) : performanceMode ? (
                         <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#111', color: 'var(--text-muted)', fontSize: '0.8rem', padding: '16px', textAlign: 'center' }}>
                           <span>📷 Camera Feed Active</span>
                           <span style={{ fontSize: '0.7rem', opacity: 0.7, marginTop: '4px' }}>Video preview hidden to maximize streaming CPU performance.</span>

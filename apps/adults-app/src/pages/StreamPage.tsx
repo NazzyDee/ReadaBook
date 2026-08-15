@@ -27,6 +27,8 @@ interface StreamData {
   viewerCount: number;
   emoteOnly?: boolean;
   pinnedMessage?: string | null;
+  broadcastSource?: 'webcam' | 'obs';
+  isObsConnected?: boolean;
 }
 
 
@@ -326,37 +328,90 @@ export const StreamPage: React.FC = () => {
           
           {/* The Main Camera Feed (Creator stream takes 100% space as background canvas) */}
           <div className="live-camera-feed-sim" style={{ flex: 1, background: '#11032a', position: 'relative', width: '100%', height: '100%', minHeight: '500px' }}>
-            <div style={{
-              width: '100%',
-              height: '100%',
-              background: 'linear-gradient(135deg, #15023a 0%, #6247aa 100%)',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              padding: '24px',
-              textAlign: 'center'
-            }}>
+            {stream.broadcastSource === 'obs' ? (
+              stream.isObsConnected ? (
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  background: 'linear-gradient(135deg, #0b011d 0%, #240046 100%)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#fff',
+                  padding: '24px',
+                  textAlign: 'center'
+                }}>
+                  <div style={{
+                    width: '80px',
+                    height: '80px',
+                    borderRadius: '50%',
+                    background: 'var(--accent-primary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 'bold',
+                    fontSize: '1.6rem',
+                    marginBottom: '12px',
+                    boxShadow: '0 0 24px rgba(157, 78, 221, 0.6)'
+                  }}>
+                    📡
+                  </div>
+                  <h2 style={{ fontSize: '1.3rem', color: '#fff', margin: '0 0 4px 0' }}>{stream.streamerName}'s OBS Broadcast</h2>
+                  <span style={{ fontSize: '0.9rem', color: 'var(--accent-success)', fontWeight: 'bold' }}>🟢 Ingestion Feed Connected (1080p)</span>
+                  <span style={{ fontSize: '0.8rem', opacity: 0.6, marginTop: '8px' }}>Streaming from OBS Studio encoder-us-east-1</span>
+                </div>
+              ) : (
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  background: '#11032a',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#ffde6a',
+                  padding: '24px',
+                  textAlign: 'center'
+                }}>
+                  <span style={{ fontSize: '2.5rem', animation: 'pulse 1.5s infinite', display: 'block', marginBottom: '12px' }}>📡</span>
+                  <h2 style={{ fontSize: '1.2rem', color: '#fff', margin: '0 0 4px 0' }}>Awaiting OBS Signal...</h2>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>The stream has started but storyteller is still configuring OBS.</span>
+                </div>
+              )
+            ) : (
               <div style={{
-                width: '72px',
-                height: '72px',
-                borderRadius: '50%',
-                background: 'var(--accent-secondary)',
+                width: '100%',
+                height: '100%',
+                background: 'linear-gradient(135deg, #15023a 0%, #6247aa 100%)',
                 display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontWeight: 'bold',
-                fontSize: '1.5rem',
-                marginBottom: '12px',
-                boxShadow: '0 0 20px rgba(138, 43, 226, 0.6)'
+                color: '#fff',
+                padding: '24px',
+                textAlign: 'center'
               }}>
-                {stream.streamerName.substring(0, 2).toUpperCase()}
+                <div style={{
+                  width: '72px',
+                  height: '72px',
+                  borderRadius: '50%',
+                  background: 'var(--accent-secondary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  fontSize: '1.5rem',
+                  marginBottom: '12px',
+                  boxShadow: '0 0 20px rgba(138, 43, 226, 0.6)'
+                }}>
+                  {stream.streamerName.substring(0, 2).toUpperCase()}
+                </div>
+                <h2 style={{ fontSize: '1.2rem', color: '#fff', margin: '0 0 4px 0' }}>{stream.streamerName} is Live!</h2>
+                <span style={{ fontSize: '0.9rem', opacity: 0.8 }}>Camera Feed Active</span>
+                <span style={{ fontSize: '0.8rem', opacity: 0.6, marginTop: '8px' }}>Storyteller is streaming live on camera! 🎥</span>
               </div>
-              <h2 style={{ fontSize: '1.2rem', color: '#fff', margin: '0 0 4px 0' }}>{stream.streamerName} is Live!</h2>
-              <span style={{ fontSize: '0.9rem', opacity: 0.8 }}>Camera Feed Active</span>
-              <span style={{ fontSize: '0.8rem', opacity: 0.6, marginTop: '8px' }}>Storyteller is streaming live on camera! 🎥</span>
-            </div>
+            )}
             <div className="feed-watermark" style={{ top: '20px', left: '20px', fontSize: '1rem', background: 'rgba(0,0,0,0.5)', padding: '4px 10px', borderRadius: '4px' }}>
               <span>{stream.streamerName}</span>
               <span className="rec-dot"></span>
