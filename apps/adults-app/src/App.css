@@ -2311,6 +2311,15 @@
   font-weight: 700;
 }
 
+.studio-nav-item.sub-item {
+  padding: 8px 24px 8px 36px;
+  font-size: 0.85rem;
+}
+
+.studio-nav-category-header:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
 .studio-content-body {
   flex: 1;
   background-color: #03010a;

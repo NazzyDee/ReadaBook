@@ -90,7 +90,23 @@ export const DashboardPage: React.FC = () => {
 
   // Recording Mode state
   // Recording Mode state
-  const [dashboardMode, setDashboardMode] = useState<'studio-dashboard' | 'studio-content' | 'studio-analytics' | 'studio-subtitles' | 'studio-customisation' | 'studio-audio' | 'studio-settings' | 'studio-earn' | 'live' | 'record' | 'upload' | 'sync-editor'>('studio-dashboard');
+  const [dashboardMode, setDashboardMode] = useState<
+    'studio-dashboard' | 'studio-content' | 'studio-analytics' | 'studio-subtitles' | 'studio-customisation' | 'studio-audio' | 'studio-settings' | 'studio-earn' | 'live' | 'record' | 'upload' | 'sync-editor' |
+    'studio-analytics-channel' | 'studio-analytics-summary' |
+    'studio-community-roles' | 'studio-community-followers' |
+    'studio-rewards-points' | 'studio-rewards-emotes' |
+    'studio-content-producer' | 'studio-content-clips' |
+    'studio-settings-credentials' | 'studio-settings-moderation'
+  >('studio-dashboard');
+  
+  // Twitch sidebar submenus expand states
+  const [expandSidebarSections, setExpandSidebarSections] = useState({
+    content: true,
+    analytics: true,
+    rewards: true,
+    community: true,
+    settings: true
+  });
   
   // YouTube-Studio customization state variables
   const [profilePictureUrl, setProfilePictureUrl] = useState('https://images.unsplash.com/photo-1544717297-fa95b6ee9643?auto=format&fit=crop&w=150&q=80');
@@ -345,7 +361,7 @@ export const DashboardPage: React.FC = () => {
   const [subscribersOnly, setSubscribersOnly] = useState(false);
   
   const [streamMarkers, setStreamMarkers] = useState<{ id: string; time: number; page: number; desc: string }[]>([]);
-  const [clipsCollection, setClipsCollection] = useState<{ id: string; time: number; bookTitle: string }[]>([]);
+  const [clipsCollection, setClipsCollection] = useState<{ id: string; time: number; bookTitle: string; title?: string; creator?: string; duration?: number; views?: number; thumbnail?: string }[]>([]);
   
   // Community Goals state
   const [goalActive, setGoalActive] = useState(true);
@@ -1614,7 +1630,12 @@ export const DashboardPage: React.FC = () => {
     const newClip = {
       id: `clip-${Math.random()}`,
       time: elapsed,
-      bookTitle: selectedBook.title
+      bookTitle: selectedBook.title,
+      title: `${selectedBook.title} Highlight - Clip #${Math.floor(Math.random() * 1000)}`,
+      creator: user?.email ? user.email.split('@')[0] : 'Broadcaster',
+      duration: 30,
+      views: 1,
+      thumbnail: selectedBook.coverUrl || 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=200&q=80'
     };
     setClipsCollection(prev => [...prev, newClip]);
     addEvent(`🎬 Stream Clip captured at ${Math.floor(elapsed / 60)}m ${Math.floor(elapsed % 60).toString().padStart(2, '0')}s.`, "🎬");
@@ -2537,7 +2558,7 @@ export const DashboardPage: React.FC = () => {
           </div>
         );
 
-      case 'studio-content':
+      case 'studio-content-producer':
         return (
           <div className="studio-card glass-panel" style={{ margin: 0 }}>
             {/* Sub Tabs */}
@@ -2625,67 +2646,344 @@ export const DashboardPage: React.FC = () => {
           </div>
         );
 
-      case 'studio-analytics':
+      case 'studio-content-clips':
         return (
-          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '20px' }}>
+          <div className="studio-card glass-panel" style={{ margin: 0 }}>
+            <h3>Trimmed Clips Catalog</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>Manage high-quality highlights trimmed by your community during storytime.</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '16px' }}>
+              {clipsCollection.length === 0 ? (
+                <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '30px', background: 'rgba(255,255,255,0.01)', border: '1px dashed var(--border-color)', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '2rem' }}>🎬</span>
+                  <p style={{ margin: '8px 0 0 0', color: 'var(--text-muted)', fontSize: '0.85rem' }}>No clips created yet. Viewers can click the "Clip" action during live streams to save highlight clips!</p>
+                </div>
+              ) : (
+                clipsCollection.map(clip => (
+                  <div key={clip.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ position: 'relative', height: '120px', background: 'var(--bg-dark)' }}>
+                      <img src={clip.thumbnail || "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=200&q=80"} alt="Clip Thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
+                      <span style={{ position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,0,0,0.8)', padding: '2px 4px', borderRadius: '3px', fontSize: '0.7rem' }}>{clip.duration}s</span>
+                    </div>
+                    <div style={{ padding: '10px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                      <div>
+                        <strong style={{ fontSize: '0.85rem', color: '#fff', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{clip.title}</strong>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginTop: '2px' }}>Clipped by: {clip.creator}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px', fontSize: '0.75rem' }}>
+                        <span style={{ color: 'var(--accent-success)' }}>👀 {clip.views} views</span>
+                        <button type="button" onClick={() => alert("🔗 Link copied to clipboard!")} style={{ background: 'none', border: 'none', color: 'var(--accent-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>Share</button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        );
+
+      case 'studio-analytics-channel':
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
+              <div className="studio-card glass-panel" style={{ margin: 0, padding: '16px' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Avg Viewers</span>
+                <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#fff', margin: '4px 0' }}>420</div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--accent-success)' }}>📈 +18% vs last week</span>
+              </div>
+              <div className="studio-card glass-panel" style={{ margin: 0, padding: '16px' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Followers Gained</span>
+                <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#fff', margin: '4px 0' }}>+84</div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--accent-success)' }}>📈 +32% vs last week</span>
+              </div>
+              <div className="studio-card glass-panel" style={{ margin: 0, padding: '16px' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Subscribers</span>
+                <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#fff', margin: '4px 0' }}>148</div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--accent-success)' }}>📈 +8 new subs</span>
+              </div>
+              <div className="studio-card glass-panel" style={{ margin: 0, padding: '16px' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Est. Revenue</span>
+                <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--accent-success)', margin: '4px 0' }}>$420.50</div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--accent-success)' }}>📈 +12% vs last week</span>
+              </div>
+            </div>
+
             <div className="studio-card glass-panel" style={{ margin: 0 }}>
-              <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem' }}>Weekly Active Reading Time</h3>
+              <h3>Viewer Distribution Graph</h3>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>Understand peak reader traffic levels based on daily focus schedules.</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {[
-                  { day: 'Mon', mins: 25 },
-                  { day: 'Tue', mins: 15 },
-                  { day: 'Wed', mins: 30 },
-                  { day: 'Thu', mins: 20 },
-                  { day: 'Fri', mins: 40 },
-                  { day: 'Sat', mins: 15 }
+                  { label: 'Morning Storytime (8:00 AM - 10:00 AM)', pct: 45, color: 'var(--accent-primary)', count: '180 kids' },
+                  { label: 'Mid-day Quiet Time (1:00 PM - 3:00 PM)', pct: 85, color: 'var(--accent-secondary)', count: '340 kids' },
+                  { label: 'Cozy Bedtime (7:00 PM - 9:00 PM)', pct: 95, color: 'var(--accent-tertiary)', count: '380 kids' },
+                  { label: 'Late Night Study Room (10:00 PM - 12:00 AM)', pct: 25, color: 'var(--accent-success)', count: '100 kids' }
                 ].map((row, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <span style={{ width: '40px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>{row.day}</span>
-                    <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', height: '18px', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ background: 'var(--accent-primary)', width: `${(row.mins / 45) * 100}%`, height: '100%' }}></div>
+                  <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div className="flex-between" style={{ fontSize: '0.85rem' }}>
+                      <span style={{ color: '#fff' }}>{row.label}</span>
+                      <strong>{row.count} ({row.pct}%)</strong>
                     </div>
-                    <span style={{ width: '50px', fontSize: '0.85rem', textAlign: 'right', fontWeight: 'bold' }}>{row.mins}m</span>
+                    <div style={{ background: 'rgba(255,255,255,0.05)', height: '14px', borderRadius: '7px', overflow: 'hidden' }}>
+                      <div style={{ background: row.color, width: `${row.pct}%`, height: '100%' }}></div>
+                    </div>
                   </div>
                 ))}
               </div>
-              <div style={{ marginTop: '20px', borderTop: '1px solid var(--border-color)', paddingTop: '12px' }} className="flex-between">
-                <span>Total Active Minutes this Week:</span>
-                <strong>145 mins</strong>
-              </div>
             </div>
+          </div>
+        );
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div className="studio-card glass-panel" style={{ margin: 0 }}>
-                <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem' }}>Top Read Books</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <div className="flex-between" style={{ background: 'rgba(255,255,255,0.02)', padding: '10px', borderRadius: '4px' }}>
-                    <span>1. Frankenstein</span>
-                    <strong>12 completions</strong>
-                  </div>
-                  <div className="flex-between" style={{ background: 'rgba(255,255,255,0.02)', padding: '10px', borderRadius: '4px' }}>
-                    <span>2. Sherlock Holmes</span>
-                    <strong>8 completions</strong>
-                  </div>
-                  <div className="flex-between" style={{ background: 'rgba(255,255,255,0.02)', padding: '10px', borderRadius: '4px' }}>
-                    <span>3. Alice in Wonderland</span>
-                    <strong>5 completions</strong>
-                  </div>
-                </div>
-              </div>
+      case 'studio-analytics-summary':
+        return (
+          <div className="studio-card glass-panel" style={{ margin: 0 }}>
+            <h3>Past Stream Summaries</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>Select a recent live broadcast to review its stats and viewer activity.</p>
+            <table className="studio-table">
+              <thead>
+                <tr>
+                  <th>Stream Date</th>
+                  <th>Book Title & Chapter</th>
+                  <th>Duration</th>
+                  <th>Peak Viewers</th>
+                  <th>Chat Activity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Aug 14, 2026</strong></td>
+                  <td>Harry Potter & The Sorcerer's Stone (Ch. 1)</td>
+                  <td>1h 15m</td>
+                  <td>580</td>
+                  <td>1,240 messages</td>
+                </tr>
+                <tr>
+                  <td><strong>Aug 12, 2026</strong></td>
+                  <td>Frankenstein (Intro / Preface)</td>
+                  <td>45m</td>
+                  <td>340</td>
+                  <td>450 messages</td>
+                </tr>
+                <tr>
+                  <td><strong>Aug 09, 2026</strong></td>
+                  <td>The Fellowship of the Ring (Ch. 2-3)</td>
+                  <td>2h 05m</td>
+                  <td>720</td>
+                  <td>2,100 messages</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        );
 
-              <div className="studio-card glass-panel" style={{ margin: 0 }}>
-                <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem' }}>Vocabulary Milestone Progress</h3>
+      case 'studio-rewards-points':
+        return (
+          <div className="studio-card glass-panel" style={{ margin: 0 }}>
+            <h3>Channel Points Reward Manager</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>Configure custom viewer point costs for kids to interact with your storytime directly.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div className="audio-row" style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <div className="flex-between" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
-                    <span>Words unlocked this week:</span>
-                    <span>18 / 20 words</span>
-                  </div>
-                  <div style={{ background: 'rgba(255,255,255,0.1)', height: '10px', borderRadius: '5px', overflow: 'hidden' }}>
-                    <div style={{ background: 'var(--accent-secondary)', width: '90%', height: '100%' }}></div>
-                  </div>
+                  <strong>🪄 Ask a Question (Story Q&A)</strong>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>Let a child trigger an on-screen alert to ask the reader a question about the plot.</div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <input type="number" defaultValue={250} style={{ width: '80px', padding: '4px', textAlign: 'center', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', color: '#fff', borderRadius: '4px' }} />
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Points</span>
                 </div>
               </div>
+              <div className="audio-row" style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <strong>🔊 Play a Magic Sound Alert</strong>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>Triggers a chimes or bell sound effect to ring on the broadcaster's headset.</div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <input type="number" defaultValue={500} style={{ width: '80px', padding: '4px', textAlign: 'center', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', color: '#fff', borderRadius: '4px' }} />
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Points</span>
+                </div>
+              </div>
+              <div className="audio-row" style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <strong>📖 Suggest Next Book</strong>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '2px' }}>Sends a recommendation to the broadcaster's queue for next storytime picks.</div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <input type="number" defaultValue={1000} style={{ width: '80px', padding: '4px', textAlign: 'center', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', color: '#fff', borderRadius: '4px' }} />
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Points</span>
+                </div>
+              </div>
+              <button type="button" onClick={() => alert("🪙 Channel points cost settings updated successfully!")} className="btn-primary" style={{ marginTop: '12px', alignSelf: 'flex-start' }}>Save Rewards Config</button>
             </div>
+          </div>
+        );
+
+      case 'studio-rewards-emotes':
+        return (
+          <div className="studio-card glass-panel" style={{ margin: 0 }}>
+            <h3>Custom Emotes & Badge Assets</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>Upload and manage the emoticons and sub badges viewers use in chat.</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px', textAlign: 'center' }}>
+              {[
+                { symbol: '🧸', name: 'cozy_bear' },
+                { symbol: '🐉', name: 'epic_dragon' },
+                { symbol: '🪄', name: 'magic_wand' },
+                { symbol: '🦉', name: 'wise_owl' },
+                { symbol: '🏰', name: 'castle_view' }
+              ].map((emote, idx) => (
+                <div key={idx} style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
+                  <div style={{ fontSize: '2rem' }}>{emote.symbol}</div>
+                  <strong style={{ fontSize: '0.8rem', display: 'block', marginTop: '8px', color: '#fff' }}>:{emote.name}:</strong>
+                  <button type="button" onClick={() => alert("Emote deleted successfully.")} style={{ marginTop: '8px', background: 'none', border: 'none', color: 'var(--accent-danger)', fontSize: '0.75rem', cursor: 'pointer' }}>Delete</button>
+                </div>
+              ))}
+              <div style={{ padding: '12px', background: 'rgba(255,255,255,0.01)', border: '1px dashed var(--border-color)', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} onClick={() => alert("Select emote file to upload (PNG/GIF, max 256KB)")}>
+                <span style={{ fontSize: '1.5rem' }}>➕</span>
+                <strong style={{ fontSize: '0.75rem', marginTop: '6px', color: 'var(--text-muted)' }}>Upload Emote</strong>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'studio-community-roles':
+        return (
+          <div className="studio-card glass-panel" style={{ margin: 0 }}>
+            <h3>Roles Manager</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>Assign moderators, VIPs, and editing staff roles to community helpers.</p>
+            <table className="studio-table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Current Roles</th>
+                  <th>Date Assigned</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>@grannyreads</strong></td>
+                  <td><span style={{ background: 'rgba(0, 229, 255, 0.15)', color: 'var(--accent-secondary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>🛡️ Moderator</span></td>
+                  <td>Jan 12, 2026</td>
+                  <td><button type="button" onClick={() => alert("Grannyreads role settings opened.")} className="btn-action-cog" style={{ background: 'var(--bg-hover)', color: '#fff', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '4px 8px', fontSize: '0.75rem', cursor: 'pointer' }}>Edit</button></td>
+                </tr>
+                <tr>
+                  <td><strong>@storytime_uncle</strong></td>
+                  <td>
+                    <span style={{ background: 'rgba(0, 229, 255, 0.15)', color: 'var(--accent-secondary)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold', marginRight: '4px' }}>🛡️ Moderator</span>
+                    <span style={{ background: 'rgba(255, 183, 3, 0.15)', color: '#ffb703', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 'bold' }}>⭐ VIP</span>
+                  </td>
+                  <td>Feb 04, 2026</td>
+                  <td><button type="button" onClick={() => alert("Uncle role settings opened.")} className="btn-action-cog" style={{ background: 'var(--bg-hover)', color: '#fff', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '4px 8px', fontSize: '0.75rem', cursor: 'pointer' }}>Edit</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        );
+
+      case 'studio-community-followers':
+        return (
+          <div className="studio-card glass-panel" style={{ margin: 0 }}>
+            <h3>Followers List</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>List of followers who have subscribed to your storytime updates.</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
+              {[
+                { name: 'Billy & Sarah', since: 'Followed Aug 14, 2026', icon: '👦👧' },
+                { name: 'CozyReaderMom', since: 'Followed Aug 11, 2026', icon: '👩' },
+                { name: 'TimmyTheBookworm', since: 'Followed Aug 08, 2026', icon: '👶' },
+                { name: 'LuluFantasy', since: 'Followed Aug 02, 2026', icon: '👧' }
+              ].map((follower, idx) => (
+                <div key={idx} style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ fontSize: '1.8rem' }}>{follower.icon}</span>
+                  <div>
+                    <strong style={{ fontSize: '0.9rem', color: '#fff', display: 'block' }}>{follower.name}</strong>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{follower.since}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'studio-settings-credentials':
+        return (
+          <div className="studio-card glass-panel" style={{ margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <h3>Stream Credentials & Ingest Info</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Copy RTMP server parameters and input stream keys into your encoder software (e.g. OBS Studio, Streamlabs).</p>
+            
+            <div className="form-group">
+              <label>Primary Ingest RTMP URL</label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input type="text" readOnly value="rtmp://stream.readabook.live/live" style={{ flex: 1, padding: '8px', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', color: 'var(--text-muted)', borderRadius: '4px' }} />
+                <button type="button" onClick={() => { navigator.clipboard.writeText("rtmp://stream.readabook.live/live"); alert("📋 Ingest URL copied to clipboard!"); }} className="btn-primary" style={{ padding: '8px 12px', fontSize: '0.8rem' }}>Copy</button>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Private Stream Key</label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input 
+                  type={showStreamKey ? "text" : "password"} 
+                  readOnly 
+                  value={`live_${user?.uid?.substring(0, 6)}_${user?.uid?.substring(user.uid.length - 6)}`} 
+                  style={{ flex: 1, padding: '8px', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', color: '#fff', borderRadius: '4px', fontFamily: 'monospace' }} 
+                />
+                <button type="button" onClick={() => setShowStreamKey(!showStreamKey)} className="btn-secondary" style={{ padding: '8px 12px', fontSize: '0.8rem' }}>
+                  {showStreamKey ? "Hide" : "Show"}
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => { 
+                    navigator.clipboard.writeText(`live_${user?.uid?.substring(0, 6)}_${user?.uid?.substring(user.uid.length - 6)}`); 
+                    alert("📋 Stream Key copied to clipboard! Keep this private."); 
+                  }} 
+                  className="btn-primary" 
+                  style={{ padding: '8px 12px', fontSize: '0.8rem' }}
+                >
+                  Copy
+                </button>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Stream Latency Preference</label>
+              <select defaultValue="low" style={{ background: 'var(--bg-dark)', border: '1px solid var(--border-color)', color: '#fff', padding: '8px', borderRadius: '4px' }}>
+                <option value="ultra-low">Ultra-Low Latency (Realtime chat feedback, slight buffering hazard)</option>
+                <option value="low">Low Latency (Cozy stream sync, recommended)</option>
+                <option value="normal">Normal Latency (Maximum stability, fits poor connections)</option>
+              </select>
+            </div>
+
+            <button type="button" onClick={() => alert("📡 Stream preferences saved successfully!")} className="btn-primary" style={{ alignSelf: 'flex-start' }}>Save Preferences</button>
+          </div>
+        );
+
+      case 'studio-settings-moderation':
+        return (
+          <div className="studio-card glass-panel" style={{ margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <h3>Moderation & Safety Rules</h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Manage automated chat safety filters and enforce classroom-friendly chat streams.</p>
+
+            <div className="form-group">
+              <label>AutoMod Shield Level</label>
+              <select defaultValue="medium" style={{ background: 'var(--bg-dark)', border: '1px solid var(--border-color)', color: '#fff', padding: '8px', borderRadius: '4px' }}>
+                <option value="low">Low Filter (Allows mild banter, locks swearing)</option>
+                <option value="medium">Medium Filter (Deletes URLs, spam blocks, blocks bullying)</option>
+                <option value="high">High Filter (Strict classroom filter - only matches safe vocabulary keywords)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Banned Words List (Comma separated)</label>
+              <textarea 
+                defaultValue="spam, troll, advertisement, free-money" 
+                rows={3} 
+                style={{ padding: '8px', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', color: '#fff', borderRadius: '4px' }} 
+              />
+            </div>
+
+            <div className="form-group" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
+              <input type="checkbox" defaultChecked id="block-hyperlinks" style={{ width: 'auto', cursor: 'pointer' }} />
+              <label htmlFor="block-hyperlinks" style={{ cursor: 'pointer', fontSize: '0.85rem' }}>Block Hyperlinks (Auto deletes any text containing http:// or https:// in chat)</label>
+            </div>
+
+            <button type="button" onClick={() => alert("🛡️ Moderation safety options updated!")} className="btn-primary" style={{ alignSelf: 'flex-start' }}>Save Safety Config</button>
           </div>
         );
 
@@ -3060,16 +3358,126 @@ export const DashboardPage: React.FC = () => {
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Broadcaster</span>
           </div>
 
-          <nav className="studio-nav-links">
+          <nav className="studio-nav-links" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            
+            {/* Stream Manager link */}
             <button type="button" onClick={() => setDashboardMode('studio-dashboard')} className={`studio-nav-item ${dashboardMode === 'studio-dashboard' ? 'active' : ''}`}>
-              <span>📊 Dashboard</span>
+              <span>📡 Stream Manager</span>
             </button>
-            <button type="button" onClick={() => setDashboardMode('studio-content')} className={`studio-nav-item ${dashboardMode === 'studio-content' ? 'active' : ''}`}>
-              <span>📂 Content</span>
-            </button>
-            <button type="button" onClick={() => setDashboardMode('studio-analytics')} className={`studio-nav-item ${dashboardMode === 'studio-analytics' ? 'active' : ''}`}>
-              <span>📈 Analytics</span>
-            </button>
+
+            {/* Content folder */}
+            <div>
+              <div 
+                onClick={() => setExpandSidebarSections({ ...expandSidebarSections, content: !expandSidebarSections.content })}
+                className="studio-nav-category-header"
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 16px', fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', textTransform: 'uppercase', cursor: 'pointer', letterSpacing: '0.05em' }}
+              >
+                <span>📂 Content</span>
+                <span>{expandSidebarSections.content ? '▼' : '▶'}</span>
+              </div>
+              {expandSidebarSections.content && (
+                <div className="studio-nav-submenu" style={{ paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <button type="button" onClick={() => setDashboardMode('studio-content-producer')} className={`studio-nav-item sub-item ${dashboardMode === 'studio-content-producer' ? 'active' : ''}`}>
+                    <span>📚 Video Producer</span>
+                  </button>
+                  <button type="button" onClick={() => setDashboardMode('studio-content-clips')} className={`studio-nav-item sub-item ${dashboardMode === 'studio-content-clips' ? 'active' : ''}`}>
+                    <span>🎬 Trimmed Clips</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Analytics folder */}
+            <div>
+              <div 
+                onClick={() => setExpandSidebarSections({ ...expandSidebarSections, analytics: !expandSidebarSections.analytics })}
+                className="studio-nav-category-header"
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 16px', fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', textTransform: 'uppercase', cursor: 'pointer', letterSpacing: '0.05em' }}
+              >
+                <span>📈 Analytics</span>
+                <span>{expandSidebarSections.analytics ? '▼' : '▶'}</span>
+              </div>
+              {expandSidebarSections.analytics && (
+                <div className="studio-nav-submenu" style={{ paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <button type="button" onClick={() => setDashboardMode('studio-analytics-channel')} className={`studio-nav-item sub-item ${dashboardMode === 'studio-analytics-channel' ? 'active' : ''}`}>
+                    <span>📊 Channel Analytics</span>
+                  </button>
+                  <button type="button" onClick={() => setDashboardMode('studio-analytics-summary')} className={`studio-nav-item sub-item ${dashboardMode === 'studio-analytics-summary' ? 'active' : ''}`}>
+                    <span>📝 Stream Summary</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Viewer Rewards folder */}
+            <div>
+              <div 
+                onClick={() => setExpandSidebarSections({ ...expandSidebarSections, rewards: !expandSidebarSections.rewards })}
+                className="studio-nav-category-header"
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 16px', fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', textTransform: 'uppercase', cursor: 'pointer', letterSpacing: '0.05em' }}
+              >
+                <span>🪙 Viewer Rewards</span>
+                <span>{expandSidebarSections.rewards ? '▼' : '▶'}</span>
+              </div>
+              {expandSidebarSections.rewards && (
+                <div className="studio-nav-submenu" style={{ paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <button type="button" onClick={() => setDashboardMode('studio-rewards-points')} className={`studio-nav-item sub-item ${dashboardMode === 'studio-rewards-points' ? 'active' : ''}`}>
+                    <span>🪙 Channel Points</span>
+                  </button>
+                  <button type="button" onClick={() => setDashboardMode('studio-rewards-emotes')} className={`studio-nav-item sub-item ${dashboardMode === 'studio-rewards-emotes' ? 'active' : ''}`}>
+                    <span>🎭 Custom Emotes & Badges</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Community folder */}
+            <div>
+              <div 
+                onClick={() => setExpandSidebarSections({ ...expandSidebarSections, community: !expandSidebarSections.community })}
+                className="studio-nav-category-header"
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 16px', fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', textTransform: 'uppercase', cursor: 'pointer', letterSpacing: '0.05em' }}
+              >
+                <span>👥 Community</span>
+                <span>{expandSidebarSections.community ? '▼' : '▶'}</span>
+              </div>
+              {expandSidebarSections.community && (
+                <div className="studio-nav-submenu" style={{ paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <button type="button" onClick={() => setDashboardMode('studio-community-roles')} className={`studio-nav-item sub-item ${dashboardMode === 'studio-community-roles' ? 'active' : ''}`}>
+                    <span>🛡️ Roles Manager</span>
+                  </button>
+                  <button type="button" onClick={() => setDashboardMode('studio-community-followers')} className={`studio-nav-item sub-item ${dashboardMode === 'studio-community-followers' ? 'active' : ''}`}>
+                    <span>❤️ Followers List</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Settings folder */}
+            <div>
+              <div 
+                onClick={() => setExpandSidebarSections({ ...expandSidebarSections, settings: !expandSidebarSections.settings })}
+                className="studio-nav-category-header"
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 16px', fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--text-muted)', textTransform: 'uppercase', cursor: 'pointer', letterSpacing: '0.05em' }}
+              >
+                <span>⚙️ Settings</span>
+                <span>{expandSidebarSections.settings ? '▼' : '▶'}</span>
+              </div>
+              {expandSidebarSections.settings && (
+                <div className="studio-nav-submenu" style={{ paddingLeft: '16px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <button type="button" onClick={() => setDashboardMode('studio-settings-credentials')} className={`studio-nav-item sub-item ${dashboardMode === 'studio-settings-credentials' ? 'active' : ''}`}>
+                    <span>📡 Stream Credentials</span>
+                  </button>
+                  <button type="button" onClick={() => setDashboardMode('studio-settings-moderation')} className={`studio-nav-item sub-item ${dashboardMode === 'studio-settings-moderation' ? 'active' : ''}`}>
+                    <span>🛡️ Moderation Rules</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <hr style={{ border: '0', borderTop: '1px solid var(--border-color)', margin: '8px 0' }} />
+
+            {/* Flat links for miscellaneous */}
             <button type="button" onClick={() => setDashboardMode('studio-earn')} className={`studio-nav-item ${dashboardMode === 'studio-earn' ? 'active' : ''}`}>
               <span>💰 Affiliate & Earnings</span>
             </button>
@@ -3082,9 +3490,6 @@ export const DashboardPage: React.FC = () => {
             <button type="button" onClick={() => setDashboardMode('studio-audio')} className={`studio-nav-item ${dashboardMode === 'studio-audio' ? 'active' : ''}`}>
               <span>🎵 Audio Library</span>
             </button>
-            <button type="button" onClick={() => setDashboardMode('studio-settings')} className={`studio-nav-item ${dashboardMode === 'studio-settings' ? 'active' : ''}`}>
-              <span>⚙️ Settings</span>
-            </button>
           </nav>
         </aside>
       )}
@@ -3096,13 +3501,20 @@ export const DashboardPage: React.FC = () => {
             <div>
               <h2 style={{ margin: 0, fontSize: '1.4rem', color: '#fff' }}>
                 {dashboardMode === 'studio-dashboard' && "Channel Dashboard"}
-                {dashboardMode === 'studio-content' && "Channel Content"}
-                {dashboardMode === 'studio-analytics' && "Channel Analytics"}
+                {dashboardMode === 'studio-content-producer' && "Video Producer"}
+                {dashboardMode === 'studio-content-clips' && "Trimmed Clips Catalog"}
+                {dashboardMode === 'studio-analytics-channel' && "Channel Analytics Portal"}
+                {dashboardMode === 'studio-analytics-summary' && "Stream Summary Statistics"}
+                {dashboardMode === 'studio-rewards-points' && "Channel Points Reward Manager"}
+                {dashboardMode === 'studio-rewards-emotes' && "Custom Emotes & Badge Assets"}
+                {dashboardMode === 'studio-community-roles' && "Roles Manager (Moderators & VIPs)"}
+                {dashboardMode === 'studio-community-followers' && "Followers List"}
+                {dashboardMode === 'studio-settings-credentials' && "Stream Credentials Ingestion"}
+                {dashboardMode === 'studio-settings-moderation' && "Moderation & Safety Rules"}
                 {dashboardMode === 'studio-earn' && "Affiliate & Earnings Manager"}
                 {dashboardMode === 'studio-subtitles' && "Subtitles Manager"}
                 {dashboardMode === 'studio-customisation' && "Channel Customisation"}
                 {dashboardMode === 'studio-audio' && "Audio Library"}
-                {dashboardMode === 'studio-settings' && "Creator Settings"}
               </h2>
               <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Manage your channel content, interactive tools, and subscriber milestones.</p>
             </div>
