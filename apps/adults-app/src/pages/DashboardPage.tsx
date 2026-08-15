@@ -76,6 +76,9 @@ export const DashboardPage: React.FC = () => {
   const [customCoverFile, setCustomCoverFile] = useState<File | null>(null);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
   const [parsingStatus, setParsingStatus] = useState('');
+  const [coverSearchQuery, setCoverSearchQuery] = useState('');
+  const [coverSearchResult, setCoverSearchResult] = useState<{ found: boolean; coverUrl: string | null } | null>(null);
+  const [isSearchingCover, setIsSearchingCover] = useState(false);
 
   // Info modal state
   const [showEditInfo, setShowEditInfo] = useState(false);
@@ -1846,6 +1849,42 @@ export const DashboardPage: React.FC = () => {
     }
   };
 
+  const handleCheckCoverArt = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!coverSearchQuery.trim()) return;
+    setIsSearchingCover(true);
+    setCoverSearchResult(null);
+    try {
+      const searchUrl = `https://openlibrary.org/search.json?title=${encodeURIComponent(coverSearchQuery)}&fields=cover_i,cover_edition_key&limit=1`;
+      const response = await fetch(searchUrl);
+      const data = await response.json();
+      const docObj = data.docs?.[0];
+      if (docObj) {
+        let url = null;
+        if (docObj.cover_i) {
+          url = `https://covers.openlibrary.org/b/id/${docObj.cover_i}-L.jpg`;
+        } else if (docObj.cover_edition_key) {
+          url = `https://covers.openlibrary.org/b/olid/${docObj.cover_edition_key}-L.jpg`;
+        }
+        
+        if (url) {
+          setCoverSearchResult({ found: true, coverUrl: url });
+          setNewBookTitle(coverSearchQuery);
+        } else {
+          setCoverSearchResult({ found: false, coverUrl: null });
+          setNewBookTitle(coverSearchQuery);
+        }
+      } else {
+        setCoverSearchResult({ found: false, coverUrl: null });
+      }
+    } catch (err) {
+      console.error("Cover check failed:", err);
+      setCoverSearchResult({ found: false, coverUrl: null });
+    } finally {
+      setIsSearchingCover(false);
+    }
+  };
+
   // Add new custom book to Firestore
   const handleAddBookSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -3173,6 +3212,59 @@ export const DashboardPage: React.FC = () => {
             <p className="card-instructions">
               Paste your book content below. Separate pages or chapters with <strong>double newlines</strong> (hit Enter twice).
             </p>
+
+            {/* Cover Art Lookup Tool */}
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.03)',
+              border: '1px solid var(--border-color)',
+              borderRadius: '12px',
+              padding: '16px',
+              marginBottom: '20px'
+            }}>
+              <h3 style={{ margin: '0 0 8px 0', fontSize: '1rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                🔍 Check Cover Art Availability
+              </h3>
+              <p style={{ margin: '0 0 12px 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                Search by book title to see if Open Library already has high-resolution cover art. If it doesn't, you can upload your own custom cover below!
+              </p>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <input 
+                  type="text" 
+                  value={coverSearchQuery} 
+                  onChange={(e) => setCoverSearchQuery(e.target.value)}
+                  placeholder="Enter book title to check..."
+                  style={{ flex: 1, padding: '8px 12px', borderRadius: '6px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', color: '#fff' }}
+                />
+                <button 
+                  type="button" 
+                  onClick={handleCheckCoverArt}
+                  className="btn-action-cog"
+                  style={{ background: 'var(--accent-secondary)', border: 'none', borderRadius: '6px', padding: '8px 16px', color: '#fff', cursor: 'pointer', fontWeight: 'bold' }}
+                  disabled={isSearchingCover}
+                >
+                  {isSearchingCover ? 'Searching...' : 'Check Cover'}
+                </button>
+              </div>
+
+              {coverSearchResult && (
+                <div style={{ marginTop: '15px', display: 'flex', alignItems: 'center', gap: '15px', padding: '10px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
+                  {coverSearchResult.found && coverSearchResult.coverUrl ? (
+                    <>
+                      <img src={coverSearchResult.coverUrl} alt="Cover Preview" style={{ width: '50px', height: '70px', borderRadius: '4px', objectFit: 'cover' }} />
+                      <div>
+                        <div style={{ color: 'var(--accent-success)', fontSize: '0.85rem', fontWeight: 'bold' }}>🟢 Cover Art Found!</div>
+                        <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>We will automatically pull this cover. You do not need to upload a cover file below unless you want to override it.</div>
+                      </div>
+                    </>
+                  ) : (
+                    <div>
+                      <div style={{ color: '#ff4d4d', fontSize: '0.85rem', fontWeight: 'bold' }}>🔴 No Cover Art Found.</div>
+                      <div style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Please create the book and upload your own cover image file in the form below!</div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
             {addBookError && <div className="login-error">{addBookError}</div>}
             {addBookSuccess && <div className="login-success">{addBookSuccess}</div>}
