@@ -3,6 +3,7 @@ import { useAuth } from '../lib/AuthContext';
 import { doc, setDoc, updateDoc, onSnapshot, collection, query, where, addDoc, deleteDoc, getDocs, writeBatch, arrayRemove } from 'firebase/firestore';
 import { db, storage } from '../lib/firebase';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { books } from '../lib/booksData';
 import { ChevronLeft, ChevronRight, Play, Square, Users, MessageSquare, BookOpen, Plus, Clipboard, Trash2, Pin, Volume2, VolumeX, Mic, MicOff, AlertTriangle, Radio, Shield, Activity, Star, Video, Circle, Save, Clock } from 'lucide-react';
 import { saveVideoBlob } from '../lib/recordingsDb';
 import '../App.css';
@@ -41,7 +42,7 @@ export const DashboardPage: React.FC = () => {
   
   // Custom books state
   const [customBooks, setCustomBooks] = useState<FirestoreBook[]>([]);
-  const [selectedBookId, setSelectedBookId] = useState('');
+  const [selectedBookId, setSelectedBookId] = useState(books[0].id);
   const [isLive, setIsLive] = useState(false);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [viewerCount, setViewerCount] = useState(0);
@@ -79,7 +80,7 @@ export const DashboardPage: React.FC = () => {
 
   // Recording Mode state
   // Recording Mode state
-  const [dashboardMode, setDashboardMode] = useState<'studio-dashboard' | 'studio-content' | 'studio-analytics' | 'studio-subtitles' | 'studio-customisation' | 'studio-audio' | 'studio-settings' | 'studio-earn' | 'live' | 'record' | 'upload' | 'sync-editor' | 'children'>('studio-dashboard');
+  const [dashboardMode, setDashboardMode] = useState<'studio-dashboard' | 'studio-content' | 'studio-analytics' | 'studio-subtitles' | 'studio-customisation' | 'studio-audio' | 'studio-settings' | 'studio-earn' | 'live' | 'record' | 'upload' | 'sync-editor'>('studio-dashboard');
   
   // YouTube-Studio customization state variables
   const [profilePictureUrl, setProfilePictureUrl] = useState('https://images.unsplash.com/photo-1544717297-fa95b6ee9643?auto=format&fit=crop&w=150&q=80');
@@ -377,9 +378,9 @@ export const DashboardPage: React.FC = () => {
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const ttsUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  // Merge static books and custom books (BYOB: only custom books in adult version)
-  const allBooks = customBooks;
-  const selectedBookRaw = allBooks.find(b => b.id === selectedBookId) || customBooks[0] || null;
+  // Merge static books and custom books (combine pre-seeded books + custom books)
+  const allBooks = [...books, ...customBooks];
+  const selectedBookRaw = allBooks.find(b => b.id === selectedBookId) || books[0];
 
   // Fetch full book pages dynamically
   useEffect(() => {
@@ -388,23 +389,9 @@ export const DashboardPage: React.FC = () => {
     setActiveBookPages(activeBook.pages || []);
   }, [selectedBookId, customBooks]);
 
-  // Set default selection if none chosen
-  useEffect(() => {
-    if (!selectedBookId && customBooks.length > 0) {
-      setSelectedBookId(customBooks[0].id);
-    }
-  }, [customBooks, selectedBookId]);
-
-  const selectedBook = selectedBookRaw ? {
+  const selectedBook = {
     ...selectedBookRaw,
     pages: activeBookPages.length > 0 ? activeBookPages : selectedBookRaw.pages
-  } : {
-    id: '',
-    title: 'No Book Selected',
-    author: 'Unknown',
-    coverUrl: '',
-    genre: '',
-    pages: ['Please upload a custom book first to start storytelling!']
   };
 
   // Helper to add activity events
@@ -2925,9 +2912,6 @@ export const DashboardPage: React.FC = () => {
           </div>
         );
 
-      case 'children':
-        return renderChildrenProfileManager();
-
       case 'studio-settings':
         return (
           <div className="studio-card glass-panel" style={{ margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -3017,9 +3001,6 @@ export const DashboardPage: React.FC = () => {
             <button type="button" onClick={() => setDashboardMode('studio-audio')} className={`studio-nav-item ${dashboardMode === 'studio-audio' ? 'active' : ''}`}>
               <span>🎵 Audio Library</span>
             </button>
-            <button type="button" onClick={() => setDashboardMode('children')} className={`studio-nav-item ${dashboardMode === 'children' ? 'active' : ''}`}>
-              <span>🧸 Child Profiles</span>
-            </button>
             <button type="button" onClick={() => setDashboardMode('studio-settings')} className={`studio-nav-item ${dashboardMode === 'studio-settings' ? 'active' : ''}`}>
               <span>⚙️ Settings</span>
             </button>
@@ -3040,7 +3021,6 @@ export const DashboardPage: React.FC = () => {
                 {dashboardMode === 'studio-subtitles' && "Subtitles Manager"}
                 {dashboardMode === 'studio-customisation' && "Channel Customisation"}
                 {dashboardMode === 'studio-audio' && "Audio Library"}
-                {dashboardMode === 'children' && "Child Profile Administrator"}
                 {dashboardMode === 'studio-settings' && "Creator Settings"}
               </h2>
               <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>Manage your channel content, interactive tools, and subscriber milestones.</p>
@@ -3395,18 +3375,6 @@ export const DashboardPage: React.FC = () => {
               >
                 Upload Video (Sync Timeline)
               </button>
-              <button 
-                type="button"
-                onClick={() => setDashboardMode('children')}
-                className={`btn-mode-tab ${dashboardMode === 'children' ? 'active' : ''}`}
-                style={{
-                  background: dashboardMode === 'children' ? 'var(--accent-primary)' : 'transparent',
-                  color: dashboardMode === 'children' ? '#fff' : 'var(--text-muted)',
-                  border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold'
-                }}
-              >
-                Child Profiles
-              </button>
             </div>
 
             {dashboardMode === 'live' ? (
@@ -3471,12 +3439,17 @@ export const DashboardPage: React.FC = () => {
                           value={selectedBookId} 
                           onChange={(e) => setSelectedBookId(e.target.value)}
                         >
-                          {customBooks.length > 0 ? (
-                            customBooks.map((b) => (
+                          <optgroup label="Default Library Books">
+                            {books.map((b) => (
                               <option key={b.id} value={b.id}>{b.title} (by {b.author})</option>
-                            ))
-                          ) : (
-                            <option value="">No books uploaded yet. Please upload a book first!</option>
+                            ))}
+                          </optgroup>
+                          {customBooks.length > 0 && (
+                            <optgroup label="My Uploaded Books">
+                              {customBooks.map((b) => (
+                                <option key={b.id} value={b.id}>{b.title} (Custom)</option>
+                              ))}
+                            </optgroup>
                           )}
                         </select>
                       </div>
@@ -3550,12 +3523,17 @@ export const DashboardPage: React.FC = () => {
                         value={selectedBookId} 
                         onChange={(e) => setSelectedBookId(e.target.value)}
                       >
-                        {customBooks.length > 0 ? (
-                          customBooks.map((b) => (
+                        <optgroup label="Default Library Books">
+                          {books.map((b) => (
                             <option key={b.id} value={b.id}>{b.title} (by {b.author})</option>
-                          ))
-                        ) : (
-                          <option value="">No books uploaded yet. Please upload a book first!</option>
+                          ))}
+                        </optgroup>
+                        {customBooks.length > 0 && (
+                          <optgroup label="My Uploaded Books">
+                            {customBooks.map((b) => (
+                              <option key={b.id} value={b.id}>{b.title} (Custom)</option>
+                            ))}
+                          </optgroup>
                         )}
                       </select>
                     </div>
@@ -3605,12 +3583,17 @@ export const DashboardPage: React.FC = () => {
                         value={selectedBookId} 
                         onChange={(e) => setSelectedBookId(e.target.value)}
                       >
-                        {customBooks.length > 0 ? (
-                          customBooks.map((b) => (
+                        <optgroup label="Default Library Books">
+                          {books.map((b) => (
                             <option key={b.id} value={b.id}>{b.title} (by {b.author})</option>
-                          ))
-                        ) : (
-                          <option value="">No books uploaded yet. Please upload a book first!</option>
+                          ))}
+                        </optgroup>
+                        {customBooks.length > 0 && (
+                          <optgroup label="My Uploaded Books">
+                            {customBooks.map((b) => (
+                              <option key={b.id} value={b.id}>{b.title} (Custom)</option>
+                            ))}
+                          </optgroup>
                         )}
                       </select>
                     </div>
