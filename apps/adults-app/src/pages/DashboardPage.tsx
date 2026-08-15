@@ -73,6 +73,8 @@ export const DashboardPage: React.FC = () => {
   const [addBookError, setAddBookError] = useState('');
   const [addBookSuccess, setAddBookSuccess] = useState('');
   const [isParsingFile, setIsParsingFile] = useState(false);
+  const [customCoverFile, setCustomCoverFile] = useState<File | null>(null);
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
   const [parsingStatus, setParsingStatus] = useState('');
 
   // Info modal state
@@ -1894,20 +1896,36 @@ export const DashboardPage: React.FC = () => {
     };
 
     let finalCoverUrl = '';
-    try {
-      const searchUrl = `https://openlibrary.org/search.json?title=${encodeURIComponent(newBookTitle)}&fields=cover_i,cover_edition_key&limit=1`;
-      const response = await fetch(searchUrl);
-      const data = await response.json();
-      const docObj = data.docs?.[0];
-      if (docObj) {
-        if (docObj.cover_i) {
-          finalCoverUrl = `https://covers.openlibrary.org/b/id/${docObj.cover_i}-L.jpg`;
-        } else if (docObj.cover_edition_key) {
-          finalCoverUrl = `https://covers.openlibrary.org/b/olid/${docObj.cover_edition_key}-L.jpg`;
-        }
+
+    if (customCoverFile) {
+      try {
+        setIsUploadingCover(true);
+        const coverRef = ref(storage, `book_covers/${user.uid}_${Date.now()}_${customCoverFile.name}`);
+        const uploadTask = await uploadBytesResumable(coverRef, customCoverFile);
+        finalCoverUrl = await getDownloadURL(uploadTask.ref);
+        setIsUploadingCover(false);
+      } catch (storageErr: any) {
+        console.error("Storage upload failed for custom cover:", storageErr);
+        setIsUploadingCover(false);
+        setAddBookError('Failed to upload custom cover art: ' + storageErr.message);
+        return;
       }
-    } catch (apiErr) {
-      console.error("Open Library API cover look up failed, using procedural fallback cover:", apiErr);
+    } else {
+      try {
+        const searchUrl = `https://openlibrary.org/search.json?title=${encodeURIComponent(newBookTitle)}&fields=cover_i,cover_edition_key&limit=1`;
+        const response = await fetch(searchUrl);
+        const data = await response.json();
+        const docObj = data.docs?.[0];
+        if (docObj) {
+          if (docObj.cover_i) {
+            finalCoverUrl = `https://covers.openlibrary.org/b/id/${docObj.cover_i}-L.jpg`;
+          } else if (docObj.cover_edition_key) {
+            finalCoverUrl = `https://covers.openlibrary.org/b/olid/${docObj.cover_edition_key}-L.jpg`;
+          }
+        }
+      } catch (apiErr) {
+        console.error("Open Library API cover look up failed, using procedural fallback cover:", apiErr);
+      }
     }
 
     if (!finalCoverUrl) {
@@ -1932,6 +1950,7 @@ export const DashboardPage: React.FC = () => {
       setNewBookTitle('');
       setNewBookAuthor('');
       setNewBookText('');
+      setCustomCoverFile(null);
       setTimeout(() => {
         setShowAddBook(false);
         setAddBookSuccess('');
@@ -3329,7 +3348,51 @@ export const DashboardPage: React.FC = () => {
                 />
               </div>
 
-              <button type="submit" className="btn-primary flex-center gap-sm">
+              <div className="form-group" style={{ marginBottom: '20px' }}>
+                <label>Upload Custom Cover Art (Optional - if left empty, we will look up Open Library cover art automatically)</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        setCustomCoverFile(e.target.files[0]);
+                      }
+                    }}
+                    style={{
+                      padding: '8px 12px',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid var(--border-color)',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      cursor: 'pointer'
+                    }}
+                  />
+                  {customCoverFile && (
+                    <span style={{ fontSize: '0.85rem', color: 'var(--accent-success)' }}>
+                      Selected: {customCoverFile.name}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {isUploadingCover && (
+                <div style={{
+                  padding: '12px 16px',
+                  background: 'rgba(255, 183, 3, 0.1)',
+                  border: '1px solid #ffde6a',
+                  borderRadius: '8px',
+                  marginBottom: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}>
+                  <span style={{ fontSize: '1.2rem', animation: 'spin 1.5s linear infinite' }}>⏳</span>
+                  <span style={{ fontSize: '0.9rem', color: '#ffde6a' }}>Uploading custom cover art to Storage...</span>
+                </div>
+              )}
+
+              <button type="submit" className="btn-primary flex-center gap-sm" disabled={isUploadingCover || isParsingFile}>
                 <Clipboard size={18} />
                 <span>Upload Novel</span>
               </button>
