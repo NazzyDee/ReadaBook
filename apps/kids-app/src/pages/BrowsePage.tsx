@@ -146,7 +146,71 @@ export const BrowsePage: React.FC = () => {
       snapshot.forEach((doc) => {
         active.push({ id: doc.id, ...doc.data() } as ActiveStream);
       });
-      setLiveStreams(active);
+      
+      const mockStreams: ActiveStream[] = [
+        {
+          id: 'mock_lillyreads',
+          streamerName: 'LillyReads',
+          title: 'Cozy Bedtime Storytelling & Soft Rain Lofi 🌧️',
+          genre: 'Fantasy',
+          bookId: 'the-lion-the-witch-and-the-wardrobe',
+          bookTitle: 'The Chronicles of Narnia: The Lion, the Witch and the Wardrobe',
+          bookAuthor: 'C.S. Lewis',
+          bookCoverUrl: 'https://covers.openlibrary.org/b/id/8441376-L.jpg',
+          isLive: true,
+          viewerCount: 1420
+        },
+        {
+          id: 'mock_bookishbard',
+          streamerName: 'BookishBard',
+          title: 'Adventure Quest! Epic Reading & Voice Acting 🐉',
+          genre: 'Fantasy',
+          bookId: 'the-hobbit',
+          bookTitle: 'The Hobbit',
+          bookAuthor: 'J.R.R. Tolkien',
+          bookCoverUrl: 'https://covers.openlibrary.org/b/id/14627509-L.jpg',
+          isLive: true,
+          viewerCount: 3500
+        },
+        {
+          id: 'mock_sorcererspells',
+          streamerName: 'SorcererSpells',
+          title: 'Magical Reading & Soundscape Synthesizers ✨',
+          genre: 'Fantasy',
+          bookId: 'harry-potter-and-the-sorcerer-s-stone',
+          bookTitle: "Harry Potter and the Sorcerer's Stone",
+          bookAuthor: 'J.K. Rowling',
+          bookCoverUrl: 'https://covers.openlibrary.org/b/id/15155833-L.jpg',
+          isLive: true,
+          viewerCount: 5600
+        },
+        {
+          id: 'mock_westeroswatcher',
+          streamerName: 'WesterosWatcher',
+          title: 'Epic Fantasy Study Night - Join Co-Writing Sprinters!',
+          genre: 'Fantasy',
+          bookId: 'a-game-of-thrones',
+          bookTitle: 'A Game of Thrones',
+          bookAuthor: 'George R.R. Martin',
+          bookCoverUrl: 'https://covers.openlibrary.org/b/id/9269962-L.jpg',
+          isLive: true,
+          viewerCount: 2800
+        },
+        {
+          id: 'mock_elvenlibrarian',
+          streamerName: 'ElvenLibrarian',
+          title: 'Rivendell Study Room: Cozy Fireplace & Silent Reading',
+          genre: 'Fantasy',
+          bookId: 'the-fellowship-of-the-ring',
+          bookTitle: 'The Fellowship of the Ring',
+          bookAuthor: 'J.R.R. Tolkien',
+          bookCoverUrl: 'https://covers.openlibrary.org/b/id/14627060-L.jpg',
+          isLive: true,
+          viewerCount: 1850
+        }
+      ];
+
+      setLiveStreams([...mockStreams, ...active]);
     });
 
     return () => unsubscribe();
@@ -174,12 +238,56 @@ export const BrowsePage: React.FC = () => {
       snapshot.forEach((doc) => {
         list.push({ id: doc.id, ...doc.data() } as Recording);
       });
-      list.sort((a, b) => {
+      
+      const mockRecordings: Recording[] = [
+        {
+          id: 'mock_rec_1',
+          title: 'Bedtime Story: The Hobbit',
+          genre: 'Fantasy',
+          bookId: 'the-hobbit',
+          bookTitle: 'The Hobbit',
+          bookAuthor: 'J.R.R. Tolkien',
+          bookCoverUrl: 'https://covers.openlibrary.org/b/id/14627509-L.jpg',
+          duration: 320,
+          readerId: 'mock_lillyreads',
+          readerName: 'LillyReads',
+          createdAt: { toMillis: () => Date.now(), seconds: Date.now() / 1000, nanoseconds: 0 } as any
+        },
+        {
+          id: 'mock_rec_2',
+          title: 'Hogwarts Journey: Sorcerer\'s Stone Reading',
+          genre: 'Fantasy',
+          bookId: 'harry-potter-and-the-sorcerer-s-stone',
+          bookTitle: "Harry Potter and the Sorcerer's Stone",
+          bookAuthor: 'J.K. Rowling',
+          bookCoverUrl: 'https://covers.openlibrary.org/b/id/15155833-L.jpg',
+          duration: 450,
+          readerId: 'mock_sorcererspells',
+          readerName: 'SorcererSpells',
+          createdAt: { toMillis: () => Date.now(), seconds: Date.now() / 1000, nanoseconds: 0 } as any
+        },
+        {
+          id: 'mock_rec_3',
+          title: 'Classic Chronicles: The Wardrobe Adventure',
+          genre: 'Fantasy',
+          bookId: 'the-lion-the-witch-and-the-wardrobe',
+          bookTitle: 'The Chronicles of Narnia: The Lion, the Witch and the Wardrobe',
+          bookAuthor: 'C.S. Lewis',
+          bookCoverUrl: 'https://covers.openlibrary.org/b/id/8441376-L.jpg',
+          duration: 280,
+          readerId: 'mock_bookishbard',
+          readerName: 'BookishBard',
+          createdAt: { toMillis: () => Date.now(), seconds: Date.now() / 1000, nanoseconds: 0 } as any
+        }
+      ];
+
+      const combined = [...mockRecordings, ...list];
+      combined.sort((a, b) => {
         const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds || 0);
         const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds || 0);
         return timeB - timeA;
       });
-      setRecordings(list);
+      setRecordings(combined);
     });
 
     return () => unsubscribe();

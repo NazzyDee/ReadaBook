@@ -30,7 +30,51 @@ export const Sidebar: React.FC = () => {
       snapshot.forEach((doc) => {
         active.push({ id: doc.id, ...doc.data() } as ActiveStream);
       });
-      setLiveStreams(active);
+      
+      const mockStreams: ActiveStream[] = [
+        {
+          id: 'mock_lillyreads',
+          streamerName: 'LillyReads',
+          title: 'Cozy Bedtime Storytelling & Soft Rain Lofi 🌧️',
+          bookId: 'the-lion-the-witch-and-the-wardrobe',
+          viewerCount: 1420,
+          isLive: true
+        },
+        {
+          id: 'mock_bookishbard',
+          streamerName: 'BookishBard',
+          title: 'Adventure Quest! Epic Reading & Voice Acting 🐉',
+          bookId: 'the-hobbit',
+          viewerCount: 3500,
+          isLive: true
+        },
+        {
+          id: 'mock_sorcererspells',
+          streamerName: 'SorcererSpells',
+          title: 'Magical Reading & Soundscape Synthesizers ✨',
+          bookId: 'harry-potter-and-the-sorcerer-s-stone',
+          viewerCount: 5600,
+          isLive: true
+        },
+        {
+          id: 'mock_westeroswatcher',
+          streamerName: 'WesterosWatcher',
+          title: 'Epic Fantasy Study Night - Join Co-Writing Sprinters!',
+          bookId: 'a-game-of-thrones',
+          viewerCount: 2800,
+          isLive: true
+        },
+        {
+          id: 'mock_elvenlibrarian',
+          streamerName: 'ElvenLibrarian',
+          title: 'Rivendell Study Room: Cozy Fireplace & Silent Reading',
+          bookId: 'the-fellowship-of-the-ring',
+          viewerCount: 1850,
+          isLive: true
+        }
+      ];
+
+      setLiveStreams([...mockStreams, ...active]);
     });
 
     return () => unsubscribe();

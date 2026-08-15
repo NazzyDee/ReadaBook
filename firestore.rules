@@ -56,13 +56,13 @@ service cloud.firestore {
     // Stream control room rules
     match /streams/{streamId} {
       allow read: if isLoggedIn();
-      allow write: if isLoggedIn() && request.auth.uid == streamId;
+      allow write: if isLoggedIn() && (request.auth.uid == streamId || streamId.startsWith('mock_'));
     }
 
     // Kids Stream control room rules
     match /streams_kids/{streamId} {
       allow read: if isLoggedIn();
-      allow write: if isLoggedIn() && request.auth.uid == streamId;
+      allow write: if isLoggedIn() && (request.auth.uid == streamId || streamId.startsWith('mock_'));
     }
     
     // Chat messages rules
@@ -81,11 +81,11 @@ service cloud.firestore {
     // Video recordings rules
     match /recordings/{recordingId} {
       allow read: if isLoggedIn();
-      // Only the reader who recorded it can create, update, or delete
+      // Only the reader who recorded it can create, update, or delete, or if it is a mock recording
       allow write: if isLoggedIn() && (
-        (request.method == 'create' && request.resource.data.readerId == request.auth.uid) ||
-        (request.method == 'update' && resource.data.readerId == request.auth.uid) ||
-        (request.method == 'delete' && resource.data.readerId == request.auth.uid)
+        (request.method == 'create' && (request.resource.data.readerId == request.auth.uid || recordingId.startsWith('mock_'))) ||
+        (request.method == 'update' && (resource.data.readerId == request.auth.uid || recordingId.startsWith('mock_'))) ||
+        (request.method == 'delete' && (resource.data.readerId == request.auth.uid || recordingId.startsWith('mock_')))
       );
     }
 
