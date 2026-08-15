@@ -1425,7 +1425,7 @@
 /* Studio Grid Layout */
 .studio-grid {
   display: grid;
-  grid-template-columns: 320px 1fr 340px;
+  grid-template-columns: 300px 1fr 360px;
   gap: var(--spacing-lg);
   align-items: start;
 }

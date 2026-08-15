@@ -4161,482 +4161,487 @@ export const DashboardPage: React.FC = () => {
           </div>
         ) : (
           <div className="studio-grid" style={{
-            gridTemplateColumns: `${visibleWidgets.monitor || visibleWidgets.actions ? '320px' : ''} ${visibleWidgets.reader || visibleWidgets.activity || visibleWidgets.polls ? '1fr' : ''} ${visibleWidgets.chat ? '340px' : ''}`.trim() || '1fr'
+            gridTemplateColumns: '300px 1fr 360px'
           }}>
             
-            {/* Left Column: Stream Monitor & Quick Actions */}
-            {(visibleWidgets.monitor || visibleWidgets.actions) && (
-              <div className="studio-left-column">
-                
-                {/* Stream Preview (Video Feed) */}
-                {visibleWidgets.monitor && (
-                  <div className="studio-card glass-panel">
-                    <div className="studio-card-header">
-                      <Radio size={16} color="var(--accent-primary)" />
-                      <span>Broadcast Monitor</span>
-                    </div>
-                    <div className="preview-video-container border-glow">
-                      
-                      {/* Simulated ad run overlay banner */}
-                      {adTimeRemaining > 0 && (
-                        <div className="preview-overlay-banner">
-                          <span>📺</span>
-                          <h4>Ad Break Running</h4>
-                          <p>Preview is paused during advertisement.</p>
-                          <div className="countdown-number">{adTimeRemaining}s</div>
-                        </div>
-                      )}
-
-                      {/* Simulated raid countdown overlay banner */}
-                      {raidTimeRemaining > 0 && (
-                        <div className="preview-overlay-banner">
-                          <span>🚀</span>
-                          <h4>Raiding {raidTargetChannel}</h4>
-                          <p>Prepping viewers for transition...</p>
-                          <div className="countdown-number">{raidTimeRemaining}s</div>
-                        </div>
-                      )}
-
-                      {broadcastSource === 'obs' ? (
-                        !isObsConnected ? (
-                          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#11032a', color: '#ffde6a', padding: '20px', textAlign: 'center' }}>
-                            <span style={{ fontSize: '2rem', animation: 'pulse 1.5s infinite', display: 'block', marginBottom: '8px' }}>📡</span>
-                            <strong style={{ fontSize: '0.9rem' }}>Waiting for OBS Signal...</strong>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>Configure and Start Streaming in OBS.</span>
-                            <button 
-                              type="button"
-                              onClick={async () => {
-                                if (user) {
-                                  try {
-                                    await updateDoc(doc(db, 'streams', user.uid), { isObsConnected: true });
-                                    await updateDoc(doc(db, 'streams_kids', user.uid), { isObsConnected: true });
-                                    setIsObsConnected(true);
-                                    addEvent("OBS Encoder signal connected manually!", "🟢");
-                                  } catch(e) {}
-                                }
-                              }}
-                              style={{ marginTop: '10px', background: 'var(--accent-secondary)', border: 'none', borderRadius: '4px', padding: '6px 12px', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', cursor: 'pointer' }}
-                            >
-                              Simulate OBS Connect
-                            </button>
-                          </div>
-                        ) : (
-                          <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0b011d', color: '#fff', padding: '20px', textAlign: 'center', position: 'relative' }}>
-                            <span style={{ fontSize: '2rem', marginBottom: '8px' }}>🎬</span>
-                            <strong style={{ color: 'var(--accent-success)', fontSize: '0.9rem' }}>🟢 OBS Connected</strong>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>Feed: 1080p @ 60fps</span>
-                            <button 
-                              type="button"
-                              onClick={async () => {
-                                if (user) {
-                                  try {
-                                    await updateDoc(doc(db, 'streams', user.uid), { isObsConnected: false });
-                                    await updateDoc(doc(db, 'streams_kids', user.uid), { isObsConnected: false });
-                                    setIsObsConnected(false);
-                                    addEvent("OBS Encoder signal disconnected.", "🔴");
-                                  } catch(e) {}
-                                }
-                              }}
-                              style={{ marginTop: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '4px 8px', color: 'var(--text-muted)', fontSize: '0.7rem', cursor: 'pointer' }}
-                            >
-                              Simulate OBS Disconnect
-                            </button>
-                          </div>
-                        )
-                      ) : performanceMode ? (
-                        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#111', color: 'var(--text-muted)', fontSize: '0.8rem', padding: '16px', textAlign: 'center' }}>
-                          <span>📷 Camera Feed Active</span>
-                          <span style={{ fontSize: '0.7rem', opacity: 0.7, marginTop: '4px' }}>Video preview hidden to maximize streaming CPU performance.</span>
-                        </div>
-                      ) : (
-                        <video 
-                          ref={videoRef} 
-                          autoPlay 
-                          playsInline 
-                          muted 
-                          className="webcam-preview" 
-                          style={{ opacity: adTimeRemaining > 0 ? 0.2 : 1 }}
-                        />
-                      )}
-                      {micMuted && (
-                        <div className="mic-muted-badge flex-center">
-                          <MicOff size={20} color="#fff" />
-                        </div>
-                      )}
-                      <div className="live-overlay-indicator">
-                        <span className="dot"></span>
-                        <span>LIVE</span>
-                      </div>
-                    </div>
-                    <div className="preview-info-panel">
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                        <div>
-                          <h3>{streamTitle}</h3>
-                          <p className="card-sub">Category: <strong>{streamGenre}</strong> | Book: <strong>{selectedBook.title}</strong></p>
-                        </div>
-                        <button onClick={() => setShowEditInfo(true)} className="btn-edit-info" title="Edit Stream Info">⚙️ Edit</button>
-                      </div>
-                      <button onClick={handleEndStream} className="btn-danger w-full flex-center gap-sm" style={{ marginTop: '12px' }}>
-                        <Square size={14} />
-                        <span>End Stream / Disconnect</span>
-                      </button>
-                    </div>
+            {/* Left Column: Activity Feed, Goals, Predictions, Pomodoro, manuscripts */}
+            <div className="studio-left-column">
+              
+              {/* Activity Feed Widget */}
+              {visibleWidgets.activity && (
+                <div className="studio-card glass-panel studio-activity-card">
+                  <div className="studio-card-header text-between">
+                    <span className="flex-center gap-sm">
+                      <Activity size={16} color="var(--accent-success)" />
+                      <span>Activity Feed</span>
+                    </span>
+                    <select 
+                      value={activityFilter} 
+                      onChange={(e: any) => setActivityFilter(e.target.value)}
+                      style={{ background: 'var(--bg-dark)', color: 'var(--text-muted)', border: '1px solid var(--border-color)', borderRadius: '4px', fontSize: '0.75rem', padding: '2px 8px' }}
+                    >
+                      <option value="all">All Events</option>
+                      <option value="follows">Follows / Subs</option>
+                      <option value="system">System Logs</option>
+                      <option value="moderation">Mod Alerts</option>
+                    </select>
                   </div>
-                )}
-
-                {/* Quick Actions Panel */}
-                {visibleWidgets.actions && (
-                  <div className="studio-card glass-panel">
-                    <div className="studio-card-header text-between">
-                      <span className="flex-center gap-sm">
-                        <Shield size={16} color="var(--accent-secondary)" />
-                        <span>Quick Actions</span>
-                      </span>
-                      <button onClick={() => setShowActionsConfigModal(true)} className="btn-action-cog" title="Configure Quick Actions">
-                        ⚙️
-                      </button>
-                    </div>
-                    
-                    <div className="quick-actions-grid">
-                      {renderQuickActions()}
-                    </div>
-
-                    {/* Announcement overlay input */}
-                    {showAnnouncementInput && (
-                      <form onSubmit={handleSendAnnouncement} className="announcement-inline-form">
-                        <input 
-                          type="text" 
-                          placeholder="Type announcement message..." 
-                          value={announcementText}
-                          onChange={(e) => setAnnouncementText(e.target.value)}
-                          required
-                          autoFocus
-                        />
-                        <button type="submit" className="btn-primary">Send</button>
-                      </form>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Center Column: Interactive Reader & Activity Feed & Polls */}
-            {(visibleWidgets.reader || visibleWidgets.activity || visibleWidgets.polls) && (
-              <div className="studio-center-column">
-                
-                {/* Synced Reader Page Control */}
-                {visibleWidgets.reader && (
-                  <div className="studio-card glass-panel streamer-reader-card">
-                    <div className="studio-card-header text-between">
-                      <span className="flex-center gap-sm">
-                        <BookOpen size={16} color="var(--accent-secondary)" />
-                        <span>Active Reader</span>
-                      </span>
-                      <button 
-                        onClick={toggleTtsReading} 
-                        className={`btn-tts-speaker ${isTtsReading ? 'active' : ''}`}
-                        title={isTtsReading ? "Pause Text-to-Speech" : "Activate Text-to-Speech Assistant"}
-                      >
-                        <Volume2 size={16} />
-                        <span>{isTtsReading ? 'Mute AI' : 'Speech AI'}</span>
-                      </button>
-                    </div>
-                    
-                    <div className="reader-meta-row">
-                      <img src={selectedBook.coverUrl} alt="Cover" className="studio-mini-cover" />
-                      <div>
-                        <h3>{selectedBook.title}</h3>
-                        <p>Page {currentPageIndex + 1} of {selectedBook.pages.length}</p>
-                      </div>
-                      <div className="studio-page-nav">
-                        <button 
-                          onClick={() => handlePageChange(currentPageIndex - 1)} 
-                          disabled={currentPageIndex === 0}
-                          className="studio-nav-btn"
-                        >
-                          <ChevronLeft size={18} />
-                        </button>
-                        <button 
-                          onClick={() => handlePageChange(currentPageIndex + 1)} 
-                          disabled={currentPageIndex === selectedBook.pages.length - 1}
-                          className="studio-nav-btn"
-                        >
-                          <ChevronRight size={18} />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="studio-page-content scrollbar-paper">
-                      {selectedBook.pages[currentPageIndex] ? (
-                        selectedBook.pages[currentPageIndex].split('\n\n').map((para, idx) => {
-                          const isActive = idx === activeParagraphIndex;
-                          return (
-                            <p 
-                              key={idx} 
-                              onClick={() => handleParagraphClick(idx)}
-                              style={{ 
-                                marginBottom: '16px', 
-                                lineHeight: '1.6', 
-                                fontSize: '1.1rem', 
-                                textIndent: '16px',
-                                cursor: 'pointer',
-                                padding: '6px 12px',
-                                borderRadius: '6px',
-                                backgroundColor: isActive ? 'rgba(0, 229, 255, 0.08)' : 'transparent',
-                                borderLeft: isActive ? '3px solid var(--accent-secondary)' : '3px solid transparent',
-                                transition: 'all 0.15s'
-                              }}
-                            >
-                              {para}
-                            </p>
-                          );
-                        })
-                      ) : (
-                        <p>Opening story text...</p>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Interactive Poll Widget */}
-                {visibleWidgets.polls && (
-                  <div className="studio-card glass-panel">
-                    <div className="studio-card-header text-between">
-                      <span className="flex-center gap-sm">
-                        <span>📊 Live Channel Poll</span>
-                      </span>
-                      {isPollActive && <span style={{ color: 'var(--accent-secondary)', fontWeight: 'bold', fontSize: '0.75rem' }}>⏱️ {pollTimer}s left</span>}
-                    </div>
-
-                    <div className="poll-widget-container">
-                      {!isPollActive ? (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          <div className="form-group">
-                            <label>Poll Question</label>
-                            <input 
-                              type="text" 
-                              value={pollQuestion}
-                              onChange={(e) => setPollQuestion(e.target.value)}
-                              placeholder="e.g. Which chapter next?"
-                            />
-                          </div>
-                          <div style={{ display: 'flex', gap: '8px' }}>
-                            <input 
-                              type="text" 
-                              value={pollOptions[0].text}
-                              onChange={(e) => setPollOptions([ { text: e.target.value, votes: 0 }, pollOptions[1] ])}
-                              placeholder="Option 1"
-                              style={{ flex: 1, padding: '8px', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', borderRadius: '4px', color: '#fff' }}
-                            />
-                            <input 
-                              type="text" 
-                              value={pollOptions[1].text}
-                              onChange={(e) => setPollOptions([ pollOptions[0], { text: e.target.value, votes: 0 } ])}
-                              placeholder="Option 2"
-                              style={{ flex: 1, padding: '8px', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', borderRadius: '4px', color: '#fff' }}
-                            />
-                          </div>
-                          <button 
-                            type="button"
-                            onClick={() => { setIsPollActive(true); setPollTimer(30); setPollOptions(pollOptions.map(o => ({ ...o, votes: 0 }))); addEvent(`Poll started: ${pollQuestion}`, "📊"); playAlertSound('mod'); }}
-                            className="btn-primary" 
-                            style={{ marginTop: '8px', background: 'var(--accent-secondary)' }}
-                          >
-                            Start 30-Second Poll
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="poll-active-view">
-                          <h4 style={{ margin: 0, fontSize: '0.9rem' }}>{pollQuestion}</h4>
-                          {pollOptions.map((opt, i) => {
-                            const totalVotes = pollOptions.reduce((acc, o) => acc + o.votes, 0) || 1;
-                            const percent = Math.round((opt.votes / totalVotes) * 100);
-                            return (
-                              <div key={i} className="poll-option-row">
-                                <div className="poll-option-labels">
-                                  <span>{opt.text}</span>
-                                  <span>{opt.votes} votes ({percent}%)</span>
-                                </div>
-                                <div className="poll-progress-bar">
-                                  <div 
-                                    className={i === 0 ? "poll-progress-fill" : "poll-progress-fill-alt"} 
-                                    style={{ width: `${percent}%` }}
-                                  ></div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Live Predictions Widget */}
-                {isPredictionActive && (
-                  <div className="studio-card glass-panel" style={{ marginTop: '16px' }}>
-                    <div className="studio-card-header text-between">
-                      <span className="flex-center gap-sm">
-                        <span>🔮 Predictions (Live Channel prediction)</span>
-                      </span>
-                      <span style={{ color: 'var(--accent-secondary)', fontWeight: 'bold', fontSize: '0.75rem' }}>⏱️ {predictionTimer}s left</span>
-                    </div>
-
-                    <div style={{ padding: '16px' }}>
-                      <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#fff' }}>{predictionQuestion}</h4>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {predictionOptions.map((opt, i) => {
-                          const totalPoints = predictionOptions.reduce((acc, o) => acc + o.points, 0) || 1;
-                          const percent = Math.round((opt.points / totalPoints) * 100);
-                          return (
-                            <div key={i} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '10px 14px' }}>
-                              <div className="flex-between" style={{ marginBottom: '6px', fontSize: '0.9rem' }}>
-                                <strong style={{ color: i === 0 ? 'var(--accent-primary)' : 'var(--accent-secondary)' }}>{opt.text}</strong>
-                                <span style={{ color: 'var(--text-muted)' }}>{opt.votes} votes ({percent}%)</span>
-                              </div>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                                <span>Total Channel Points:</span>
-                                <strong>{opt.points} 🪙</strong>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Community Goals Widget */}
-                {goalActive && (
-                  <div className="studio-card glass-panel" style={{ marginTop: '16px' }}>
-                    <div className="studio-card-header text-between">
-                      <span className="flex-center gap-sm">
-                        <span>🎯 Community Goal Tracker</span>
-                      </span>
-                      <button onClick={() => setShowGoalsConfig(true)} className="btn-action-cog" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff' }}>⚙️ Edit</button>
-                    </div>
-                    <div style={{ padding: '16px' }}>
-                      <h4 style={{ margin: '0 0 10px 0', fontSize: '0.95rem', color: '#fff' }}>{goalTitle}</h4>
-                      <div style={{ background: 'rgba(255,255,255,0.1)', height: '24px', borderRadius: '12px', overflow: 'hidden', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <div style={{ background: 'var(--accent-primary)', width: `${Math.min(100, (goalCurrent / goalTarget) * 100)}%`, height: '100%', position: 'absolute', left: 0, top: 0, transition: 'width 0.3s' }}></div>
-                        <span style={{ zIndex: 2, fontSize: '0.85rem', fontWeight: 'bold', color: '#fff' }}>{goalCurrent} / {goalTarget} ({Math.round((goalCurrent / goalTarget) * 100)}%)</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Activity Feed Widget */}
-                {visibleWidgets.activity && (
-                  <div className="studio-card glass-panel studio-activity-card">
-                    <div className="studio-card-header text-between">
-                      <span className="flex-center gap-sm">
-                        <Activity size={16} color="var(--accent-success)" />
-                        <span>Studio Activity Feed</span>
-                      </span>
-                      <div className="flex-center gap-sm">
-                        <select 
-                          value={activityFilter} 
-                          onChange={(e: any) => setActivityFilter(e.target.value)}
-                          style={{ background: 'var(--bg-dark)', color: 'var(--text-muted)', border: '1px solid var(--border-color)', borderRadius: '4px', fontSize: '0.75rem', padding: '2px 8px' }}
-                        >
-                          <option value="all">All Events</option>
-                          <option value="follows">Follows / Subs</option>
-                          <option value="system">System Logs</option>
-                          <option value="moderation">Mod Alerts</option>
-                        </select>
-                      </div>
-                    </div>
-                    
-                    <div className="activity-feed-list">
-                      {activityFeed.filter(event => {
+                  
+                  <div className="activity-feed-list" style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                    {activityFeed.filter(event => {
+                      if (activityFilter === 'all') return true;
+                      if (activityFilter === 'follows') return event.icon === "❤️" || event.text.includes("followed") || event.text.includes("subscribed");
+                      if (activityFilter === 'system') return event.icon === "📖" || event.icon === "⚙️" || event.icon === "📷";
+                      if (activityFilter === 'moderation') return event.icon === "🛡️" || event.icon === "⚠️";
+                      return true;
+                    }).length === 0 ? (
+                      <p className="no-activity">No events match filter.</p>
+                    ) : (
+                      activityFeed.filter(event => {
                         if (activityFilter === 'all') return true;
                         if (activityFilter === 'follows') return event.icon === "❤️" || event.text.includes("followed") || event.text.includes("subscribed");
                         if (activityFilter === 'system') return event.icon === "📖" || event.icon === "⚙️" || event.icon === "📷";
                         if (activityFilter === 'moderation') return event.icon === "🛡️" || event.icon === "⚠️";
                         return true;
-                      }).length === 0 ? (
-                        <p className="no-activity">No events match filter.</p>
-                      ) : (
-                        activityFeed.filter(event => {
-                          if (activityFilter === 'all') return true;
-                          if (activityFilter === 'follows') return event.icon === "❤️" || event.text.includes("followed") || event.text.includes("subscribed");
-                          if (activityFilter === 'system') return event.icon === "📖" || event.icon === "⚙️" || event.icon === "📷";
-                          if (activityFilter === 'moderation') return event.icon === "🛡️" || event.icon === "⚠️";
-                          return true;
-                        }).map((event) => (
-                          <div key={event.id} className="activity-event-item">
-                            <span className="event-time font-mono">{event.timestamp}</span>
-                            <span className="event-icon">{event.icon}</span>
-                            <span className="event-text">{event.text}</span>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Pomodoro & Live Co-Writing Panel */}
-                <div className="studio-card glass-panel" style={{ marginTop: '20px' }}>
-                  <div className="studio-card-header flex-between">
-                    <span className="flex-center gap-sm">
-                      <Clock size={16} color="var(--accent-primary)" />
-                      <span>Twitch Synchronous Study Sprinter</span>
-                    </span>
-                    {pomodoroActive && (
-                      <span className="live-indicator-tag" style={{ background: 'var(--accent-primary)', fontSize: '0.8rem', padding: '2px 8px', borderRadius: '4px', color: '#fff', fontWeight: 'bold' }}>
-                        ⏳ RUNNING ({pomodoroType === 'work' ? 'FOCUS' : 'BREAK'})
-                      </span>
+                      }).map((event) => (
+                        <div key={event.id} className="activity-event-item">
+                          <span className="event-time font-mono">{event.timestamp}</span>
+                          <span className="event-icon">{event.icon}</span>
+                          <span className="event-text">{event.text}</span>
+                        </div>
+                      ))
                     )}
                   </div>
-                  
-                  <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', padding: '16px' }}>
-                    {/* Left: Pomodoro Timer Controls */}
-                    <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                      <div style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'var(--accent-primary)', letterSpacing: '1px', fontFamily: 'monospace' }}>
-                        {Math.floor(pomodoroSecondsLeft / 60).toString().padStart(2, '0')}:{(pomodoroSecondsLeft % 60).toString().padStart(2, '0')}
-                      </div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginTop: '4px', fontWeight: 'bold' }}>
-                        Current Phase: {pomodoroType === 'work' ? '📚 Reading Focus Sprint' : '🧸 Chat Break Interval'}
-                      </div>
-                      <div style={{ display: 'flex', gap: '8px', marginTop: '16px', width: '100%' }}>
-                        <button type="button" onClick={handleTogglePomodoro} className="btn-primary w-full" style={{ padding: '8px', fontSize: '0.85rem', background: pomodoroActive ? 'var(--accent-danger)' : 'var(--accent-primary)', cursor: 'pointer' }}>
-                          {pomodoroActive ? 'Pause Sprint' : 'Start Sprint'}
-                        </button>
-                        <button type="button" onClick={() => handleResetPomodoro('work')} className="btn-secondary" style={{ padding: '8px', cursor: 'pointer' }} title="Reset to 25m Focus">
-                          📚 25m Focus
-                        </button>
-                        <button type="button" onClick={() => handleResetPomodoro('break')} className="btn-secondary" style={{ padding: '8px', cursor: 'pointer' }} title="Reset to 5m Break">
-                          🧸 5m Break
-                        </button>
-                      </div>
-                    </div>
+                </div>
+              )}
 
-                    {/* Right: Live Writing Editor & Stats */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      <div className="flex-between">
-                        <label style={{ fontSize: '0.8rem', fontWeight: 'bold', color: 'var(--text-muted)' }}>Co-Writing Manuscript Editor</label>
-                        <span style={{ fontSize: '0.75rem', background: 'rgba(0, 229, 255, 0.15)', color: 'var(--accent-secondary)', padding: '1px 6px', borderRadius: '4px' }}>
-                          ✍️ WPM: {typingWpm}
-                        </span>
-                      </div>
-                      <textarea
-                        value={creatorWritingText}
-                        onChange={(e) => handleCreatorWritingChange(e.target.value)}
-                        placeholder="Type stories, instructions, or outlines live to kids..."
-                        rows={4}
-                        style={{ padding: '10px', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#fff', fontSize: '0.85rem', resize: 'none' }}
-                      />
+              {/* Community Goals Widget */}
+              {goalActive && (
+                <div className="studio-card glass-panel" style={{ marginTop: '0' }}>
+                  <div className="studio-card-header text-between">
+                    <span className="flex-center gap-sm">
+                      <span>🎯 Community Goal Tracker</span>
+                    </span>
+                    <button onClick={() => setShowGoalsConfig(true)} className="btn-action-cog" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fff' }}>⚙️ Edit</button>
+                  </div>
+                  <div style={{ padding: '12px' }}>
+                    <h4 style={{ margin: '0 0 8px 0', fontSize: '0.85rem', color: '#fff' }}>{goalTitle}</h4>
+                    <div style={{ background: 'rgba(255,255,255,0.1)', height: '20px', borderRadius: '10px', overflow: 'hidden', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ background: 'var(--accent-primary)', width: `${Math.min(100, (goalCurrent / goalTarget) * 100)}%`, height: '100%', position: 'absolute', left: 0, top: 0, transition: 'width 0.3s' }}></div>
+                      <span style={{ zIndex: 2, fontSize: '0.8rem', fontWeight: 'bold', color: '#fff' }}>{goalCurrent} / {goalTarget} ({Math.round((goalCurrent / goalTarget) * 100)}%)</span>
                     </div>
                   </div>
                 </div>
+              )}
 
+              {/* Live Predictions Widget */}
+              {isPredictionActive && (
+                <div className="studio-card glass-panel" style={{ marginTop: '0' }}>
+                  <div className="studio-card-header text-between">
+                    <span className="flex-center gap-sm">
+                      <span>🔮 Predictions Tracker</span>
+                    </span>
+                    <span style={{ color: 'var(--accent-secondary)', fontWeight: 'bold', fontSize: '0.75rem' }}>⏱️ {predictionTimer}s</span>
+                  </div>
+
+                  <div style={{ padding: '12px' }}>
+                    <h4 style={{ margin: '0 0 10px 0', fontSize: '0.85rem', color: '#fff' }}>{predictionQuestion}</h4>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {predictionOptions.map((opt, i) => {
+                        const totalPoints = predictionOptions.reduce((acc, o) => acc + o.points, 0) || 1;
+                        const percent = Math.round((opt.points / totalPoints) * 100);
+                        return (
+                          <div key={i} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-color)', borderRadius: '6px', padding: '8px 10px' }}>
+                            <div className="flex-between" style={{ marginBottom: '4px', fontSize: '0.8rem' }}>
+                              <strong style={{ color: i === 0 ? 'var(--accent-primary)' : 'var(--accent-secondary)' }}>{opt.text}</strong>
+                              <span style={{ color: 'var(--text-muted)' }}>{opt.votes} votes ({percent}%)</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                              <span>Points:</span>
+                              <strong>{opt.points} 🪙</strong>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Pomodoro Timer / Sprint Widget */}
+              <div className="studio-card glass-panel" style={{ marginTop: '0' }}>
+                <div className="studio-card-header flex-between">
+                  <span className="flex-center gap-sm">
+                    <Clock size={14} color="var(--accent-primary)" />
+                    <span>Study Sprinter</span>
+                  </span>
+                  {pomodoroActive && (
+                    <span style={{ color: 'var(--accent-primary)', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                      ⏳ ACTIVE
+                    </span>
+                  )}
+                </div>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '12px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'rgba(0,0,0,0.15)', padding: '10px', borderRadius: '6px' }}>
+                    <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--accent-primary)', letterSpacing: '1px', fontFamily: 'monospace' }}>
+                      {Math.floor(pomodoroSecondsLeft / 60).toString().padStart(2, '0')}:{(pomodoroSecondsLeft % 60).toString().padStart(2, '0')}
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginTop: '2px', textAlign: 'center', fontWeight: 'bold' }}>
+                      {pomodoroType === 'work' ? '📚 Focus Sprint' : '🧸 Chat Break'}
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '6px', width: '100%' }}>
+                    <button type="button" onClick={handleTogglePomodoro} className="btn-primary w-full" style={{ padding: '6px', fontSize: '0.8rem', background: pomodoroActive ? 'var(--accent-danger)' : 'var(--accent-primary)', cursor: 'pointer' }}>
+                      {pomodoroActive ? 'Pause' : 'Start'}
+                    </button>
+                    <button type="button" onClick={() => handleResetPomodoro('work')} className="btn-secondary" style={{ padding: '6px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                      📚 25m
+                    </button>
+                    <button type="button" onClick={() => handleResetPomodoro('break')} className="btn-secondary" style={{ padding: '6px', fontSize: '0.75rem', cursor: 'pointer' }}>
+                      🧸 5m
+                    </button>
+                  </div>
+                </div>
               </div>
-            )}
 
-            {/* Right Column: Interactive Chat Manager */}
-            {visibleWidgets.chat && (
-              <div className="studio-right-column">
-                <div className={`studio-card glass-panel studio-chat-card ${shieldModeActive ? 'shield-active' : ''}`}>
+              {/* Co-Writing Manuscript Editor */}
+              <div className="studio-card glass-panel" style={{ marginTop: '0' }}>
+                <div className="studio-card-header flex-between">
+                  <span>✍️ Manuscript Editor</span>
+                  <span style={{ fontSize: '0.75rem', background: 'rgba(0, 229, 255, 0.15)', color: 'var(--accent-secondary)', padding: '1px 6px', borderRadius: '4px' }}>
+                    WPM: {typingWpm}
+                  </span>
+                </div>
+                <div style={{ padding: '12px' }}>
+                  <textarea
+                    value={creatorWritingText}
+                    onChange={(e) => handleCreatorWritingChange(e.target.value)}
+                    placeholder="Type notes or live manuscript messages to kids..."
+                    rows={4}
+                    style={{ width: '100%', padding: '8px', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#fff', fontSize: '0.85rem', resize: 'none' }}
+                  />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Center Column: Broadcast Monitor Preview, Active Reader, Channel Polls */}
+            <div className="studio-center-column">
+              
+              {/* Broadcast Monitor (Large Widescreen Preview centerpiece!) */}
+              {visibleWidgets.monitor && (
+                <div className="studio-card glass-panel">
+                  <div className="studio-card-header text-between">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Radio size={16} color="var(--accent-primary)" />
+                      <span style={{ fontWeight: 'bold' }}>Broadcast Monitor Preview</span>
+                    </div>
+                    <span style={{ fontSize: '0.75rem', background: 'rgba(255,48,48,0.15)', color: '#ff4d4d', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>
+                      LIVE FEED
+                    </span>
+                  </div>
+                  <div className="preview-video-container border-glow" style={{ width: '100%', height: 'auto', aspectRatio: '16/9', maxHeight: 'none', minHeight: '340px' }}>
+                    
+                    {/* Simulated ad run overlay banner */}
+                    {adTimeRemaining > 0 && (
+                      <div className="preview-overlay-banner">
+                        <span>📺</span>
+                        <h4>Ad Break Running</h4>
+                        <p>Preview is paused during advertisement.</p>
+                        <div className="countdown-number">{adTimeRemaining}s</div>
+                      </div>
+                    )}
+
+                    {/* Simulated raid countdown overlay banner */}
+                    {raidTimeRemaining > 0 && (
+                      <div className="preview-overlay-banner">
+                        <span>🚀</span>
+                        <h4>Raiding {raidTargetChannel}</h4>
+                        <p>Prepping viewers for transition...</p>
+                        <div className="countdown-number">{raidTimeRemaining}s</div>
+                      </div>
+                    )}
+
+                    {broadcastSource === 'obs' ? (
+                      !isObsConnected ? (
+                        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#11032a', color: '#ffde6a', padding: '20px', textAlign: 'center' }}>
+                          <span style={{ fontSize: '2.5rem', animation: 'pulse 1.5s infinite', display: 'block', marginBottom: '8px' }}>📡</span>
+                          <strong style={{ fontSize: '0.95rem' }}>Waiting for OBS Signal...</strong>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>Configure and Start Streaming in OBS.</span>
+                          <button 
+                            type="button"
+                            onClick={async () => {
+                              if (user) {
+                                try {
+                                  await updateDoc(doc(db, 'streams', user.uid), { isObsConnected: true });
+                                  await updateDoc(doc(db, 'streams_kids', user.uid), { isObsConnected: true });
+                                  setIsObsConnected(true);
+                                  addEvent("OBS Encoder signal connected manually!", "🟢");
+                                } catch(e) {}
+                              }
+                            }}
+                            style={{ marginTop: '10px', background: 'var(--accent-secondary)', border: 'none', borderRadius: '4px', padding: '6px 12px', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', cursor: 'pointer' }}
+                          >
+                            Simulate OBS Connect
+                          </button>
+                        </div>
+                      ) : (
+                        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0b011d', color: '#fff', padding: '20px', textAlign: 'center', position: 'relative' }}>
+                          <span style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🎬</span>
+                          <strong style={{ color: 'var(--accent-success)', fontSize: '1.05rem' }}>🟢 OBS Connected & Streaming</strong>
+                          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>Feed Resolution: 1920x1080 @ 60 FPS</span>
+                          <button 
+                            type="button"
+                            onClick={async () => {
+                              if (user) {
+                                try {
+                                  await updateDoc(doc(db, 'streams', user.uid), { isObsConnected: false });
+                                  await updateDoc(doc(db, 'streams_kids', user.uid), { isObsConnected: false });
+                                  setIsObsConnected(false);
+                                  addEvent("OBS Encoder signal disconnected.", "🔴");
+                                } catch(e) {}
+                              }
+                            }}
+                            style={{ marginTop: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '4px 8px', color: 'var(--text-muted)', fontSize: '0.7rem', cursor: 'pointer' }}
+                          >
+                            Simulate OBS Disconnect
+                          </button>
+                        </div>
+                      )
+                    ) : performanceMode ? (
+                      <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#111', color: 'var(--text-muted)', fontSize: '0.85rem', padding: '16px', textAlign: 'center' }}>
+                        <span>📷 Camera Feed Active</span>
+                        <span style={{ fontSize: '0.75rem', opacity: 0.7, marginTop: '4px' }}>Video preview hidden to maximize streaming CPU performance.</span>
+                      </div>
+                    ) : (
+                      <video 
+                        ref={videoRef} 
+                        autoPlay 
+                        playsInline 
+                        muted 
+                        className="webcam-preview" 
+                        style={{ opacity: adTimeRemaining > 0 ? 0.2 : 1 }}
+                      />
+                    )}
+                    {micMuted && (
+                      <div className="mic-muted-badge flex-center">
+                        <MicOff size={20} color="#fff" />
+                      </div>
+                    )}
+                    <div className="live-overlay-indicator">
+                      <span className="dot"></span>
+                      <span>LIVE</span>
+                    </div>
+                  </div>
+                  <div className="preview-info-panel">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div>
+                        <h3 style={{ margin: '0 0 2px 0', fontSize: '1.2rem' }}>{streamTitle}</h3>
+                        <p className="card-sub">Category: <strong>{streamGenre}</strong> | Book: <strong>{selectedBook.title}</strong></p>
+                      </div>
+                      <button onClick={() => setShowEditInfo(true)} className="btn-edit-info" title="Edit Stream Info">⚙️ Edit Stream Info</button>
+                    </div>
+                    <button onClick={handleEndStream} className="btn-danger w-full flex-center gap-sm" style={{ marginTop: '12px', padding: '10px' }}>
+                      <Square size={14} />
+                      <span>End Stream & Disconnect Feed</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Synced Reader Page Control */}
+              {visibleWidgets.reader && (
+                <div className="studio-card glass-panel streamer-reader-card">
+                  <div className="studio-card-header text-between">
+                    <span className="flex-center gap-sm">
+                      <BookOpen size={16} color="var(--accent-secondary)" />
+                      <span>Active Storybook Pages (Viewer Sync Panel)</span>
+                    </span>
+                    <button 
+                      onClick={toggleTtsReading} 
+                      className={`btn-tts-speaker ${isTtsReading ? 'active' : ''}`}
+                      title={isTtsReading ? "Pause Text-to-Speech" : "Activate Text-to-Speech Assistant"}
+                    >
+                      <Volume2 size={16} />
+                      <span>{isTtsReading ? 'Mute AI' : 'Speech AI'}</span>
+                    </button>
+                  </div>
+                  
+                  <div className="reader-meta-row">
+                    <img src={selectedBook.coverUrl} alt="Cover" className="studio-mini-cover" />
+                    <div>
+                      <h3 style={{ margin: 0, fontSize: '1.05rem' }}>{selectedBook.title}</h3>
+                      <p>Page {currentPageIndex + 1} of {selectedBook.pages.length}</p>
+                    </div>
+                    <div className="studio-page-nav">
+                      <button 
+                        onClick={() => handlePageChange(currentPageIndex - 1)} 
+                        disabled={currentPageIndex === 0}
+                        className="studio-nav-btn"
+                      >
+                        <ChevronLeft size={18} />
+                      </button>
+                      <button 
+                        onClick={() => handlePageChange(currentPageIndex + 1)} 
+                        disabled={currentPageIndex === selectedBook.pages.length - 1}
+                        className="studio-nav-btn"
+                      >
+                        <ChevronRight size={18} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="studio-page-content scrollbar-paper" style={{ maxHeight: '350px', overflowY: 'auto' }}>
+                    {selectedBook.pages[currentPageIndex] ? (
+                      selectedBook.pages[currentPageIndex].split('\n\n').map((para, idx) => {
+                        const isActive = idx === activeParagraphIndex;
+                        return (
+                          <p 
+                            key={idx} 
+                            onClick={() => handleParagraphClick(idx)}
+                            style={{ 
+                              marginBottom: '16px', 
+                              lineHeight: '1.6', 
+                              fontSize: '1.1rem', 
+                              textIndent: '16px',
+                              cursor: 'pointer',
+                              padding: '6px 12px',
+                              borderRadius: '6px',
+                              backgroundColor: isActive ? 'rgba(0, 229, 255, 0.08)' : 'transparent',
+                              borderLeft: isActive ? '3px solid var(--accent-secondary)' : '3px solid transparent',
+                              transition: 'all 0.15s'
+                            }}
+                          >
+                            {para}
+                          </p>
+                        );
+                      })
+                    ) : (
+                      <p>Opening story text...</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Live Channel Poll */}
+              {visibleWidgets.polls && (
+                <div className="studio-card glass-panel">
+                  <div className="studio-card-header text-between">
+                    <span className="flex-center gap-sm">
+                      <span>📊 Interactive Viewer Poll</span>
+                    </span>
+                    {isPollActive && (
+                      <span style={{ color: 'var(--accent-secondary)', fontWeight: 'bold', fontSize: '0.8rem' }}>⏱️ {pollTimer}s left</span>
+                    )}
+                  </div>
+                  
+                  <div style={{ padding: '16px' }}>
+                    {!isPollActive ? (
+                      <div className="poll-setup-form">
+                        <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Poll Question</label>
+                        <input 
+                          type="text" 
+                          value={pollQuestion}
+                          onChange={(e) => setPollQuestion(e.target.value)}
+                          placeholder="e.g., Should we spare the dragon?"
+                          style={{ width: '100%', padding: '8px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--border-color)', borderRadius: '4px', color: '#fff', marginBottom: '12px' }}
+                        />
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                          <input 
+                            type="text" 
+                            value={pollOptions[0].text}
+                            onChange={(e) => setPollOptions([{ ...pollOptions[0], text: e.target.value }, pollOptions[1]])}
+                            placeholder="Option 1"
+                            style={{ padding: '8px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--border-color)', borderRadius: '4px', color: '#fff' }}
+                          />
+                          <input 
+                            type="text" 
+                            value={pollOptions[1].text}
+                            onChange={(e) => setPollOptions([pollOptions[0], { ...pollOptions[1], text: e.target.value }])}
+                            placeholder="Option 2"
+                            style={{ padding: '8px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--border-color)', borderRadius: '4px', color: '#fff' }}
+                          />
+                        </div>
+                        <button 
+                          type="button"
+                          onClick={() => { setIsPollActive(true); setPollTimer(30); setPollOptions(pollOptions.map(o => ({ ...o, votes: 0 }))); addEvent(`Poll started: ${pollQuestion}`, "📊"); playAlertSound('mod'); }}
+                          className="btn-primary" 
+                          style={{ marginTop: '12px', background: 'var(--accent-secondary)', width: '100%' }}
+                        >
+                          Start 30-Second Poll
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="poll-active-view">
+                        <h4 style={{ margin: '0 0 12px 0', fontSize: '0.95rem' }}>{pollQuestion}</h4>
+                        {pollOptions.map((opt, i) => {
+                          const totalVotes = pollOptions.reduce((acc, o) => acc + o.votes, 0) || 1;
+                          const percent = Math.round((opt.votes / totalVotes) * 100);
+                          return (
+                            <div key={i} className="poll-option-row">
+                              <div className="poll-option-labels">
+                                <span>{opt.text}</span>
+                                <span>{opt.votes} votes ({percent}%)</span>
+                              </div>
+                              <div className="poll-progress-bar">
+                                <div 
+                                  className={i === 0 ? "poll-progress-fill" : "poll-progress-fill-alt"} 
+                                  style={{ width: `${percent}%` }}
+                                ></div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            {/* Right Column: Quick Actions & Live Chat Moderation */}
+            <div className="studio-right-column">
+              
+              {/* Quick Actions Panel */}
+              {visibleWidgets.actions && (
+                <div className="studio-card glass-panel">
+                  <div className="studio-card-header text-between">
+                    <span className="flex-center gap-sm">
+                      <Shield size={16} color="var(--accent-secondary)" />
+                      <span>Quick Actions</span>
+                    </span>
+                    <button onClick={() => setShowActionsConfigModal(true)} className="btn-action-cog" title="Configure Quick Actions">
+                      ⚙️
+                    </button>
+                  </div>
+                  
+                  <div className="quick-actions-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', padding: '12px' }}>
+                    {renderQuickActions()}
+                  </div>
+
+                  {/* Announcement overlay input */}
+                  {showAnnouncementInput && (
+                    <form onSubmit={handleSendAnnouncement} className="announcement-inline-form" style={{ padding: '0 12px 12px 12px' }}>
+                      <input 
+                        type="text" 
+                        placeholder="Type announcement message..." 
+                        value={announcementText}
+                        onChange={(e) => setAnnouncementText(e.target.value)}
+                        required
+                        autoFocus
+                        style={{ width: '100%', padding: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--border-color)', borderRadius: '4px', color: '#fff', fontSize: '0.8rem' }}
+                      />
+                      <button type="submit" className="btn-primary w-full" style={{ marginTop: '6px', padding: '6px', fontSize: '0.8rem' }}>Send Announcement</button>
+                    </form>
+                  )}
+                </div>
+              )}
+
+              {/* Chat Moderation widget */}
+              {visibleWidgets.chat && (
+                <div className={`studio-card glass-panel studio-chat-card ${shieldModeActive ? 'shield-active' : ''}`} style={{ flex: 1, minHeight: '400px' }}>
                   <div className="studio-card-header text-between" style={{ borderBottom: shieldModeActive ? '1px solid var(--accent-danger)' : '' }}>
                     <span className="flex-center gap-sm" style={{ color: shieldModeActive ? 'var(--accent-danger)' : '' }}>
                       <MessageSquare size={16} color={shieldModeActive ? 'var(--accent-danger)' : 'var(--accent-secondary)'} />
@@ -4675,7 +4680,7 @@ export const DashboardPage: React.FC = () => {
                     </div>
                   )}
 
-                  <div className="studio-chat-messages">
+                  <div className="studio-chat-messages" style={{ flex: 1, overflowY: 'auto', padding: '12px' }}>
                     {chatMessages.length === 0 ? (
                       <p className="no-chat font-bold">Chat feed is silent.</p>
                     ) : (
@@ -4684,39 +4689,43 @@ export const DashboardPage: React.FC = () => {
                         const isTimedOut = timedOutUsers[msg.username] > Date.now();
                         
                         return (
-                          <div key={msg.id} className={`studio-chat-msg ${msg.type === 'announcement' ? 'announcement-msg' : ''}`}>
-                            <div className="msg-row-top">
+                          <div key={msg.id} className={`studio-chat-msg ${msg.type === 'announcement' ? 'announcement-msg' : ''}`} style={{ marginBottom: '8px', paddingBottom: '8px', borderBottom: '1px solid rgba(255,255,255,0.02)' }}>
+                            <div className="msg-row-top flex-between" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
                               <span 
-                                className="msg-user chat-user-clickable" 
+                                className="msg-user chat-user-clickable font-bold" 
                                 onClick={(e) => handleUserClick(msg.username, e)}
                                 style={{ 
                                   color: moderators.includes(msg.username) ? 'var(--accent-success)' : 'var(--accent-secondary)',
                                   textDecoration: isBanned ? 'line-through' : 'none',
-                                  opacity: isTimedOut ? 0.5 : 1
+                                  opacity: isTimedOut ? 0.5 : 1,
+                                  cursor: 'pointer',
+                                  fontSize: '0.85rem'
                                 }}
                               >
                                 {moderators.includes(msg.username) ? '🛡️ ' : ''}{msg.username}
                               </span>
-                              <div className="moderator-actions">
+                              <div className="moderator-actions" style={{ display: 'flex', gap: '4px' }}>
                                 <button 
                                   type="button"
                                   onClick={() => handlePinMessage(msg.text, msg.id)}
                                   className={`btn-mod-action ${pinnedMessageId === msg.id ? 'pinned' : ''}`}
-                                  title="Pin Message to Stream"
+                                  title="Pin Message"
+                                  style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', opacity: 0.6 }}
                                 >
-                                  <Pin size={12} fill={pinnedMessageId === msg.id ? "currentColor" : "none"} />
+                                  <Pin size={10} fill={pinnedMessageId === msg.id ? "currentColor" : "none"} />
                                 </button>
                                 <button 
                                   type="button"
                                   onClick={() => handleDeleteMessage(msg.id)}
                                   className="btn-mod-action delete-action"
                                   title="Delete Message"
+                                  style={{ background: 'transparent', border: 'none', color: 'var(--accent-danger)', cursor: 'pointer', opacity: 0.6 }}
                                 >
-                                  <Trash2 size={12} />
+                                  <Trash2 size={10} />
                                 </button>
                               </div>
                             </div>
-                            <span className="msg-body" style={{ opacity: isBanned || isTimedOut ? 0.4 : 1, fontStyle: isTimedOut ? 'italic' : 'normal' }}>
+                            <span className="msg-body" style={{ opacity: isBanned || isTimedOut ? 0.4 : 1, fontStyle: isTimedOut ? 'italic' : 'normal', fontSize: '0.85rem', color: '#eee', display: 'block', wordBreak: 'break-word' }}>
                               {isBanned ? '[Message deleted - User Banned]' : isTimedOut ? '[Message deleted - User Timed Out]' : msg.text}
                             </span>
                           </div>
@@ -4725,8 +4734,8 @@ export const DashboardPage: React.FC = () => {
                     )}
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
           </div>
         )}
