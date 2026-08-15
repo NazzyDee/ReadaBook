@@ -1080,3 +1080,222 @@
   padding: var(--spacing-xl);
 }
 
+/* ==========================================================================
+   CHILDHOOD LITERACY PEDAGOGY & SENSORY STYLING (Vooks, Epic, Novel Effect inspired)
+   ========================================================================== */
+
+/* Typography Modes */
+.font-outfit {
+  font-family: 'Outfit', system-ui, sans-serif !important;
+}
+
+.font-rounded {
+  font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif !important;
+}
+
+/* Dyslexic friendly: bottom weighted with wide spacing */
+.font-dyslexic {
+  font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif !important;
+  font-weight: bold;
+  letter-spacing: 0.12em !important;
+  word-spacing: 0.28em !important;
+  line-height: 2.2 !important;
+  text-shadow: 0 1px 0px rgba(0,0,0,0.1), 0 2px 0px rgba(0,0,0,0.05); /* heavier bottoms */
+}
+
+/* Calm Mode Theme Override */
+.calm-mode-active {
+  background-color: #fdfaf3 !important; /* warm soothing cream */
+  color: #3e2723 !important; /* soft dark brown with high contrast */
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.calm-mode-active .book-display {
+  background-color: #fffdf9 !important;
+  border-color: #d7ccc8 !important;
+  box-shadow: 0 6px 16px rgba(141, 110, 99, 0.08) !important;
+  transition: all 0.4s ease;
+}
+
+.calm-mode-active .main-content {
+  background-color: #fdfaf3 !important;
+}
+
+.calm-mode-active .header {
+  background-color: #fdfaf3 !important;
+  border-bottom: 2px solid #efebe9 !important;
+}
+
+/* Kinetic Prosody Word Animations */
+.word-animate-active {
+  display: inline-block;
+  transform-origin: bottom center;
+  transition: transform 0.15s ease-out, color 0.15s ease;
+}
+
+/* Standard Highlight */
+.word-highlighted-basic {
+  background-color: rgba(255, 183, 3, 0.22);
+  border-bottom: 3px solid #ffb703;
+  color: #ff477e;
+  font-weight: bold;
+  border-radius: 4px;
+  transform: scale(1.05);
+}
+
+/* Kinetic Prosody Highlight (Word grows and wiggles) */
+.word-highlighted-kinetic {
+  background-color: rgba(255, 71, 126, 0.12);
+  border-bottom: 3px solid var(--accent-primary);
+  color: var(--accent-primary) !important;
+  font-weight: 800;
+  border-radius: 6px;
+  animation: word-bounce 0.4s ease-out forwards;
+  position: relative;
+}
+
+/* Visual Eye-Tracking Assist Dot */
+.word-highlighted-kinetic::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-secondary);
+  box-shadow: 0 0 8px var(--accent-secondary);
+  animation: tracking-dot-fade 0.4s infinite alternate;
+}
+
+/* Kinetic emphasis for ALL-CAPS or loud words */
+.word-emphasis-loud {
+  text-transform: uppercase;
+  font-size: 1.25em !important;
+  font-weight: 900 !important;
+  color: #e63946 !important;
+  display: inline-block;
+  animation: word-shake 0.5s ease-in-out infinite alternate;
+}
+
+/* Kinetic wiggles for question/exclamation words */
+.word-emphasis-question {
+  display: inline-block;
+  color: #00b4d8 !important;
+  animation: word-float 1.2s ease-in-out infinite alternate;
+}
+
+.word-emphasis-exclamation {
+  display: inline-block;
+  color: #fb8500 !important;
+  animation: word-shake 0.2s infinite;
+}
+
+/* Reading Settings Component Styling */
+.reading-settings-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  background: #f7f9fa;
+  border: 1px solid rgba(0, 180, 216, 0.1);
+  padding: 10px 16px;
+  border-radius: 16px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+}
+
+.calm-mode-active .reading-settings-bar {
+  background: #f5f0e6;
+  border-color: rgba(141, 110, 99, 0.15);
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.setting-item select {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: white;
+}
+
+/* Keyframe Animations */
+@keyframes word-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.18) translateY(-4px); }
+  100% { transform: scale(1.08) translateY(0); }
+}
+
+@keyframes tracking-dot-fade {
+  from { opacity: 0.5; transform: translateX(-50%) scale(0.8); }
+  to { opacity: 1; transform: translateX(-50%) scale(1.2); }
+}
+
+@keyframes word-shake {
+  0% { transform: rotate(-2deg); }
+  100% { transform: rotate(2deg); }
+}
+
+@keyframes word-float {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-3px); }
+}
+
+/* Dynamic visual guidance reading helper */
+.guided-reading-helper {
+  height: 6px;
+  background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
+  border-radius: 3px;
+  margin-top: 6px;
+  opacity: 0.7;
+}
+
+/* Safe Curation filter items */
+.filter-bar-container {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-select {
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 50px;
+  border: 2px solid var(--border-color);
+  background-color: #fff;
+  cursor: pointer;
+  outline: none;
+  min-width: 140px;
+}
+
+.filter-select:focus {
+  border-color: var(--accent-primary);
+}
+
+.badge-reading-level {
+  background: #00b4d8;
+  color: #fff;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+}
+
+.badge-age-range {
+  background: #ff477e;
+  color: #fff;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+}
+

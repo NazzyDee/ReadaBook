@@ -84,6 +84,12 @@ export const BookClubsPage: React.FC = () => {
   const [meetingDate, setMeetingDate] = useState('');
   const [meetingTime, setMeetingTime] = useState('');
   const [meetingLink, setMeetingLink] = useState('');
+  // Bookship Multimedia / Video Meeting / OCR states
+  const [showHighlighterModal, setShowHighlighterModal] = useState(false);
+  const [activeVideoCall, setActiveVideoCall] = useState<ClubMeeting | null>(null);
+  const [ocrBookPage, setOcrBookPage] = useState<number>(1);
+  const [videoCallMuted, setVideoCallMuted] = useState(false);
+  const [videoCallCameraOff, setVideoCallCameraOff] = useState(false);
 
   // Feedback states
   const [successMsg, setSuccessMsg] = useState('');
@@ -332,7 +338,27 @@ export const BookClubsPage: React.FC = () => {
     }
   };
 
-  // Submit RSVP
+  const handleBookAuthorTour = async (authorName: string, date: string, time: string) => {
+    if (!user || !activeClub) return;
+    try {
+      const mtgId = 'meeting_' + Date.now();
+      const newMtg = {
+        id: mtgId,
+        title: `📖 Meet the Author Live: ${authorName} Book Tour`,
+        date: date,
+        time: time,
+        videoLink: `readabook.org/room/${activeClub.id}_meet_${authorName.replace(/\s+/g, '_')}`,
+        rsvps: { [user.uid]: 'yes' }
+      };
+      
+      await setDoc(doc(db, 'book_clubs', activeClub.id, 'meetings', mtgId), newMtg);
+      setSuccessMsg(`Reserved virtual meeting with ${authorName} successfully!`);
+      setTimeout(() => setSuccessMsg(''), 3000);
+    } catch (err: any) {
+      console.error("Failed to book author meeting:", err);
+      setErrorMsg("Failed to book virtual tour.");
+    }
+  };
   const handleRsvpMeeting = async (meetingId: string, status: 'yes' | 'no') => {
     if (!user || !activeClub) return;
     try {
@@ -619,6 +645,15 @@ export const BookClubsPage: React.FC = () => {
                         style={{ padding: '8px' }}
                       />
                     </div>
+                    <button 
+                      type="button" 
+                      onClick={() => setShowHighlighterModal(true)} 
+                      className="btn-secondary" 
+                      style={{ padding: '10px 16px', height: 'fit-content', marginTop: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', background: 'var(--bg-hover)', color: 'var(--accent-primary)', border: '1px solid var(--border-color)' }}
+                      title="Virtual Highlighter OCR Page Text Scanner"
+                    >
+                      🖍️ <span>Highlight Quote</span>
+                    </button>
                     <button type="submit" className="btn-primary" style={{ padding: '10px 16px', height: 'fit-content', marginTop: '18px', cursor: 'pointer' }}>
                       <Send size={16} />
                     </button>
@@ -780,7 +815,17 @@ export const BookClubsPage: React.FC = () => {
                             <div>📅 Date: <strong>{mtg.date}</strong></div>
                             <div>🕒 Time: <strong>{mtg.time}</strong></div>
                             {mtg.videoLink && (
-                              <div>🔗 Video Link: <a href={mtg.videoLink.startsWith('http') ? mtg.videoLink : `https://${mtg.videoLink}`} target="_blank" rel="noreferrer" style={{ color: 'var(--accent-primary)', textDecoration: 'underline' }}>Join Call</a></div>
+                              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '6px' }}>
+                                <span>🔗 Room Link:</span>
+                                <button 
+                                  type="button" 
+                                  onClick={() => setActiveVideoCall(mtg)} 
+                                  className="btn-primary" 
+                                  style={{ padding: '4px 10px', fontSize: '0.75rem', background: 'var(--accent-success)', borderColor: 'var(--accent-success)', cursor: 'pointer' }}
+                                >
+                                  📞 Start One-Tap Call
+                                </button>
+                              </div>
                             )}
                           </div>
 
@@ -847,9 +892,220 @@ export const BookClubsPage: React.FC = () => {
                   </form>
                 )}
               </div>
+
+              {/* Meet the Author booking widget */}
+              <div className="glass-panel" style={{ padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)', height: 'fit-content', marginTop: '20px' }}>
+                <h3 style={{ marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>🌟 Meet the Author Bookings</span>
+                </h3>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
+                  Book a virtual live storytelling session with a bestselling creator directly into your club calendar!
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {[
+                    { name: 'Dr. Seuss 🎩', topic: 'Rhyme & Imagination', date: '2026-08-18', time: '16:00' },
+                    { name: 'Roald Dahl 🍫', topic: 'Mischief & Magic', date: '2026-08-20', time: '17:30' },
+                    { name: 'J.K. Rowling 🧙‍♀️', topic: 'Fantasy World-Building', date: '2026-08-22', time: '18:00' }
+                  ].map((author) => (
+                    <div key={author.name} style={{ padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      <div style={{ fontWeight: 'bold', fontSize: '0.85rem' }}>{author.name}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Focus: {author.topic}</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>📅 {author.date} at {author.time}</div>
+                      <button 
+                        type="button" 
+                        onClick={() => handleBookAuthorTour(author.name, author.date, author.time)}
+                        className="btn-primary" 
+                        style={{ padding: '6px 12px', fontSize: '0.8rem', width: '100%', cursor: 'pointer', background: 'var(--accent-primary)', border: 'none' }}
+                      >
+                        Book Live Tour Slot
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           )}
 
+        </div>
+      )}
+
+      {/* Virtual Highlighter OCR Scanner Modal */}
+      {showHighlighterModal && activeClub && (
+        <div className="studio-modal-overlay flex-center" style={{ zIndex: 100 }} onClick={() => setShowHighlighterModal(false)}>
+          <div className="studio-modal-card glass-panel" style={{ width: '560px', maxWidth: '90vw' }} onClick={e => e.stopPropagation()}>
+            <h2>Virtual Highlighter (OCR Scanner)</h2>
+            <p className="card-instructions">Simulate Bookship's page scanner. Select a text quote from the current book page to share it instantly with notes!</p>
+            
+            <div style={{ margin: '16px 0', padding: '12px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
+              <div className="flex-between" style={{ marginBottom: '12px' }}>
+                <span style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>Active Book: {activeClub.currentBookTitle}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <label style={{ fontSize: '0.8rem' }}>Page:</label>
+                  <input 
+                    type="number" 
+                    min={1} 
+                    value={ocrBookPage} 
+                    onChange={e => setOcrBookPage(parseInt(e.target.value) || 1)} 
+                    style={{ width: '60px', padding: '4px', background: 'var(--bg-dark)', border: '1px solid var(--border-color)', color: '#fff', textAlign: 'center' }} 
+                  />
+                </div>
+              </div>
+
+              {/* Simulated Page Content with highlightable sentences */}
+              <div style={{ background: '#fff', color: '#111', padding: '16px', borderRadius: '6px', fontSize: '0.95rem', minHeight: '140px', lineHeight: '1.6', border: '2px solid var(--accent-primary)', position: 'relative' }}>
+                <div style={{ position: 'absolute', top: '4px', right: '4px', background: 'rgba(157, 78, 221, 0.2)', color: 'var(--accent-primary)', fontSize: '0.65rem', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold' }}>
+                  📸 CAMERA VIEW FINDER
+                </div>
+                <p style={{ margin: 0, cursor: 'pointer' }}>
+                  {[
+                    "Once upon a time, in a cozy forest cabin, lived a young bear who loved reading.",
+                    "He spent his nights looking at the bright stars and reading tales of ancient wizard castles.",
+                    "His friends thought he was sleeping, but his flashlight was always glowing under the blankets.",
+                    "One morning, he discovered a mysterious golden key hidden inside a hollow oak tree."
+                  ].map((sentence, idx) => (
+                    <span 
+                      key={idx} 
+                      onClick={() => {
+                        setNewMsgText(`> "${sentence}" -- (Page ${ocrBookPage}) \n\nCheck out this beautiful passage from our book!`);
+                        setNewMsgPage(ocrBookPage);
+                        setShowHighlighterModal(false);
+                      }}
+                      style={{ transition: 'all 0.15s' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(255, 235, 59, 0.4)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      {sentence}{" "}
+                    </span>
+                  ))}
+                </p>
+                <div style={{ fontSize: '0.75rem', color: '#888', fontStyle: 'italic', marginTop: '12px', borderTop: '1px solid #eee', paddingTop: '6px' }}>
+                  💡 Hover & click any sentence above to highlight and scan it!
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
+              <button type="button" onClick={() => setShowHighlighterModal(false)} className="btn-secondary w-full">Cancel Scanner</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bookship Simulated Live Video call Overlay Modal */}
+      {activeVideoCall && (
+        <div className="studio-modal-overlay flex-center" style={{ zIndex: 101, background: 'rgba(5, 1, 15, 0.95)' }}>
+          <div className="studio-modal-card glass-panel" style={{ width: '800px', maxWidth: '95vw', padding: '24px' }}>
+            <div className="flex-between" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '12px', marginBottom: '16px' }}>
+              <div>
+                <h2 style={{ margin: 0, fontSize: '1.25rem', color: '#fff' }}>📞 Bookship Live Video Meeting</h2>
+                <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Meeting room: {activeVideoCall.title}</p>
+              </div>
+              <span className="live-overlay-indicator" style={{ position: 'static' }}>ACTIVE</span>
+            </div>
+
+            {/* Video Feeds Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px', background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+              
+              {/* User 1: Me */}
+              <div style={{ background: '#111', borderRadius: '8px', overflow: 'hidden', height: '180px', position: 'relative', border: '2px solid var(--accent-success)' }}>
+                {videoCallCameraOff ? (
+                  <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', color: '#888' }}>
+                    Camera Turned Off
+                  </div>
+                ) : (
+                  <div style={{ height: '100%', background: 'linear-gradient(135deg, #0b011d 0%, #00b4d8 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: 'var(--accent-success)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 'bold' }}>
+                      ME
+                    </div>
+                    <span style={{ fontSize: '0.8rem', marginTop: '8px' }}>Broadcaster (Active)</span>
+                  </div>
+                )}
+                <div style={{ position: 'absolute', bottom: '8px', left: '8px', background: 'rgba(0,0,0,0.6)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', color: '#fff' }}>
+                  Me {videoCallMuted && '🔇'}
+                </div>
+              </div>
+
+              {/* User 2: Co-Parent 1 */}
+              <div style={{ background: '#111', borderRadius: '8px', overflow: 'hidden', height: '180px', position: 'relative', border: '1px solid var(--border-color)' }}>
+                <div style={{ height: '100%', background: 'linear-gradient(135deg, #051c24 0%, #7209b7 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                  <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 'bold', border: '2px solid var(--accent-primary)' }}>
+                    PJ
+                  </div>
+                  <span style={{ fontSize: '0.8rem', marginTop: '8px' }}>Papa Joe 👨</span>
+                </div>
+                <div style={{ position: 'absolute', bottom: '8px', left: '8px', background: 'rgba(0,0,0,0.6)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', background: '#39ff14', borderRadius: '50%', display: 'inline-block' }} className="pulse"></span>
+                  <span>Talking...</span>
+                </div>
+              </div>
+
+              {/* User 3: Co-Parent 2 */}
+              <div style={{ background: '#111', borderRadius: '8px', overflow: 'hidden', height: '180px', position: 'relative', border: '1px solid var(--border-color)' }}>
+                <div style={{ height: '100%', background: 'linear-gradient(135deg, #3a0ca3 0%, #f72585 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                  <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: 'var(--accent-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 'bold' }}>
+                    GS
+                  </div>
+                  <span style={{ fontSize: '0.8rem', marginTop: '8px' }}>Grandma Sarah 👵</span>
+                </div>
+                <div style={{ position: 'absolute', bottom: '8px', left: '8px', background: 'rgba(0,0,0,0.6)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', color: '#fff' }}>
+                  🔇 Muted
+                </div>
+              </div>
+
+              {/* User 4: Author / Moderator */}
+              <div style={{ background: '#111', borderRadius: '8px', overflow: 'hidden', height: '180px', position: 'relative', border: '1px solid var(--border-color)' }}>
+                <div style={{ height: '100%', background: 'linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                  <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#fff', color: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', fontWeight: 'bold' }}>
+                    UT
+                  </div>
+                  <span style={{ fontSize: '0.8rem', marginTop: '8px' }}>Uncle Todd 🧔</span>
+                </div>
+                <div style={{ position: 'absolute', bottom: '8px', left: '8px', background: 'rgba(0,0,0,0.6)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', color: '#fff' }}>
+                  🎙️ Active
+                </div>
+              </div>
+
+            </div>
+
+            {/* Video Controls Bar */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
+              <button 
+                type="button" 
+                onClick={() => setVideoCallMuted(!videoCallMuted)} 
+                className="btn-secondary" 
+                style={{ padding: '10px 20px', cursor: 'pointer', background: videoCallMuted ? 'var(--accent-danger)' : '' }}
+              >
+                {videoCallMuted ? '🔇 Unmute' : '🎙️ Mute'}
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setVideoCallCameraOff(!videoCallCameraOff)} 
+                className="btn-secondary" 
+                style={{ padding: '10px 20px', cursor: 'pointer', background: videoCallCameraOff ? 'var(--accent-danger)' : '' }}
+              >
+                {videoCallCameraOff ? '📷 Turn Camera On' : '📹 Hide Camera'}
+              </button>
+              <button 
+                type="button" 
+                onClick={() => {
+                  alert("Screen Sharing Active! Broadcasting layout view to other co-parents.");
+                }} 
+                className="btn-secondary" 
+                style={{ padding: '10px 20px', cursor: 'pointer' }}
+              >
+                🖥️ Share Screen
+              </button>
+              <button 
+                type="button" 
+                onClick={() => setActiveVideoCall(null)} 
+                className="btn-primary" 
+                style={{ padding: '10px 24px', background: 'var(--accent-danger)', borderColor: 'var(--accent-danger)', cursor: 'pointer' }}
+              >
+                🔴 Leave Meeting
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

@@ -39,6 +39,8 @@ export const DashboardPage: React.FC = () => {
   const [newBookTitle, setNewBookTitle] = useState('');
   const [newBookAuthor, setNewBookAuthor] = useState('');
   const [newBookGenre, setNewBookGenre] = useState('Adventure');
+  const [newBookAgeRange, setNewBookAgeRange] = useState('8-10');
+  const [newBookReadingLevel, setNewBookReadingLevel] = useState('Level T');
   const [newBookText, setNewBookText] = useState('');
   const [addBookError, setAddBookError] = useState('');
   const [addBookSuccess, setAddBookSuccess] = useState('');
@@ -239,6 +241,8 @@ export const DashboardPage: React.FC = () => {
         title: newBookTitle,
         author: newBookAuthor,
         genre: newBookGenre,
+        ageRange: newBookAgeRange,
+        readingLevel: newBookReadingLevel,
         pages,
         coverUrl: generateBookCoverSvgUrl(newBookTitle, newBookAuthor, newBookGenre),
         uploaderId: user.uid,
@@ -318,7 +322,7 @@ export const DashboardPage: React.FC = () => {
                     required
                   />
                 </div>
-                <div className="form-group" style={{ flex: 1 }}>
+                 <div className="form-group" style={{ flex: 1 }}>
                   <label>Genre / Category</label>
                   <select 
                     value={newBookGenre}
@@ -328,6 +332,33 @@ export const DashboardPage: React.FC = () => {
                     <option value="Adventure">Adventure</option>
                     <option value="Nature / Friendship">Nature / Friendship</option>
                     <option value="Classics">Classics</option>
+                  </select>
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label>Age Group</label>
+                  <select 
+                    value={newBookAgeRange}
+                    onChange={(e) => setNewBookAgeRange(e.target.value)}
+                    style={{ background: 'var(--bg-dark)', color: 'var(--text-main)', padding: '12px', borderRadius: '6px', border: '1px solid var(--border-color)' }}
+                  >
+                    <option value="2-4">Toddler (2-4)</option>
+                    <option value="5-7">Early Reader (5-7)</option>
+                    <option value="8-10">Independent (8-10)</option>
+                  </select>
+                </div>
+                <div className="form-group" style={{ flex: 1 }}>
+                  <label>A-Z Level</label>
+                  <select 
+                    value={newBookReadingLevel}
+                    onChange={(e) => setNewBookReadingLevel(e.target.value)}
+                    style={{ background: 'var(--bg-dark)', color: 'var(--text-main)', padding: '12px', borderRadius: '6px', border: '1px solid var(--border-color)' }}
+                  >
+                    <option value="Level I">Level I</option>
+                    <option value="Level M">Level M</option>
+                    <option value="Level P">Level P</option>
+                    <option value="Level R">Level R</option>
+                    <option value="Level S">Level S</option>
+                    <option value="Level T">Level T</option>
                   </select>
                 </div>
               </div>

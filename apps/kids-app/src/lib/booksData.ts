@@ -5,6 +5,10 @@ export interface Book {
   coverUrl: string;
   genre: string;
   pages: string[];
+  ageRange?: string;
+  readingLevel?: string;
+  lexile?: string;
+  description?: string;
 }
 
 export const books: Book[] = [
@@ -14,6 +18,10 @@ export const books: Book[] = [
     author: "J.M. Barrie",
     coverUrl: "/assets/peter-pan.jpg",
     genre: "Adventure",
+    ageRange: "8-10",
+    readingLevel: "Level P",
+    lexile: "600L",
+    description: "Follow the boy who wouldn't grow up on an adventure to Neverland with Wendy, John, and Michael.",
     pages: [
       "All children, except one, grow up. They soon know that they will grow up, and the way Wendy knew was this. One day when she was two years old she was playing in a garden, and she plucked another flower and ran with it to her mother.",
       "I suppose she must have looked rather delightful, for Mrs. Darling put her hand to her heart and cried, 'Oh, why can't you remain like this for ever!' This was all that passed between them on the subject, but whence Wendy knew that she must grow up.",
@@ -27,6 +35,10 @@ export const books: Book[] = [
     author: "Frances Hodgson Burnett",
     coverUrl: "/assets/secret-garden.jpg",
     genre: "Nature / Friendship",
+    ageRange: "8-10",
+    readingLevel: "Level R",
+    lexile: "680L",
+    description: "Mary Lennox discovers a locked, hidden garden and brings it back to life with the help of new friends.",
     pages: [
       "When Mary Lennox was sent to Misselthwaite Manor to live with her uncle everybody said she was the most disagreeable-looking child ever seen. It was true, too. She had a little thin face, a little thin body, thin light hair and a sour expression.",
       "Her hair was yellow, and her face was yellow because she had been born in India and had always been ill in one way or another. Her father had held a position under the English Government and had always been busy and ill himself.",
@@ -40,6 +52,10 @@ export const books: Book[] = [
     author: "Margery Williams",
     coverUrl: "/assets/velveteen-rabbit.jpg",
     genre: "Classics",
+    ageRange: "5-7",
+    readingLevel: "Level M",
+    lexile: "490L",
+    description: "A toy rabbit learns that love from a child can make him real.",
     pages: [
       "There was once a velveteen rabbit, and in the beginning he was really splendid. He was fat and bunchy, as a rabbit should be; his coat was spotted with brown and white, he had real thread whiskers, and his ears were lined with pink sateen.",
       "On Christmas morning, when he sat wedged in the top of the Boy's stocking, with a sprig of holly between his paws, the effect was charming. There were other things in the stocking, nuts and oranges and a toy engine, but the Rabbit was quite the best.",
@@ -53,6 +69,10 @@ export const books: Book[] = [
     author: "Beatrix Potter",
     coverUrl: "/assets/peter-rabbit.jpg",
     genre: "Nature / Adventure",
+    ageRange: "2-4",
+    readingLevel: "Level I",
+    lexile: "350L",
+    description: "A mischievous little rabbit ignores his mother's warning and squeezes into Mr. McGregor's garden.",
     pages: [
       "Once upon a time there were four little Rabbits, and their names were—Flopsy, Mopsy, Cotton-tail, and Peter. They lived with their Mother in a sand-bank, underneath the root of a very big fir-tree.",
       "'Now, my dears,' said old Mrs. Rabbit one morning, 'you may go into the fields or down the lane, but don't go into Mr. McGregor's garden: your Father had an accident there; he was put in a pie by Mrs. McGregor.'",
@@ -66,6 +86,10 @@ export const books: Book[] = [
     author: "L. Frank Baum",
     coverUrl: "/assets/wizard-of-oz.jpg",
     genre: "Adventure / Fantasy",
+    ageRange: "8-10",
+    readingLevel: "Level S",
+    lexile: "740L",
+    description: "Dorothy and her dog Toto are swept away to the magical Land of Oz and seek the Wizard to go home.",
     pages: [
       "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the lumber to build it had to be carried by wagon many miles.",
       "There were four walls, a floor and a roof, which made one room; and this room contained a rusty looking cookstove, a cupboard for the dishes, a table, three or four chairs, and the beds. Uncle Henry and Aunt Em had a big bed in one corner, and Dorothy a little bed in another corner.",
@@ -79,11 +103,15 @@ export const books: Book[] = [
     author: "Lewis Carroll",
     coverUrl: "/assets/alice-in-wonderland.jpg",
     genre: "Fantasy / Classics",
+    ageRange: "8-10",
+    readingLevel: "Level T",
+    lexile: "780L",
+    description: "Alice falls down a rabbit hole into a bizarre world populated by peculiar creatures.",
     pages: [
       "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversations?'",
       "So she was considering in her own mind (as well as she could, for the hot day made her feel very sleepy and stupid), whether the pleasure of making a daisy-chain would be worth the trouble of getting up and picking the daisies, when suddenly a White Rabbit with pink eyes ran close by her.",
       "There was nothing so VERY remarkable in that; nor did Alice think it so VERY much out of the way to hear the Rabbit say to itself, 'Oh dear! Oh dear! I shall be late!' (when she thought it over afterwards, it occurred to her that she ought to have wondered at this, but at the time it all seemed quite natural);",
-      "But when the Rabbit actually TOOK A WATCH OUT OF ITS WAISTCOAT-POCKET, and looked at it, and then hurried on, Alice started to her feet, for it flashed across her mind that she had never before seen a rabbit with either a waistcoat-pocket, or a watch to take out of it, and burning with curiosity, she ran across the field after it, and fortunately was just in time to see it pop down a large rabbit-hole under the hedge."
+      "But when the Rabbit actually TOOK A WATCH OUT OF ITS WAISTCOAT-POCKET, and looked at it, and then hurried on, Alice started to feet, for it flashed across her mind that she had never before seen a rabbit with either a waistcoat-pocket, or a watch to take out of it, and burning with curiosity, she ran across the field after it, and fortunately was just in time to see it pop down a large rabbit-hole under the hedge."
     ]
   }
 ];

@@ -5,6 +5,10 @@ export interface Book {
   coverUrl: string;
   genre: string;
   pages: string[];
+  ageRange?: string;
+  readingLevel?: string;
+  lexile?: string;
+  description?: string;
 }
 
 export const books: Book[] = [
@@ -14,6 +18,10 @@ export const books: Book[] = [
     author: "Lewis Carroll",
     coverUrl: "/assets/alice-in-wonderland.jpg",
     genre: "Fantasy",
+    ageRange: "8-10",
+    readingLevel: "Level T",
+    lexile: "780L",
+    description: "Alice falls down a rabbit hole into a bizarre world populated by peculiar creatures.",
     pages: [
       "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice 'without pictures or conversations?'",
       "So she was considering in her own mind (as well as she could, for the hot day made her feel very sleepy and stupid), whether the pleasure of making a daisy-chain would be worth the trouble of getting up and picking the daisies, when suddenly a White Rabbit with pink eyes ran close by her.",
@@ -28,6 +36,10 @@ export const books: Book[] = [
     author: "Mary Shelley",
     coverUrl: "/assets/frankenstein.jpg",
     genre: "Sci-Fi / Classics",
+    ageRange: "8-10",
+    readingLevel: "Level Z",
+    lexile: "900L",
+    description: "A scientist creates a sentient creature in an unorthodox scientific experiment, leading to tragic consequences.",
     pages: [
       "You will rejoice to hear that no disaster has accompanied the commencement of an enterprise which you have regarded with such evil forebodings. I arrived here yesterday, and my first task is to assure my dear sister of my welfare and increasing confidence in the success of my undertaking.",
       "I am already far north of London, and as I walk in the streets of Petersburgh, I feel a cold northern breeze play upon my cheeks, which braces my nerves and fills me with delight. Do you understand this feeling? This breeze, which has travelled from the regions towards which I am advancing, gives me a foretaste of those icy climes.",
@@ -41,6 +53,10 @@ export const books: Book[] = [
     author: "H.G. Wells",
     coverUrl: "/assets/the-time-machine.jpg",
     genre: "Sci-Fi",
+    ageRange: "8-10",
+    readingLevel: "Level Y",
+    lexile: "850L",
+    description: "A Victorian scientist travels into the far future to discover two highly divergent human species.",
     pages: [
       "The Time Traveller (for so it will be convenient to speak of him) was expounding a recondite matter to us. His grey eyes shone and twinkled, and his usually pale face was flushed and animated. The fire burned brightly, and the soft radiance of the incandescent lights in the lilies of silver caught the bubbles that flashed and passed in our glasses.",
       "Our chairs, being his patents, embraced and caressed us rather than submitted to being sat upon, and there was that luxurious after-dinner atmosphere when thought runs gracefully free of the trammels of precision. And he put it to us in this way, marking the points with a lean forefinger, as we sat and lazily admired his earnestness over this new paradox (as we thought it) which he had thought fit to lay before us.",
@@ -54,6 +70,10 @@ export const books: Book[] = [
     author: "Franz Kafka",
     coverUrl: "/assets/metamorphosis.jpg",
     genre: "Fiction / Classics",
+    ageRange: "8-10",
+    readingLevel: "Level Z",
+    lexile: "920L",
+    description: "A salesman wakes up to find himself transformed into a giant insect.",
     pages: [
       "One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections.",
       "The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked. 'What's happened to me?' he thought. It wasn't a dream.",
@@ -67,6 +87,10 @@ export const books: Book[] = [
     author: "Nathaniel Hawthorne",
     coverUrl: "/assets/scarlet-letter.jpg",
     genre: "Drama / Classics",
+    ageRange: "8-10",
+    readingLevel: "Level Z",
+    lexile: "950L",
+    description: "In 17th-century Puritan Boston, Hester Prynne struggles to create a new life of repentance and dignity.",
     pages: [
       "A throng of bearded men, in sad-colored garments and gray, steeple-crowned hats, intermixed with women, some wearing hoods, and others bareheaded, was assembled in front of a wooden edifice, the door of which was heavily timbered with oak, and studded with iron spikes.",
       "The founders of a new colony, whatever Utopia of human virtue and happiness they might originally project, have invariably recognized it among their earliest practical necessities to allot a portion of the virgin soil as a cemetery, and another portion as the site of a prison.",
@@ -80,6 +104,10 @@ export const books: Book[] = [
     author: "Bram Stoker",
     coverUrl: "/assets/dracula.jpg",
     genre: "Horror / Gothic",
+    ageRange: "8-10",
+    readingLevel: "Level Z",
+    lexile: "980L",
+    description: "An English solicitor visits Transylvania to help a count buy an estate in England, only to realize he is a vampire.",
     pages: [
       "3 May. Bistritz.—Left Munich at 8:35 P.M., on 1st May, arriving at Vienna early next morning; should have arrived at 6:46, but train was an hour late. Buda-Pesth seems a wonderful place, from the glimpse which I got of it from the train and the little walk I had through the streets.",
       "I feared to go very far from the station, as we had arrived late and would start as near the correct time as possible. The impression I had was that we were leaving the West and entering the East; the most western of splendid bridges over the Danube, which is here of noble width and depth, took us among the traditions of Turkish rule.",

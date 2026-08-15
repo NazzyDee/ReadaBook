@@ -11,6 +11,9 @@ interface ActiveStream {
   streamerName: string;
   title: string;
   bookId: string;
+  bookTitle?: string;
+  bookAuthor?: string;
+  bookCoverUrl?: string;
   genre: string;
   viewerCount: number;
   isLive: boolean;
@@ -41,6 +44,8 @@ export const BrowsePage: React.FC = () => {
   const [recordings, setRecordings] = useState<Recording[]>([]);
   const [customBooks, setCustomBooks] = useState<Book[]>([]);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
+  const [selectedAgeRange, setSelectedAgeRange] = useState<string>('all');
+  const [selectedReadingLevel, setSelectedReadingLevel] = useState<string>('all');
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
 
@@ -180,15 +185,40 @@ export const BrowsePage: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
+  const allBooks = [...books, ...customBooks];
+
   const allLiveStreams = liveStreams.filter(s => {
     return connectedAdults.includes(s.id);
   });
 
   const filteredRecordings = recordings.filter(rec => {
-    return connectedAdults.includes(rec.readerId);
-  });
+    const isFromConnectedAdult = connectedAdults.includes(rec.readerId);
+    if (!isFromConnectedAdult) return false;
 
-  const allBooks = [...books, ...customBooks];
+    const matchesGenre = selectedGenre
+      ? rec.genre.toLowerCase().includes(selectedGenre.toLowerCase())
+      : true;
+
+    const searchLower = searchQuery.toLowerCase();
+    const matchesSearch = searchQuery
+      ? rec.title.toLowerCase().includes(searchLower) ||
+        rec.readerName.toLowerCase().includes(searchLower) ||
+        rec.bookTitle.toLowerCase().includes(searchLower) ||
+        rec.bookAuthor.toLowerCase().includes(searchLower) ||
+        rec.genre.toLowerCase().includes(searchLower)
+      : true;
+
+    const book = allBooks.find(b => b.id === rec.bookId);
+    const matchesAge = selectedAgeRange === 'all'
+      ? true
+      : book?.ageRange === selectedAgeRange;
+
+    const matchesReadingLevel = selectedReadingLevel === 'all'
+      ? true
+      : book?.readingLevel === selectedReadingLevel;
+
+    return matchesGenre && matchesSearch && matchesAge && matchesReadingLevel;
+  });
 
   const genres = [
     { 
@@ -215,16 +245,27 @@ export const BrowsePage: React.FC = () => {
       : true;
 
     const activeBook = allBooks.find(b => b.id === s.bookId);
+    const bookTitle = s.bookTitle || activeBook?.title || '';
+    const bookAuthor = s.bookAuthor || activeBook?.author || '';
+
     const searchLower = searchQuery.toLowerCase();
     const matchesSearch = searchQuery
       ? s.title.toLowerCase().includes(searchLower) ||
         s.streamerName.toLowerCase().includes(searchLower) ||
         s.genre.toLowerCase().includes(searchLower) ||
-        (activeBook?.title.toLowerCase().includes(searchLower) || false) ||
-        (activeBook?.author.toLowerCase().includes(searchLower) || false)
+        bookTitle.toLowerCase().includes(searchLower) ||
+        bookAuthor.toLowerCase().includes(searchLower)
       : true;
 
-    return matchesGenre && matchesSearch;
+    const matchesAge = selectedAgeRange === 'all'
+      ? true
+      : activeBook?.ageRange === selectedAgeRange;
+
+    const matchesReadingLevel = selectedReadingLevel === 'all'
+      ? true
+      : activeBook?.readingLevel === selectedReadingLevel;
+
+    return matchesGenre && matchesSearch && matchesAge && matchesReadingLevel;
   });
 
   const featuredStream = allLiveStreams[0];
@@ -253,6 +294,48 @@ export const BrowsePage: React.FC = () => {
           <button type="submit" className="btn-primary" style={{ padding: '10px 20px', cursor: 'pointer' }}>Connect</button>
         </form>
       </div>
+
+      {/* Curation Filters (FarFaria Style) */}
+      <div className="filter-bar-container" style={{ background: '#fff', padding: '16px 24px', borderRadius: '16px', border: '2px solid rgba(0, 180, 216, 0.15)', display: 'flex', gap: '16px', alignItems: 'center', marginBottom: '24px' }}>
+        <span style={{ fontWeight: 'bold', fontSize: '1rem', color: '#ff477e', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          📖 Level Filters:
+        </span>
+        
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#666' }}>Age Group:</span>
+            <select 
+              className="filter-select"
+              value={selectedAgeRange}
+              onChange={(e) => setSelectedAgeRange(e.target.value)}
+              style={{ padding: '6px 12px', borderRadius: '12px', border: '1px solid var(--border-color)', outline: 'none', cursor: 'pointer' }}
+            >
+              <option value="all">All Ages</option>
+              <option value="2-4">Toddler (Ages 2-4)</option>
+              <option value="5-7">Early Reader (Ages 5-7)</option>
+              <option value="8-10">Independent (Ages 8-10)</option>
+            </select>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#666' }}>A-Z Reading Level:</span>
+            <select 
+              className="filter-select"
+              value={selectedReadingLevel}
+              onChange={(e) => setSelectedReadingLevel(e.target.value)}
+              style={{ padding: '6px 12px', borderRadius: '12px', border: '1px solid var(--border-color)', outline: 'none', cursor: 'pointer' }}
+            >
+              <option value="all">All Levels</option>
+              <option value="Level I">Level I (Ages 2-4)</option>
+              <option value="Level M">Level M (Ages 5-7)</option>
+              <option value="Level P">Level P (Ages 8-10)</option>
+              <option value="Level R">Level R (Ages 8-10)</option>
+              <option value="Level S">Level S (Ages 8-10)</option>
+              <option value="Level T">Level T (Ages 8-10)</option>
+            </select>
+          </div>
+        </div>
+      </div>
       {/* Search Header Banner */}
       {searchQuery && (
         <div className="search-results-header">
@@ -275,7 +358,7 @@ export const BrowsePage: React.FC = () => {
             <h1 className="banner-title">{featuredStream.title}</h1>
             <p className="banner-streamer">Host: 🌟 <strong>{featuredStream.streamerName}</strong></p>
             <p className="banner-description">
-              Join us in reading 📖 <strong>{featuredBook?.title}</strong> by {featuredBook?.author}. 
+              Join us in reading 📖 <strong>{featuredStream.bookTitle || featuredBook?.title}</strong> by {featuredStream.bookAuthor || featuredBook?.author}. 
               React with cute emojis and listen to the storyteller!
             </p>
             <Link to={`/stream/${featuredStream.id}`} className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block', marginTop: '16px' }}>
@@ -283,7 +366,7 @@ export const BrowsePage: React.FC = () => {
             </Link>
           </div>
           <div className="banner-preview-video">
-            <img src={featuredBook?.coverUrl || ''} alt="Featured Stream" />
+            <img src={featuredStream.bookCoverUrl || featuredBook?.coverUrl || ''} alt="Featured Stream" />
             <div className="banner-overlay-badge">
               <Users size={14} />
               <span>{featuredStream.viewerCount} Kids Listening</span>
@@ -352,15 +435,33 @@ export const BrowsePage: React.FC = () => {
                 <Link key={stream.id} to={`/stream/${stream.id}`} className="stream-card-link">
                   <div className="stream-card">
                     <div className="stream-thumbnail-container">
-                      <img src={activeBook?.coverUrl || ''} alt={stream.title} className="stream-thumbnail" />
+                      <img src={stream.bookCoverUrl || activeBook?.coverUrl || ''} alt={stream.title} className="stream-thumbnail" />
                       <div className="live-indicator">LIVE 🎈</div>
                       <div className="viewer-count" style={{ backgroundColor: 'rgba(0,0,0,0.4)' }}>
                         <Users size={12} />
                         <span>{stream.viewerCount}</span>
                       </div>
                       
+                      {/* Curation Badges */}
+                      {stream.bookId === 'physical-read' ? (
+                        <span className="badge-reading-level" style={{ position: 'absolute', bottom: '10px', left: '10px', zIndex: 5, backgroundColor: '#ff477e' }}>
+                          Physical Copy
+                        </span>
+                      ) : (
+                        activeBook?.readingLevel && (
+                          <span className="badge-reading-level" style={{ position: 'absolute', bottom: '10px', left: '10px', zIndex: 5 }}>
+                            {activeBook.readingLevel}
+                          </span>
+                        )
+                      )}
+                      {activeBook?.ageRange && (
+                        <span className="badge-age-range" style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 5 }}>
+                          Ages {activeBook.ageRange}
+                        </span>
+                      )}
+                      
                       <div className="mini-book-badge">
-                        <img src={activeBook?.coverUrl} alt="Cover" />
+                        <img src={stream.bookCoverUrl || activeBook?.coverUrl || ''} alt="Cover" />
                       </div>
                     </div>
                     
@@ -371,8 +472,16 @@ export const BrowsePage: React.FC = () => {
                       <div className="stream-metadata">
                         <h4 className="stream-card-title">{stream.title}</h4>
                         <p className="stream-card-host">Host: 🌟 {stream.streamerName}</p>
-                        <p className="stream-card-book">📖 {activeBook?.title}</p>
-                        <span className="stream-card-tag" style={{ backgroundColor: 'var(--bg-hover)', color: 'var(--accent-primary)' }}>{stream.genre}</span>
+                        <p className="stream-card-book">📖 {stream.bookTitle || activeBook?.title}</p>
+                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '6px' }}>
+                          <span className="stream-card-tag" style={{ backgroundColor: 'var(--bg-hover)', color: 'var(--accent-primary)', fontSize: '0.7rem' }}>{stream.genre}</span>
+                          <span className="stream-card-tag" style={{ backgroundColor: 'rgba(157, 78, 221, 0.1)', color: '#9d4edd', fontSize: '0.7rem' }}>
+                            {stream.genre === 'Fantasy' ? '🔮 Magical' : stream.genre === 'Adventure' ? '⚔️ Adventurous' : '☕ Cozy'}
+                          </span>
+                          <span className="stream-card-tag" style={{ backgroundColor: 'rgba(255, 183, 3, 0.1)', color: '#ffb703', fontSize: '0.7rem' }}>
+                            {stream.genre === 'Fantasy' ? '🐢 Slow-paced' : stream.genre === 'Adventure' ? '⚡ Fast-paced' : '🚶 Medium-paced'}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -401,6 +510,7 @@ export const BrowsePage: React.FC = () => {
               const minutes = Math.floor(rec.duration / 60);
               const seconds = rec.duration % 60;
               const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+              const recBook = allBooks.find(b => b.id === rec.bookId);
 
               return (
                 <Link key={rec.id} to={`/watch/${rec.id}`} className="stream-card-link">
@@ -412,6 +522,19 @@ export const BrowsePage: React.FC = () => {
                         <Clock size={12} />
                         <span>{formattedDuration}</span>
                       </div>
+
+                      {/* Curation Badges */}
+                      {recBook?.readingLevel && (
+                        <span className="badge-reading-level" style={{ position: 'absolute', bottom: '10px', left: '10px', zIndex: 5 }}>
+                          {recBook.readingLevel}
+                        </span>
+                      )}
+                      {recBook?.ageRange && (
+                        <span className="badge-age-range" style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 5 }}>
+                          Ages {recBook.ageRange}
+                        </span>
+                      )}
+
                       <div className="mini-book-badge">
                         <img src={rec.bookCoverUrl} alt="Cover" />
                       </div>
@@ -427,9 +550,17 @@ export const BrowsePage: React.FC = () => {
                         <h4 className="stream-card-title">{rec.title}</h4>
                         <p className="stream-card-host">Told by: 🌟 {rec.readerName}</p>
                         <p className="stream-card-book">📖 {rec.bookTitle}</p>
-                        <span className="stream-card-tag" style={{ background: 'rgba(0, 180, 216, 0.1)', color: 'var(--accent-secondary)' }}>
-                          {rec.genre}
-                        </span>
+                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '6px' }}>
+                          <span className="stream-card-tag" style={{ background: 'rgba(0, 180, 216, 0.1)', color: 'var(--accent-secondary)', fontSize: '0.7rem' }}>
+                            {rec.genre}
+                          </span>
+                          <span className="stream-card-tag" style={{ backgroundColor: 'rgba(157, 78, 221, 0.1)', color: '#9d4edd', fontSize: '0.7rem' }}>
+                            {rec.genre === 'Fantasy' ? '🔮 Magical' : rec.genre === 'Adventure' ? '⚔️ Adventurous' : '☕ Cozy'}
+                          </span>
+                          <span className="stream-card-tag" style={{ backgroundColor: 'rgba(255, 183, 3, 0.1)', color: '#ffb703', fontSize: '0.7rem' }}>
+                            {rec.genre === 'Fantasy' ? '🐢 Slow-paced' : rec.genre === 'Adventure' ? '⚡ Fast-paced' : '🚶 Medium-paced'}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
