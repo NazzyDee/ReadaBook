@@ -188,11 +188,11 @@ export const BrowsePage: React.FC = () => {
   const allBooks = [...books, ...customBooks];
 
   const allLiveStreams = liveStreams.filter(s => {
-    return connectedAdults.includes(s.id);
+    return s.id.startsWith('mock_') || connectedAdults.includes(s.id);
   });
 
   const filteredRecordings = recordings.filter(rec => {
-    const isFromConnectedAdult = connectedAdults.includes(rec.readerId);
+    const isFromConnectedAdult = rec.readerId.startsWith('mock_') || connectedAdults.includes(rec.readerId);
     if (!isFromConnectedAdult) return false;
 
     const matchesGenre = selectedGenre
