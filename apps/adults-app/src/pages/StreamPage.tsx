@@ -322,21 +322,82 @@ export const StreamPage: React.FC = () => {
       <main className="main-content">
         
         {/* Left: Reading and Video Section */}
-        <section className="reader-section">
+        <section className="reader-section" style={{ position: 'relative', width: '100%', height: '100%', padding: 0, overflow: 'hidden', display: 'flex', justifyContent: 'stretch', alignItems: 'stretch' }}>
           
-          {/* The E-Book Text (Dynamically synced) */}
+          {/* The Main Camera Feed (Creator stream takes 100% space as background canvas) */}
+          <div className="live-camera-feed-sim" style={{ flex: 1, background: '#11032a', position: 'relative', width: '100%', height: '100%', minHeight: '500px' }}>
+            <div style={{
+              width: '100%',
+              height: '100%',
+              background: 'linear-gradient(135deg, #15023a 0%, #6247aa 100%)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              padding: '24px',
+              textAlign: 'center'
+            }}>
+              <div style={{
+                width: '72px',
+                height: '72px',
+                borderRadius: '50%',
+                background: 'var(--accent-secondary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 'bold',
+                fontSize: '1.5rem',
+                marginBottom: '12px',
+                boxShadow: '0 0 20px rgba(138, 43, 226, 0.6)'
+              }}>
+                {stream.streamerName.substring(0, 2).toUpperCase()}
+              </div>
+              <h2 style={{ fontSize: '1.2rem', color: '#fff', margin: '0 0 4px 0' }}>{stream.streamerName} is Live!</h2>
+              <span style={{ fontSize: '0.9rem', opacity: 0.8 }}>Camera Feed Active</span>
+              <span style={{ fontSize: '0.8rem', opacity: 0.6, marginTop: '8px' }}>Storyteller is streaming live on camera! 🎥</span>
+            </div>
+            <div className="feed-watermark" style={{ top: '20px', left: '20px', fontSize: '1rem', background: 'rgba(0,0,0,0.5)', padding: '4px 10px', borderRadius: '4px' }}>
+              <span>{stream.streamerName}</span>
+              <span className="rec-dot"></span>
+            </div>
+            <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', alignItems: 'center', gap: '6px', background: '#ff4d4d', color: '#fff', padding: '6px 12px', borderRadius: '12px', fontWeight: 'bold', fontSize: '0.8rem', letterSpacing: '1px', zIndex: 5 }}>
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fff', animation: 'pulse 1.5s infinite' }}></span>
+              <span>LIVE</span>
+            </div>
+          </div>
+
+          {/* The E-Book Text Overlay (Beautiful Floating Glass Card) */}
           {activeBook ? (
-            <div className="book-display">
-              <div className="book-display-header">
-                 <img src={activeBook.coverUrl} alt="Book Cover" className="book-cover-img" />
+            <div className="book-display" style={{
+              position: 'absolute',
+              top: '20px',
+              left: '20px',
+              bottom: '20px',
+              width: '380px',
+              maxHeight: 'calc(100% - 40px)',
+              background: 'rgba(17, 3, 42, 0.85)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '12px',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.5)',
+              zIndex: 10,
+              color: '#fff',
+              overflow: 'hidden'
+            }}>
+              <div className="book-display-header" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px', marginBottom: '12px', display: 'flex', gap: '12px' }}>
+                 <img src={activeBook.coverUrl} alt="Book Cover" className="book-cover-img" style={{ width: '50px', height: '70px', borderRadius: '4px', objectFit: 'cover' }} />
                  <div className="book-display-details">
-                    <h1>{activeBook.title}</h1>
-                    <h3>By {activeBook.author}</h3>
-                    <span className="chapter-indicator">Page {stream.currentPage + 1} of {activeBook.pages.length}</span>
+                    <h2 style={{ fontSize: '1.1rem', color: '#fff', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '240px' }}>{activeBook.title}</h2>
+                    <h4 style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>By {activeBook.author}</h4>
+                    <span className="chapter-indicator" style={{ display: 'inline-block', marginTop: '4px', fontSize: '0.75rem', color: 'var(--accent-secondary)' }}>Page {stream.currentPage + 1} of {activeBook.pages.length}</span>
                  </div>
               </div>
               
-              <div className="book-text-content">
+              <div className="book-text-content" style={{ flex: 1, overflowY: 'auto', paddingRight: '4px', fontSize: '1rem', lineHeight: '1.5' }}>
                 {activeBook.pages[stream.currentPage] ? (
                   activeBook.pages[stream.currentPage].split('\n\n').map((para: string, idx: number) => {
                     const isActive = stream.currentParagraph !== undefined ? idx === stream.currentParagraph : false;
@@ -344,15 +405,13 @@ export const StreamPage: React.FC = () => {
                       <p 
                         key={idx} 
                         style={{ 
-                          marginBottom: '16px', 
-                          lineHeight: '1.6', 
-                          fontSize: '1.2rem', 
-                          textIndent: '16px',
-                          padding: '6px 12px',
+                          marginBottom: '12px', 
+                          padding: '6px 10px',
                           borderRadius: '6px',
-                          backgroundColor: isActive ? 'rgba(0, 229, 255, 0.08)' : 'transparent',
+                          backgroundColor: isActive ? 'rgba(0, 229, 255, 0.12)' : 'transparent',
                           borderLeft: isActive ? '3px solid var(--accent-secondary)' : '3px solid transparent',
-                          transition: 'all 0.15s'
+                          transition: 'all 0.15s',
+                          color: isActive ? '#fff' : 'rgba(255,255,255,0.85)'
                         }}
                       >
                         {para}
@@ -365,48 +424,29 @@ export const StreamPage: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="book-display" style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <div className="book-display" style={{
+              position: 'absolute',
+              top: '20px',
+              left: '20px',
+              bottom: '20px',
+              width: '380px',
+              background: 'rgba(17, 3, 42, 0.85)',
+              backdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '12px',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.5)',
+              zIndex: 10,
+              color: '#fff'
+            }}>
               <div className="spinner"></div>
               <p style={{ marginTop: '16px', color: 'var(--text-muted)' }}>Loading novel content...</p>
             </div>
           )}
-
-          <div className="video-overlay">
-            <div className="live-camera-feed-sim" style={{ background: '#11032a', position: 'relative', overflow: 'hidden' }}>
-              <div style={{
-                width: '100%',
-                height: '100%',
-                background: 'linear-gradient(135deg, #15023a 0%, #6247aa 100%)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontSize: '0.85rem'
-              }}>
-                <div style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '50%',
-                  background: 'var(--accent-secondary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 'bold',
-                  fontSize: '1.1rem',
-                  marginBottom: '8px',
-                  boxShadow: '0 0 16px rgba(138, 43, 226, 0.4)'
-                }}>
-                  {stream.streamerName.substring(0, 2).toUpperCase()}
-                </div>
-                <span style={{ fontSize: '0.8rem', opacity: 0.9 }}>Camera Feed Active</span>
-              </div>
-              <div className="feed-watermark">
-                <span>{stream.streamerName}</span>
-                <span className="rec-dot"></span>
-              </div>
-            </div>
-          </div>
 
         </section>
 

@@ -472,30 +472,140 @@ export const StreamPage: React.FC = () => {
       <main className="main-content">
         
         {/* Left: Reading Display */}
-        <section className="reader-section" style={calmMode ? { backgroundColor: '#fdfaf3' } : {}}>
-          
+        {/* Left: Reading Display */}
+        <section className="reader-section" style={{
+          position: 'relative',
+          flex: 1,
+          padding: 0,
+          overflow: 'hidden',
+          display: 'flex',
+          justifyContent: 'stretch',
+          alignItems: 'stretch',
+          backgroundColor: calmMode ? '#fdfaf3' : 'var(--bg-dark)'
+        }}>
+
+          {/* 1. Main Camera Feed (Takes 100% canvas when NOT in calmMode) */}
+          {!calmMode && (
+            <div className="live-camera-feed-sim" style={{ flex: 1, position: 'relative', width: '100%', height: '100%', minHeight: '550px' }}>
+              <div style={{
+                width: '100%',
+                height: '100%',
+                background: 'linear-gradient(135deg, #0b011d 0%, #00b4d8 100%)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                padding: '24px',
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  width: '80px',
+                  height: '80px',
+                  borderRadius: '50%',
+                  background: 'var(--accent-secondary)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  fontSize: '1.6rem',
+                  marginBottom: '12px',
+                  boxShadow: '0 0 20px rgba(0, 180, 216, 0.6)'
+                }}>
+                  {stream.streamerName.substring(0, 2).toUpperCase()}
+                </div>
+                <h2 style={{ fontSize: '1.3rem', color: '#fff', margin: '0 0 4px 0' }}>{stream.streamerName} is Live!</h2>
+                <span style={{ fontSize: '0.95rem', opacity: 0.9 }}>Camera Active 🎥</span>
+                <span style={{ fontSize: '0.85rem', opacity: 0.7, marginTop: '8px' }}>Watch the storyteller read live on camera! 🍿</span>
+              </div>
+
+              {/* Pomodoro Indicator overlay */}
+              {stream.pomodoroActive && (
+                <div style={{
+                  position: 'absolute',
+                  top: '20px',
+                  right: '20px',
+                  background: 'rgba(11, 1, 29, 0.85)',
+                  border: '2px solid var(--accent-primary)',
+                  borderRadius: '12px',
+                  padding: '10px 16px',
+                  color: '#fff',
+                  zIndex: 20,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                }}>
+                  <span style={{ fontSize: '0.7rem', fontWeight: 'bold', textTransform: 'uppercase', color: 'var(--accent-primary)', letterSpacing: '0.5px' }}>
+                    ⏳ STUDY SPRINT: {stream.pomodoroType === 'work' ? 'FOCUS 📚' : 'BREAK 🧸'}
+                  </span>
+                  <span style={{ fontSize: '1.4rem', fontWeight: 'bold', fontFamily: 'monospace', marginTop: '2px' }}>
+                    {Math.floor(pomodoroSecondsLeft / 60).toString().padStart(2, '0')}:{(pomodoroSecondsLeft % 60).toString().padStart(2, '0')}
+                  </span>
+                </div>
+              )}
+
+              <div className="feed-watermark" style={{ top: '20px', left: '20px', fontSize: '1rem', background: 'rgba(0, 180, 216, 0.8)', padding: '6px 12px', borderRadius: '6px' }}>
+                <span>📖 Storyteller: {stream.streamerName}</span>
+              </div>
+            </div>
+          )}
+
+          {/* 2. Floating Book Text Card Overlay */}
           {activeBook ? (
-            <div className="book-display" style={calmMode ? { padding: '32px' } : {}}>
-              <div className="book-display-header">
-                 <img src={activeBook.coverUrl} alt="Book Cover" className="book-cover-img" />
+            <div 
+              className="book-display" 
+              style={calmMode ? { 
+                padding: '32px',
+                width: '100%',
+                height: '100%',
+                maxHeight: '100%',
+                borderRadius: 0,
+                boxShadow: 'none',
+                border: 'none',
+                background: '#fdfaf3',
+                color: '#2d261e'
+              } : {
+                position: 'absolute',
+                top: '20px',
+                left: '20px',
+                bottom: '20px',
+                width: '400px',
+                maxHeight: 'calc(100% - 40px)',
+                background: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '16px',
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.15)',
+                zIndex: 10,
+                color: '#2b2d42',
+                overflow: 'hidden'
+              }}
+            >
+              <div className="book-display-header" style={{ borderBottom: '1px solid rgba(0,0,0,0.06)', paddingBottom: '12px', marginBottom: '12px' }}>
+                 <img src={activeBook.coverUrl} alt="Book Cover" className="book-cover-img" style={{ width: '50px', height: '70px', borderRadius: '6px', objectFit: 'cover' }} />
                  <div className="book-display-details">
-                    <h1>{activeBook.title}</h1>
-                    <h3>By {activeBook.author}</h3>
+                    <h1 style={{ fontSize: '1.25rem', color: calmMode ? '#3e2723' : '#1e1e24', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '250px' }}>{activeBook.title}</h1>
+                    <h3 style={{ fontSize: '0.9rem', color: '#666', margin: '2px 0 0 0' }}>By {activeBook.author}</h3>
                     {stream.bookId === 'physical-read' ? (
-                      <span className="chapter-indicator" style={{ background: '#ff477e', color: '#fff' }}>Physical Copy Read 🎥</span>
+                      <span className="chapter-indicator" style={{ display: 'inline-block', marginTop: '4px', background: '#ff477e', color: '#fff', padding: '2px 8px', borderRadius: '10px', fontSize: '0.7rem', fontWeight: 'bold' }}>Physical Copy Read 🎥</span>
                     ) : (
-                      <span className="chapter-indicator">Page {stream.currentPage + 1} of {activeBook.pages.length}</span>
+                      <span className="chapter-indicator" style={{ display: 'inline-block', marginTop: '4px', fontSize: '0.75rem', color: 'var(--accent-secondary)' }}>Page {stream.currentPage + 1} of {activeBook.pages.length}</span>
                     )}
                  </div>
               </div>
 
               {/* Reading Environment Settings Panel */}
-              <div className="reading-settings-bar">
+              <div className="reading-settings-bar" style={{ gap: '8px', padding: '6px 0', borderBottom: '1px solid rgba(0,0,0,0.06)', marginBottom: '12px' }}>
                 <div className="setting-item">
-                  <span style={{ fontWeight: 'bold', marginRight: '4px' }}>🎬 Text Style:</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#666' }}>Style:</span>
                   <select 
                     value={textAnimationMode} 
                     onChange={(e) => setTextAnimationMode(e.target.value as 'static' | 'word' | 'kinetic')}
+                    style={{ fontSize: '0.75rem', padding: '2px' }}
                   >
                     <option value="static">Plain Text (Static)</option>
                     <option value="word">Standard Highlight</option>
@@ -504,10 +614,11 @@ export const StreamPage: React.FC = () => {
                 </div>
 
                 <div className="setting-item">
-                  <span style={{ fontWeight: 'bold', marginRight: '4px' }}>🔤 Font Style:</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#666' }}>Font:</span>
                   <select 
                     value={typographyMode} 
                     onChange={(e) => setTypographyMode(e.target.value as 'outfit' | 'rounded' | 'dyslexic')}
+                    style={{ fontSize: '0.75rem', padding: '2px' }}
                   >
                     <option value="outfit">Default (Outfit)</option>
                     <option value="rounded">Rounded (Comic Neue)</option>
@@ -516,39 +627,39 @@ export const StreamPage: React.FC = () => {
                 </div>
 
                 <div className="setting-item">
-                  <span style={{ fontWeight: 'bold', marginRight: '4px' }}>🎵 Soundscape:</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#666' }}>Sound:</span>
                   <select 
                     value={soundscape} 
                     onChange={(e) => startSynthesizedSoundscape(e.target.value as any)}
-                    style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '4px' }}
+                    style={{ fontSize: '0.75rem', padding: '2px' }}
                   >
-                    <option value="none">No Background Sound</option>
-                    <option value="rain">Cozy Gentle Rain 🌧️</option>
-                    <option value="fireplace">Crackling Fireplace 🔥</option>
-                    <option value="lofi">Lofi Storytime Chords 🎵</option>
+                    <option value="none">No Sound</option>
+                    <option value="rain">Rain 🌧️</option>
+                    <option value="fireplace">Fire 🔥</option>
+                    <option value="lofi">Lofi 🎵</option>
                   </select>
                 </div>
 
                 <div className="setting-item" style={{ marginLeft: 'auto' }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontWeight: 'bold', color: calmMode ? '#8d6e63' : '#ff477e' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 'bold', color: calmMode ? '#8d6e63' : '#ff477e' }}>
                     <input 
                       type="checkbox" 
                       checked={calmMode} 
                       onChange={(e) => setCalmMode(e.target.checked)} 
-                      style={{ width: '16px', height: '16px', accentColor: '#ff477e', cursor: 'pointer' }}
+                      style={{ width: '12px', height: '12px', accentColor: '#ff477e' }}
                     />
-                    <span>Calm Mode 🧸</span>
+                    <span>Calm 🧸</span>
                   </label>
                 </div>
               </div>
               
-              <div className={`book-text-content font-${typographyMode}`} style={{ minHeight: '240px', fontSize: '1.5rem', color: calmMode ? '#3e2723' : '#2b2d42' }}>
+              <div className={`book-text-content font-${typographyMode}`} style={{ flex: 1, overflowY: 'auto', minHeight: '200px', fontSize: '1.2rem', lineHeight: '1.5', paddingRight: '4px', color: calmMode ? '#3e2723' : '#2b2d42' }}>
                 {stream.bookId === 'physical-read' ? (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '220px', textAlign: 'center', background: 'rgba(255, 183, 3, 0.04)', border: '2px dashed rgba(255, 183, 3, 0.25)', borderRadius: '16px', padding: '24px' }}>
-                    <span style={{ fontSize: '3rem', marginBottom: '12px' }}>📖</span>
-                    <h3 style={{ margin: '0 0 8px 0', color: 'var(--accent-secondary)' }}>Physical Book Read-Aloud</h3>
-                    <p style={{ margin: 0, fontSize: '1.05rem', color: 'var(--text-muted)', maxWidth: '500px' }}>
-                      The storyteller is reading their physical print copy of <strong>{activeBook.title}</strong> on camera! 🎥 Gather your own copy or sit back, relax, and listen to the story.
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '180px', textAlign: 'center', background: 'rgba(255, 183, 3, 0.04)', border: '2px dashed rgba(255, 183, 3, 0.25)', borderRadius: '12px', padding: '16px' }}>
+                    <span style={{ fontSize: '2.5rem', marginBottom: '8px' }}>📖</span>
+                    <h3 style={{ margin: '0 0 6px 0', fontSize: '1rem', color: '#ff8200' }}>Physical Book Read-Aloud</h3>
+                    <p style={{ margin: 0, fontSize: '0.85rem', color: '#555' }}>
+                      The storyteller is reading their physical print copy of <strong>{activeBook.title}</strong> on camera! 🎥 Gather your own copy or sit back and listen.
                     </p>
                   </div>
                 ) : activeBook.pages[stream.currentPage] ? (
@@ -562,15 +673,15 @@ export const StreamPage: React.FC = () => {
                           key={idx} 
                           className={`word-animate-active ${textAnimationMode === 'kinetic' ? 'word-highlighted-kinetic' : 'word-highlighted-basic'}`}
                           style={{ 
-                            marginBottom: '16px', 
-                            textIndent: '16px',
-                            padding: '12px 16px',
-                            borderRadius: '12px',
+                            marginBottom: '12px', 
+                            textIndent: '12px',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
                             display: 'flex',
                             flexWrap: 'wrap',
-                            gap: '6px',
-                            rowGap: '12px',
-                            lineHeight: '1.8'
+                            gap: '4px',
+                            rowGap: '8px',
+                            lineHeight: '1.6'
                           }}
                         >
                           {words.map((word, wIdx) => {
@@ -603,12 +714,12 @@ export const StreamPage: React.FC = () => {
                       <p 
                         key={idx} 
                         style={{ 
-                          marginBottom: '16px', 
-                          lineHeight: '1.6', 
-                          fontSize: '1.25rem', 
-                          textIndent: '16px',
-                          padding: '6px 12px',
-                          borderRadius: '8px',
+                          marginBottom: '12px', 
+                          lineHeight: '1.5', 
+                          fontSize: '1.1rem', 
+                          textIndent: '12px',
+                          padding: '6px 8px',
+                          borderRadius: '6px',
                           backgroundColor: isActive ? 'rgba(255, 183, 3, 0.15)' : 'transparent',
                           borderLeft: isActive ? '3px solid var(--accent-tertiary)' : '3px solid transparent',
                           transition: 'all 0.15s'
@@ -626,28 +737,28 @@ export const StreamPage: React.FC = () => {
               {/* Co-Writing Live Board */}
               {stream.creatorWritingText && (
                 <div style={{
-                  marginTop: '20px',
-                  background: calmMode ? '#efebe9' : 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: '12px',
-                  padding: '16px'
+                  marginTop: '12px',
+                  background: calmMode ? '#efebe9' : 'rgba(0, 0, 0, 0.03)',
+                  border: '1px solid rgba(0,0,0,0.06)',
+                  borderRadius: '8px',
+                  padding: '10px'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                    <span style={{ fontSize: '1.2rem' }}>✍️</span>
-                    <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: calmMode ? '#3e2723' : '#fff' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                    <span style={{ fontSize: '1rem' }}>✍️</span>
+                    <span style={{ fontWeight: 'bold', fontSize: '0.8rem', color: '#1e1e24' }}>
                       {stream.streamerName}'s Live Co-Writing Board
                     </span>
                   </div>
                   <div style={{
-                    fontSize: '1rem',
-                    lineHeight: '1.5',
-                    color: calmMode ? '#3e2723' : '#fff',
+                    fontSize: '0.85rem',
+                    lineHeight: '1.4',
+                    color: '#333',
                     whiteSpace: 'pre-wrap',
                     fontFamily: 'monospace',
-                    background: calmMode ? '#fdfaf3' : 'rgba(0,0,0,0.15)',
-                    padding: '12px',
-                    borderRadius: '8px',
-                    maxHeight: '120px',
+                    background: '#f8f9fa',
+                    padding: '8px',
+                    borderRadius: '6px',
+                    maxHeight: '80px',
                     overflowY: 'auto'
                   }}>
                     {stream.creatorWritingText}
@@ -656,14 +767,31 @@ export const StreamPage: React.FC = () => {
               )}
             </div>
           ) : (
-            <div className="book-display" style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <div className="book-display" style={calmMode ? { justifyContent: 'center', alignItems: 'center', background: '#fdfaf3' } : {
+              position: 'absolute',
+              top: '20px',
+              left: '20px',
+              bottom: '20px',
+              width: '400px',
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: '16px',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.15)',
+              zIndex: 10
+            }}>
               <div className="spinner"></div>
               <p style={{ marginTop: '16px', color: 'var(--text-muted)' }}>Opening the magic book...</p>
             </div>
           )}
 
-          {/* Video Feed */}
-          {calmMode ? (
+          {/* 3. Small Camera Toggle box in Calm Mode */}
+          {calmMode && (
             <div className="calm-mode-video-placeholder" style={{ position: 'absolute', bottom: '24px', right: '24px', zIndex: 10, padding: '16px', background: '#fff', borderRadius: '24px', border: '3px solid #efebe9', boxShadow: '0 8px 24px rgba(0,0,0,0.06)', width: '220px', textAlign: 'center' }}>
               <p style={{ fontSize: '0.85rem', margin: '0 0 10px 0', color: '#8d6e63', fontWeight: 'bold' }}>🧸 Video Feed Hidden</p>
               <button 
@@ -673,66 +801,6 @@ export const StreamPage: React.FC = () => {
               >
                 Show Camera
               </button>
-            </div>
-          ) : (
-            <div className="video-overlay" style={{ border: '3px solid var(--accent-secondary)', borderRadius: 'var(--border-radius)', overflow: 'hidden' }}>
-              <div className="live-camera-feed-sim" style={{ background: '#11032a', position: 'relative' }}>
-                {stream.pomodoroActive && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '12px',
-                    left: '12px',
-                    background: 'rgba(11, 1, 29, 0.85)',
-                    border: '2px solid var(--accent-primary)',
-                    borderRadius: '8px',
-                    padding: '8px 12px',
-                    color: '#fff',
-                    zIndex: 20,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
-                  }}>
-                    <span style={{ fontSize: '0.65rem', fontWeight: 'bold', textTransform: 'uppercase', color: 'var(--accent-primary)', letterSpacing: '0.5px' }}>
-                      ⏳ STUDY SPRINT: {stream.pomodoroType === 'work' ? 'FOCUS 📚' : 'BREAK 🧸'}
-                    </span>
-                    <span style={{ fontSize: '1.25rem', fontWeight: 'bold', fontFamily: 'monospace', marginTop: '2px' }}>
-                      {Math.floor(pomodoroSecondsLeft / 60).toString().padStart(2, '0')}:{(pomodoroSecondsLeft % 60).toString().padStart(2, '0')}
-                    </span>
-                  </div>
-                )}
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  background: 'linear-gradient(135deg, #0b011d 0%, #00b4d8 100%)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  fontSize: '0.85rem'
-                }}>
-                  <div style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '50%',
-                    background: 'var(--accent-secondary)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 'bold',
-                    fontSize: '1.1rem',
-                    marginBottom: '8px',
-                    boxShadow: '0 0 16px rgba(0, 180, 216, 0.4)'
-                  }}>
-                    {stream.streamerName.substring(0, 2).toUpperCase()}
-                  </div>
-                  <span style={{ fontSize: '0.8rem', opacity: 0.9 }}>Camera Active 🎥</span>
-                </div>
-                <div className="feed-watermark" style={{ background: 'rgba(0, 180, 216, 0.7)' }}>
-                  <span>📖 Storyteller: {stream.streamerName}</span>
-                </div>
-              </div>
             </div>
           )}
 
