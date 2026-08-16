@@ -60,7 +60,8 @@ import {
   Gauge,
   Dices,
   Gavel,
-  TreePine
+  TreePine,
+  Music
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -150,6 +151,10 @@ import { BackstageWhisperModal } from './BackstageWhisperModal';
 import { ViewerJournalBookmarksModal } from './ViewerJournalBookmarksModal';
 import { CommunityAuctionModal } from './CommunityAuctionModal';
 import { NarratorSkillTreeModal } from './NarratorSkillTreeModal';
+import { StreamTagTaxonomyModal } from './StreamTagTaxonomyModal';
+import { NarratorFaceOffModal } from './NarratorFaceOffModal';
+import { SubscribersWallOfHonorModal } from './SubscribersWallOfHonorModal';
+import { VocalWarmupTrainerModal } from './VocalWarmupTrainerModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -253,6 +258,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showJournalModal, setShowJournalModal] = useState(false);
   const [showAuctionModal, setShowAuctionModal] = useState(false);
   const [showSkillTreeModal, setShowSkillTreeModal] = useState(false);
+  const [showStreamTagTaxonomyModal, setShowStreamTagTaxonomyModal] = useState(false);
+  const [showNarratorFaceOffModal, setShowNarratorFaceOffModal] = useState(false);
+  const [showSubscribersWallModal, setShowSubscribersWallModal] = useState(false);
+  const [showVocalWarmupTrainerModal, setShowVocalWarmupTrainerModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -266,6 +275,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Stream Tag Taxonomy */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowStreamTagTaxonomyModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Literary Mood & Stream Tag Taxonomy"
+        >
+          <Tag size={18} />
+          <span>Tags</span>
+        </button>
+
+        {/* 1v1 Monologue Duel */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowNarratorFaceOffModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="1v1 Dramatic Monologue Face-Off Arena"
+        >
+          <Swords size={18} />
+          <span>Face-Off</span>
+        </button>
+
+        {/* Founding Readers Wall of Honor */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSubscribersWallModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Founding Readers & Grand Scribe Wall of Honor"
+        >
+          <Crown size={18} />
+          <span>Wall of Honor</span>
+        </button>
+
+        {/* Pre-Stream Vocal Warmup Trainer */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVocalWarmupTrainerModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Pre-Stream Vocal Warmup Piano & Breathwork"
+        >
+          <Music size={18} />
+          <span>Vocal Warmup</span>
+        </button>
         {/* Stage Whisper Backstage Lounge */}
         <button
           onClick={() => {
@@ -2039,6 +2099,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <NarratorSkillTreeModal
           streamerName={streamerName}
           onClose={() => setShowSkillTreeModal(false)}
+        />
+      )}
+
+      {showStreamTagTaxonomyModal && (
+        <StreamTagTaxonomyModal
+          streamerName={streamerName}
+          onClose={() => setShowStreamTagTaxonomyModal(false)}
+        />
+      )}
+
+      {showNarratorFaceOffModal && (
+        <NarratorFaceOffModal
+          streamerName={streamerName}
+          onClose={() => setShowNarratorFaceOffModal(false)}
+        />
+      )}
+
+      {showSubscribersWallModal && (
+        <SubscribersWallOfHonorModal
+          streamerName={streamerName}
+          onClose={() => setShowSubscribersWallModal(false)}
+        />
+      )}
+
+      {showVocalWarmupTrainerModal && (
+        <VocalWarmupTrainerModal
+          streamerName={streamerName}
+          onClose={() => setShowVocalWarmupTrainerModal(false)}
         />
       )}
     </div>

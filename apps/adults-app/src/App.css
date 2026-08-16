@@ -35132,6 +35132,885 @@
   cursor: pointer;
 }
 
+/* ================= STREAM TAG TAXONOMY ================= */
+.tags-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.tags-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.tags-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-teal);
+  letter-spacing: 0.08em;
+}
+
+.tags-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.selected-tags-strip {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tags-counter-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.selected-chips-wrap {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.active-tag-chip {
+  background: rgba(0, 180, 216, 0.2);
+  border: 1px solid var(--accent-teal);
+  color: #fff;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.tag-category-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag-tab-btn {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tag-tab-btn.active {
+  border-color: var(--accent-teal);
+  color: #fff;
+  background: rgba(0, 180, 216, 0.15);
+}
+
+.custom-tag-form {
+  display: flex;
+}
+
+.custom-tag-input-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.custom-tag-input-row input {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  outline: none;
+}
+
+.btn-add-tag {
+  padding: 8px 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.available-tags-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.tag-select-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.tag-select-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-teal);
+}
+
+.tag-select-card.selected {
+  border-color: var(--accent-teal);
+  background: rgba(0, 180, 216, 0.08);
+}
+
+.tag-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tag-card-top strong {
+  font-size: 0.82rem;
+  color: #fff;
+}
+
+.tag-popularity {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  color: #ffd700;
+  font-weight: 800;
+}
+
+.tag-select-card p {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.tag-category-pill {
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  padding: 2px 6px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.tags-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.btn-save-tags {
+  padding: 8px 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* ================= 1V1 MONOLOGUE DUEL ARENA ================= */
+.faceoff-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.faceoff-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.faceoff-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ff3b3b;
+  letter-spacing: 0.08em;
+}
+
+.faceoff-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.passage-prompt-box {
+  background: var(--bg-panel);
+  border: 2px solid #ff3b3b;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.passage-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.source-tag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+}
+
+.duel-timer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ff3b3b;
+}
+
+.passage-prompt-box h4 {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+}
+
+.duel-script-text {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #fff;
+  margin: 0;
+  line-height: 1.4;
+  border-left: 3px solid #ff3b3b;
+  padding-left: 10px;
+}
+
+.duel-voting-meter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meter-labels-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.side-a-name {
+  color: var(--accent-teal);
+}
+
+.side-b-name {
+  color: #ff3b3b;
+}
+
+.meter-track {
+  display: flex;
+  height: 14px;
+  background: var(--bg-panel);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.meter-fill-a {
+  background: linear-gradient(90deg, #00b4d8, #0077b6);
+  transition: width 0.3s ease;
+}
+
+.meter-fill-b {
+  background: linear-gradient(90deg, #ff3b3b, #d90429);
+  transition: width 0.3s ease;
+}
+
+.narrators-podium-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .narrators-podium-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.narrator-side-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.narrator-side-card.side-a.voted {
+  border-color: var(--accent-teal);
+}
+
+.narrator-side-card.side-b.voted {
+  border-color: #ff3b3b;
+}
+
+.narrator-avatar-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.narrator-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.leader-crown {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+}
+
+.narrator-side-card h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.votes-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.btn-vote-narrator {
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-vote-a {
+  background: var(--accent-teal);
+}
+
+.btn-vote-b {
+  background: #ff3b3b;
+}
+
+.vs-divider-circle {
+  background: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 0.85rem;
+  color: #ffd700;
+  margin: 0 auto;
+}
+
+.faceoff-broadcaster-bar {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.btn-declare-winner {
+  background: #ffd700;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* ================= FOUNDING READERS WALL OF HONOR ================= */
+.wall-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.wall-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.wall-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.08em;
+}
+
+.wall-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.museum-plaque-banner {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, var(--bg-panel) 100%);
+  border: 2px solid #ffd700;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.plaque-icon-wrap {
+  flex-shrink: 0;
+}
+
+.plaque-text h4 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffd700;
+  margin: 0 0 4px 0;
+}
+
+.plaque-text p {
+  font-size: 0.72rem;
+  color: #ccc;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.founders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.founder-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.founder-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.founder-rank-badge {
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.founder-wax-seal {
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.15);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.founder-avatar-wrap {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #ffd700;
+}
+
+.founder-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.founder-star-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.founder-card h4 {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.founder-title-pill {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--accent-secondary);
+}
+
+.founder-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.founder-meta-row strong {
+  color: #ffd700;
+}
+
+.btn-salute-founder {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.wall-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.wall-notice {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= PRE-STREAM VOCAL WARMUP TRAINER ================= */
+.vocal-trainer-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.trainer-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.trainer-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  letter-spacing: 0.08em;
+}
+
+.trainer-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.piano-keyboard-section {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.piano-sec-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.piano-sec-header label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.active-pitch-pill {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+}
+
+.piano-keys-row {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.piano-key-btn {
+  flex: 1;
+  min-width: 44px;
+  height: 90px;
+  border-radius: 0 0 6px 6px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.1s;
+}
+
+.piano-key-btn.white-key {
+  background: #fff;
+  color: #000;
+}
+
+.piano-key-btn.black-key {
+  background: #222;
+  color: #fff;
+  height: 70px;
+  border-color: #444;
+}
+
+.piano-key-btn.pressed {
+  transform: translateY(3px);
+  background: #ffd700 !important;
+  color: #000 !important;
+}
+
+.note-name {
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.solfege-name {
+  font-size: 0.55rem;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.trainer-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .trainer-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.breathwork-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.breath-card-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #fff;
+}
+
+.breath-circle-pacer {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-teal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: pulse 4s infinite ease-in-out;
+}
+
+.breath-phase-text {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.breath-tap-hint {
+  font-size: 0.52rem;
+  color: var(--text-muted);
+}
+
+.tongue-twisters-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.twister-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: #fff;
+}
+
+.btn-next-twister {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.twister-quote {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #ffd700;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.trainer-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.btn-finish-warmup {
+  padding: 8px 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+
 
 
 

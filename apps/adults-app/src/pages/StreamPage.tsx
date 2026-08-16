@@ -77,6 +77,10 @@ import { BackstageWhisperModal } from '../components/BackstageWhisperModal';
 import { ViewerJournalBookmarksModal } from '../components/ViewerJournalBookmarksModal';
 import { CommunityAuctionModal } from '../components/CommunityAuctionModal';
 import { NarratorSkillTreeModal } from '../components/NarratorSkillTreeModal';
+import { StreamTagTaxonomyModal } from '../components/StreamTagTaxonomyModal';
+import { NarratorFaceOffModal } from '../components/NarratorFaceOffModal';
+import { SubscribersWallOfHonorModal } from '../components/SubscribersWallOfHonorModal';
+import { VocalWarmupTrainerModal } from '../components/VocalWarmupTrainerModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -140,7 +144,8 @@ import {
   Dices,
   Smile,
   Gavel,
-  TreePine
+  TreePine,
+  Music
 } from 'lucide-react';
 
 interface StreamData {
@@ -273,6 +278,10 @@ export const StreamPage: React.FC = () => {
   const [showJournalModal, setShowJournalModal] = useState(false);
   const [showAuctionModal, setShowAuctionModal] = useState(false);
   const [showSkillTreeModal, setShowSkillTreeModal] = useState(false);
+  const [showStreamTagTaxonomyModal, setShowStreamTagTaxonomyModal] = useState(false);
+  const [showNarratorFaceOffModal, setShowNarratorFaceOffModal] = useState(false);
+  const [showSubscribersWallModal, setShowSubscribersWallModal] = useState(false);
+  const [showVocalWarmupTrainerModal, setShowVocalWarmupTrainerModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1491,6 +1500,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Skill Tree</span>
             </button>
 
+            {/* Stream Tag Taxonomy */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowStreamTagTaxonomyModal(true);
+              }}
+              className="btn-secondary"
+              title="Literary Mood & Stream Tag Taxonomy"
+            >
+              <Tag size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Tags</span>
+            </button>
+
+            {/* 1v1 Monologue Duel */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowNarratorFaceOffModal(true);
+              }}
+              className="btn-secondary"
+              title="1v1 Dramatic Monologue Face-Off Arena"
+            >
+              <Swords size={16} color="#ff3b3b" />
+              <span className="hide-mobile">Face-Off</span>
+            </button>
+
+            {/* Founding Readers Wall of Honor */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSubscribersWallModal(true);
+              }}
+              className="btn-secondary"
+              title="Founding Readers & Grand Scribe Wall of Honor"
+            >
+              <Crown size={16} color="#ffd700" />
+              <span className="hide-mobile">Wall of Honor</span>
+            </button>
+
+            {/* Pre-Stream Vocal Warmup Trainer */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVocalWarmupTrainerModal(true);
+              }}
+              className="btn-secondary"
+              title="Pre-Stream Vocal Warmup Piano & Breathwork"
+            >
+              <Music size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Vocal Warmup</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2211,6 +2272,38 @@ export const StreamPage: React.FC = () => {
         <NarratorSkillTreeModal
           streamerName={stream.streamerName}
           onClose={() => setShowSkillTreeModal(false)}
+        />
+      )}
+
+      {/* Stream Tag Taxonomy */}
+      {showStreamTagTaxonomyModal && (
+        <StreamTagTaxonomyModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowStreamTagTaxonomyModal(false)}
+        />
+      )}
+
+      {/* 1v1 Monologue Duel */}
+      {showNarratorFaceOffModal && (
+        <NarratorFaceOffModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowNarratorFaceOffModal(false)}
+        />
+      )}
+
+      {/* Founding Readers Wall of Honor */}
+      {showSubscribersWallModal && (
+        <SubscribersWallOfHonorModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSubscribersWallModal(false)}
+        />
+      )}
+
+      {/* Pre-Stream Vocal Warmup Trainer */}
+      {showVocalWarmupTrainerModal && (
+        <VocalWarmupTrainerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVocalWarmupTrainerModal(false)}
         />
       )}
 
