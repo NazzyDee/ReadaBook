@@ -164,6 +164,14 @@
   flex-shrink: 0;
 }
 
+.sidebar-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
 .live-badge-dot {
   position: absolute;
   bottom: -2px;
@@ -173,6 +181,7 @@
   border-radius: 50%;
   background-color: var(--accent-danger);
   border: 2px solid var(--bg-panel);
+  z-index: 2;
 }
 
 .channel-info {
@@ -15116,6 +15125,8 @@
   font-size: 0.78rem;
   font-weight: 800;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: all 0.15s ease;
 }
 
@@ -18025,7 +18036,7 @@
 }
 
 .podium-avatar.silver {
-  border: 2px solid #silver;
+  border: 2px solid #c0c0c0;
 }
 
 .podium-avatar.bronze {

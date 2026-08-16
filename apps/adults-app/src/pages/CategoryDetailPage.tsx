@@ -133,7 +133,12 @@ export const CategoryDetailPage: React.FC = () => {
                 <Link key={streamer.id} to={`/stream/${streamer.id}`} className="twitch-stream-card-link">
                   <div className="twitch-stream-card">
                     <div className="twitch-thumb-container">
-                      <img src={book?.coverUrl || streamer.bannerUrl} alt="" className="twitch-card-thumb" />
+                      <img
+                        src={book?.coverUrl || streamer.bannerUrl || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'}
+                        alt=""
+                        className="twitch-card-thumb"
+                        loading="lazy"
+                      />
                       <div className="twitch-card-badge-live">LIVE</div>
                       <div className="twitch-card-badge-viewers">
                         <span>{(streamer.followersCount / 20).toFixed(0)} viewers</span>

@@ -416,7 +416,12 @@ export const BrowsePage: React.FC = () => {
                     <div className="twitch-stream-card">
                       {/* Video Thumbnail Canvas */}
                       <div className="twitch-thumb-container">
-                        <img src={activeBook?.coverUrl || ''} alt={stream.title} className="twitch-card-thumb" />
+                        <img
+                          src={activeBook?.coverUrl || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'}
+                          alt={stream.title}
+                          className="twitch-card-thumb"
+                          loading="lazy"
+                        />
                         <div className="twitch-card-badge-live">LIVE</div>
                         <div className="twitch-card-badge-viewers">
                           <Users size={11} />
