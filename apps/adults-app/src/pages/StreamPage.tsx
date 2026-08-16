@@ -13,7 +13,9 @@ import { StreamExtensions } from '../components/StreamExtensions';
 import { CommunityGoalWidget } from '../components/CommunityGoalWidget';
 import { StreamMarkerModal } from '../components/StreamMarkerModal';
 import { ClipCreator } from '../components/ClipCreator';
-import { SubModal } from '../components/SubModal';
+import { SubscriptionModal } from '../components/SubscriptionModal';
+import { StoryBranchHUD } from '../components/StoryBranchHUD';
+import { CharityMarathonWidget } from '../components/CharityMarathonWidget';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -34,7 +36,9 @@ import {
   Edit3,
   Minimize2,
   Bookmark,
-  Users
+  Users,
+  GitBranch,
+  HeartHandshake
 } from 'lucide-react';
 
 interface StreamData {
@@ -104,6 +108,8 @@ export const StreamPage: React.FC = () => {
   const [showEditInfoModal, setShowEditInfoModal] = useState(false);
   const [showMarkerModal, setShowMarkerModal] = useState(false);
   const [showAmbientMixer, setShowAmbientMixer] = useState(false);
+  const [showBranchHUD, setShowBranchHUD] = useState(false);
+  const [showCharityModal, setShowCharityModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -542,6 +548,32 @@ export const StreamPage: React.FC = () => {
               <span>Subscribe</span>
             </button>
 
+            {/* CYOA Branching Vote Button */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBranchHUD(true);
+              }}
+              className="btn-secondary"
+              title="Open Choose Your Own Adventure Live Decision Vote"
+            >
+              <GitBranch size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">CYOA Vote</span>
+            </button>
+
+            {/* Charity Marathon Button */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowCharityModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Book Charity Marathon & Donation Drive"
+            >
+              <HeartHandshake size={16} color="var(--accent-danger)" />
+              <span className="hide-mobile">Charity Drive</span>
+            </button>
+
             {/* Guest Star Stage Launcher */}
             <button
               onClick={() => {
@@ -716,18 +748,39 @@ export const StreamPage: React.FC = () => {
         />
       )}
 
-      {/* Subscriptions Modal */}
+      {/* Subscriptions & Gift Subs Modal */}
       {showSubModal && (
-        <SubModal
+        <SubscriptionModal
           streamerName={stream.streamerName}
-          onSubscribe={(tier, isGift, count) => {
-            handleSendMessage(
-              isGift
-                ? `🎁 Just gifted ${count} Tier 1 Subscriptions to the community!`
-                : `⭐ Just subscribed at Tier ${tier}! Let's read!`
-            );
+          streamerId={stream.streamerId}
+          avatarUrl={streamerProfile?.avatarUrl}
+          onSubscribed={(tierName) => {
+            handleSendMessage(`⭐ Just subscribed with ${tierName}! Excited to read along!`);
+          }}
+          onGifted={(count, total) => {
+            handleSendMessage(`🎁 Just gifted ${count} subscriptions ($${total}) to the reading community! 🎉`);
           }}
           onClose={() => setShowSubModal(false)}
+        />
+      )}
+
+      {/* Choose Your Own Adventure Live Branching HUD */}
+      {showBranchHUD && (
+        <StoryBranchHUD
+          onOptionSelected={(winningOption) => {
+            handleSendMessage(`🗺️ Audience voted for: "${winningOption.label}"! Turning to page ${winningOption.targetPage}!`);
+          }}
+          onClose={() => setShowBranchHUD(false)}
+        />
+      )}
+
+      {/* Charity Marathon Donation & Milestone Widget */}
+      {showCharityModal && (
+        <CharityMarathonWidget
+          onDonationSubmitted={(amount, donorName, msg) => {
+            handleSendMessage(`💖 ${donorName} donated $${amount.toFixed(2)} to charity! "${msg}"`);
+          }}
+          onClose={() => setShowCharityModal(false)}
         />
       )}
 

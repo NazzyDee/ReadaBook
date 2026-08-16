@@ -21,7 +21,11 @@ import {
   Swords,
   Smartphone,
   Languages,
-  ShoppingBag
+  ShoppingBag,
+  Crown,
+  HeartHandshake,
+  GitBranch,
+  Sliders
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -41,6 +45,10 @@ import { NarratorDuelModal } from './NarratorDuelModal';
 import { CompanionModeModal } from './CompanionModeModal';
 import { UniversalTranslatorModal } from './UniversalTranslatorModal';
 import { GrandBazaarModal } from './GrandBazaarModal';
+import { SubscriptionModal } from './SubscriptionModal';
+import { StoryBranchHUD } from './StoryBranchHUD';
+import { CharityMarathonWidget } from './CharityMarathonWidget';
+import { VoiceModulationRack } from './VoiceModulationRack';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -74,6 +82,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showCompanionModal, setShowCompanionModal] = useState(false);
   const [showTranslatorModal, setShowTranslatorModal] = useState(false);
   const [showBazaarModal, setShowBazaarModal] = useState(false);
+  const [showSubModal, setShowSubModal] = useState(false);
+  const [showBranchHUD, setShowBranchHUD] = useState(false);
+  const [showCharityModal, setShowCharityModal] = useState(false);
+  const [showVoiceRackModal, setShowVoiceRackModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -87,6 +99,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Creator Subscriptions */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSubModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Creator Subscriptions & Community Gift Subs"
+        >
+          <Crown size={18} />
+          <span>Subscriptions</span>
+        </button>
+
+        {/* CYOA Story Branch Decision */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBranchHUD(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Choose Your Own Adventure Live Audience Decision"
+        >
+          <GitBranch size={18} />
+          <span>CYOA Branch</span>
+        </button>
+
+        {/* Charity Marathon */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCharityModal(true);
+          }}
+          className="btn-quick-action action-cyan"
+          title="Live Book Charity Marathon & Milestones"
+        >
+          <HeartHandshake size={18} />
+          <span>Charity Drive</span>
+        </button>
+
+        {/* Studio Voice Modulation DSP */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVoiceRackModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Voice Acting Audio DSP Modulation Rack"
+        >
+          <Sliders size={18} />
+          <span>Voice FX Rack</span>
+        </button>
+
         {/* Universal Translator */}
         <button
           onClick={() => {
@@ -481,6 +545,32 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showBazaarModal && (
         <GrandBazaarModal
           onClose={() => setShowBazaarModal(false)}
+        />
+      )}
+
+      {showSubModal && (
+        <SubscriptionModal
+          streamerName={streamerName}
+          streamerId="streamer_primary"
+          onClose={() => setShowSubModal(false)}
+        />
+      )}
+
+      {showBranchHUD && (
+        <StoryBranchHUD
+          onClose={() => setShowBranchHUD(false)}
+        />
+      )}
+
+      {showCharityModal && (
+        <CharityMarathonWidget
+          onClose={() => setShowCharityModal(false)}
+        />
+      )}
+
+      {showVoiceRackModal && (
+        <VoiceModulationRack
+          onClose={() => setShowVoiceRackModal(false)}
         />
       )}
     </div>
