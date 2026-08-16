@@ -73,6 +73,10 @@ import { SoundtrackIntegrationModal } from '../components/SoundtrackIntegrationM
 import { CliffhangerWagersModal } from '../components/CliffhangerWagersModal';
 import { EmoteSlotsManagerModal } from '../components/EmoteSlotsManagerModal';
 import { NarratorCheatSheetModal } from '../components/NarratorCheatSheetModal';
+import { BackstageWhisperModal } from '../components/BackstageWhisperModal';
+import { ViewerJournalBookmarksModal } from '../components/ViewerJournalBookmarksModal';
+import { CommunityAuctionModal } from '../components/CommunityAuctionModal';
+import { NarratorSkillTreeModal } from '../components/NarratorSkillTreeModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -134,7 +138,9 @@ import {
   Film,
   Gauge,
   Dices,
-  Smile
+  Smile,
+  Gavel,
+  TreePine
 } from 'lucide-react';
 
 interface StreamData {
@@ -263,6 +269,10 @@ export const StreamPage: React.FC = () => {
   const [showCliffhangerWagerModal, setShowCliffhangerWagerModal] = useState(false);
   const [showEmoteSlotsModal, setShowEmoteSlotsModal] = useState(false);
   const [showCheatSheetModal, setShowCheatSheetModal] = useState(false);
+  const [showBackstageWhisperModal, setShowBackstageWhisperModal] = useState(false);
+  const [showJournalModal, setShowJournalModal] = useState(false);
+  const [showAuctionModal, setShowAuctionModal] = useState(false);
+  const [showSkillTreeModal, setShowSkillTreeModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1429,6 +1439,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Cheat Sheet</span>
             </button>
 
+            {/* Stage Whisper Backstage Lounge */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBackstageWhisperModal(true);
+              }}
+              className="btn-secondary"
+              title="Stage Whisper & Backstage Co-Host Lounge"
+            >
+              <Radio size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Backstage</span>
+            </button>
+
+            {/* Viewer Live Quotation Journal */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowJournalModal(true);
+              }}
+              className="btn-secondary"
+              title="Personal Reading Journal & Margin Notes"
+            >
+              <Bookmark size={16} color="#ffd700" />
+              <span className="hide-mobile">Journal</span>
+            </button>
+
+            {/* Live Rare Book Auction */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowAuctionModal(true);
+              }}
+              className="btn-secondary"
+              title="Rare Grimoire & Signed Book Auction Gauntlet"
+            >
+              <Gavel size={16} color="var(--accent-danger)" />
+              <span className="hide-mobile">Auction</span>
+            </button>
+
+            {/* RPG Skill Tree */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSkillTreeModal(true);
+              }}
+              className="btn-secondary"
+              title="Master Chronicler RPG Skill Tree & Stream Perks"
+            >
+              <TreePine size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Skill Tree</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2117,6 +2179,38 @@ export const StreamPage: React.FC = () => {
         <NarratorCheatSheetModal
           streamerName={stream.streamerName}
           onClose={() => setShowCheatSheetModal(false)}
+        />
+      )}
+
+      {/* Stage Whisper Backstage Lounge */}
+      {showBackstageWhisperModal && (
+        <BackstageWhisperModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowBackstageWhisperModal(false)}
+        />
+      )}
+
+      {/* Viewer Live Quotation Journal */}
+      {showJournalModal && (
+        <ViewerJournalBookmarksModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowJournalModal(false)}
+        />
+      )}
+
+      {/* Live Rare Book Auction */}
+      {showAuctionModal && (
+        <CommunityAuctionModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowAuctionModal(false)}
+        />
+      )}
+
+      {/* RPG Skill Tree */}
+      {showSkillTreeModal && (
+        <NarratorSkillTreeModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSkillTreeModal(false)}
         />
       )}
 

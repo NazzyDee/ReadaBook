@@ -34183,6 +34183,956 @@
   cursor: pointer;
 }
 
+/* ================= STAGE WHISPER BACKSTAGE LOUNGE ================= */
+.backstage-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.backstage-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.backstage-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-teal);
+  letter-spacing: 0.08em;
+}
+
+.backstage-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.backstage-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-mic-test-chime {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.quick-cues-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cues-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.cues-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px;
+}
+
+.btn-cue-chip {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.72rem;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.btn-cue-chip:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-teal);
+}
+
+.backstage-messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.backstage-msg-item {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.backstage-msg-item.is-self {
+  border-color: var(--accent-teal);
+  background: rgba(0, 180, 216, 0.08);
+}
+
+.backstage-msg-item.is-urgent {
+  border-color: #ff3b3b;
+  background: rgba(255, 59, 59, 0.08);
+}
+
+.msg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sender-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sender-meta strong {
+  font-size: 0.82rem;
+  color: #fff;
+}
+
+.role-badge {
+  font-size: 0.58rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.role-badge.role-head_mod {
+  background: rgba(0, 255, 136, 0.15);
+  color: #00ff88;
+}
+
+.role-badge.role-co_narrator {
+  background: rgba(157, 78, 221, 0.15);
+  color: var(--accent-secondary);
+}
+
+.role-badge.role-broadcaster {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+}
+
+.role-badge.role-audio_engineer {
+  background: rgba(0, 180, 216, 0.15);
+  color: #00b4d8;
+}
+
+.msg-header .timestamp {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.msg-content {
+  font-size: 0.78rem;
+  color: #ccc;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.backstage-input-form {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.backstage-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.backstage-input-row input {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  outline: none;
+}
+
+.btn-send-whisper {
+  padding: 8px 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.backstage-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+}
+
+.backstage-notice {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.active-cast-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #00ff88;
+}
+
+/* ================= VIEWER LIVE QUOTATION JOURNAL ================= */
+.journal-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.journal-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.journal-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.08em;
+}
+
+.journal-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.journal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-export-journal {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.clip-quote-form {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #fff;
+}
+
+.clip-quote-form textarea {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: #fff;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  outline: none;
+  resize: vertical;
+}
+
+.form-bottom-row {
+  display: flex;
+  gap: 8px;
+}
+
+.form-bottom-row input {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  outline: none;
+}
+
+.btn-save-quote {
+  padding: 8px 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.saved-quotes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quote-entry-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quote-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.book-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.book-tag strong {
+  font-size: 0.82rem;
+  color: #fff;
+}
+
+.book-tag span {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.quote-right-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quote-time {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.btn-del-quote {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
+}
+
+.btn-del-quote:hover {
+  color: #ff3b3b;
+}
+
+.quote-body {
+  font-size: 0.88rem;
+  font-style: italic;
+  color: #fff;
+  margin: 0;
+  line-height: 1.4;
+  border-left: 3px solid #ffd700;
+  padding-left: 10px;
+}
+
+.user-margin-note {
+  background: var(--bg-surface);
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  gap: 6px;
+  font-size: 0.72rem;
+}
+
+.note-label {
+  font-weight: 800;
+  color: var(--accent-teal);
+  flex-shrink: 0;
+}
+
+.user-margin-note p {
+  margin: 0;
+  color: #ccc;
+}
+
+.journal-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 10px;
+}
+
+.sync-status {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= LIVE RARE BOOK AUCTION ================= */
+.auction-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.auction-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.auction-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-danger);
+  letter-spacing: 0.08em;
+}
+
+.auction-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.auction-hero-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 16px;
+  background: var(--bg-panel);
+  border: 2px solid var(--accent-danger);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+@media (max-width: 768px) {
+  .auction-hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.auction-item-image-wrap {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 240px;
+}
+
+.auction-item-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.signed-edition-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-align: center;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.auction-item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auction-timer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.auction-clock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff3b3b;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.bids-counter {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ffd700;
+}
+
+.auction-item-details h4 {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+}
+
+.edition-subtitle {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  margin: 0;
+}
+
+.item-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.current-bid-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.bid-label-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bid-label-col span {
+  font-size: 0.6rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.bid-label-col strong {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.highest-bidder-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-panel);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  color: #fff;
+}
+
+.highest-bidder-pill img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.bid-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.bid-cta-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.bid-buttons-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-place-bid {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.btn-place-bid:hover {
+  transform: translateY(-2px);
+  border-color: #ffd700;
+}
+
+.auction-broadcaster-bar {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gavel-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.btn-gavel-strike {
+  background: #ff3b3b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* ================= MASTER CHRONICLER RPG SKILL TREE ================= */
+.skill-tree-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.skill-tree-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.skill-tree-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  letter-spacing: 0.08em;
+}
+
+.skill-tree-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.xp-level-banner {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.15) 0%, var(--bg-panel) 100%);
+  border: 2px solid var(--accent-secondary);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.level-avatar-col {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.level-badge-circle {
+  background: var(--bg-surface);
+  border: 2px solid #ffd700;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.level-num {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.level-info-text h4 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 2px 0;
+}
+
+.level-info-text p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.xp-balance-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: #ffd700;
+}
+
+.skill-branch-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.branch-tab-btn {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.branch-tab-btn.active {
+  border-color: var(--accent-secondary);
+  color: #fff;
+  background: rgba(157, 78, 221, 0.2);
+}
+
+.skill-nodes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.skill-node-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+.skill-node-card.locked {
+  opacity: 0.65;
+  border-style: dashed;
+}
+
+.skill-node-card.unlocked {
+  border-color: #00ff88;
+  background: rgba(0, 255, 136, 0.04);
+}
+
+.node-icon-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.node-emoji {
+  font-size: 1.8rem;
+}
+
+.node-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.node-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.node-title-row h4 {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.req-level-pill {
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.perk-desc {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.perk-active-tag {
+  font-size: 0.62rem;
+  font-weight: 900;
+  color: #00ff88;
+  margin-top: 4px;
+}
+
+.btn-unlock-node {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.btn-unlock-node:hover {
+  border-color: #ffd700;
+}
+
+.skill-tree-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.passive-buffs-notice {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.btn-close-skills {
+  padding: 8px 20px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+
 
 
 

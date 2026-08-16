@@ -58,7 +58,9 @@ import {
   Headphones,
   Volume2,
   Gauge,
-  Dices
+  Dices,
+  Gavel,
+  TreePine
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -144,6 +146,10 @@ import { SoundtrackIntegrationModal } from './SoundtrackIntegrationModal';
 import { CliffhangerWagersModal } from './CliffhangerWagersModal';
 import { EmoteSlotsManagerModal } from './EmoteSlotsManagerModal';
 import { NarratorCheatSheetModal } from './NarratorCheatSheetModal';
+import { BackstageWhisperModal } from './BackstageWhisperModal';
+import { ViewerJournalBookmarksModal } from './ViewerJournalBookmarksModal';
+import { CommunityAuctionModal } from './CommunityAuctionModal';
+import { NarratorSkillTreeModal } from './NarratorSkillTreeModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -243,6 +249,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showCliffhangerWagerModal, setShowCliffhangerWagerModal] = useState(false);
   const [showEmoteSlotsModal, setShowEmoteSlotsModal] = useState(false);
   const [showCheatSheetModal, setShowCheatSheetModal] = useState(false);
+  const [showBackstageWhisperModal, setShowBackstageWhisperModal] = useState(false);
+  const [showJournalModal, setShowJournalModal] = useState(false);
+  const [showAuctionModal, setShowAuctionModal] = useState(false);
+  const [showSkillTreeModal, setShowSkillTreeModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -256,6 +266,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Stage Whisper Backstage Lounge */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBackstageWhisperModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Stage Whisper & Backstage Co-Host Lounge"
+        >
+          <Radio size={18} />
+          <span>Stage Whisper</span>
+        </button>
+
+        {/* Viewer Live Quotation Journal */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowJournalModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Personal Reading Journal & Margin Notes"
+        >
+          <Bookmark size={18} />
+          <span>Journal</span>
+        </button>
+
+        {/* Live Rare Book Auction */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowAuctionModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Rare Grimoire & Signed Book Auction Gauntlet"
+        >
+          <Gavel size={18} />
+          <span>Auction</span>
+        </button>
+
+        {/* RPG Skill Tree */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSkillTreeModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Master Chronicler RPG Skill Tree & Stream Perks"
+        >
+          <TreePine size={18} />
+          <span>Skill Tree</span>
+        </button>
         {/* Atmosphere Soundtrack & Spotify Deck */}
         <button
           onClick={() => {
@@ -1950,6 +2011,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <NarratorCheatSheetModal
           streamerName={streamerName}
           onClose={() => setShowCheatSheetModal(false)}
+        />
+      )}
+
+      {showBackstageWhisperModal && (
+        <BackstageWhisperModal
+          streamerName={streamerName}
+          onClose={() => setShowBackstageWhisperModal(false)}
+        />
+      )}
+
+      {showJournalModal && (
+        <ViewerJournalBookmarksModal
+          streamerName={streamerName}
+          onClose={() => setShowJournalModal(false)}
+        />
+      )}
+
+      {showAuctionModal && (
+        <CommunityAuctionModal
+          streamerName={streamerName}
+          onClose={() => setShowAuctionModal(false)}
+        />
+      )}
+
+      {showSkillTreeModal && (
+        <NarratorSkillTreeModal
+          streamerName={streamerName}
+          onClose={() => setShowSkillTreeModal(false)}
         />
       )}
     </div>
