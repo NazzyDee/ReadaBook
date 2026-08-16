@@ -70,7 +70,10 @@ import {
   Search,
   Map,
   Castle,
-  Globe
+  Globe,
+  HelpCircle,
+  Heart,
+  Scale
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -207,6 +210,11 @@ import { D20SkillCheckModal } from './D20SkillCheckModal';
 import { LoreTradingCardsModal } from './LoreTradingCardsModal';
 import { ReaderCitadelBookshelfModal } from './ReaderCitadelBookshelfModal';
 import { GlobalReadingRelayModal } from './GlobalReadingRelayModal';
+import { ChapterCrosswordWordleModal } from './ChapterCrosswordWordleModal';
+import { BookwormFamiliarModal } from './BookwormFamiliarModal';
+import { TriviaArcheryRangeModal } from './TriviaArcheryRangeModal';
+import { LoreCanonTribunalModal } from './LoreCanonTribunalModal';
+import { GoldLeafVolcanoModal } from './GoldLeafVolcanoModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -357,6 +365,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showLoreCardsModal, setShowLoreCardsModal] = useState(false);
   const [showCitadelModal, setShowCitadelModal] = useState(false);
   const [showRelayModal, setShowRelayModal] = useState(false);
+  const [showCrosswordModal, setShowCrosswordModal] = useState(false);
+  const [showFamiliarModal, setShowFamiliarModal] = useState(false);
+  const [showArcheryModal, setShowArcheryModal] = useState(false);
+  const [showTribunalModal, setShowTribunalModal] = useState(false);
+  const [showVolcanoModal, setShowVolcanoModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -370,6 +383,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Live Chapter Crossword & Wordle */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCrosswordModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Live Chapter Crossword & Lore Wordle Overlay"
+        >
+          <HelpCircle size={18} />
+          <span>Crossword</span>
+        </button>
+
+        {/* Evolving Bookworm Familiar */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowFamiliarModal(true);
+          }}
+          className="btn-quick-action action-pink"
+          title="Reader Loyalty Streaks & Evolving Bookworm Familiar"
+        >
+          <Heart size={18} />
+          <span>Familiar</span>
+        </button>
+
+        {/* Trivia Archery Range */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowArcheryModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Community Archery & Trivia Target Range"
+        >
+          <Target size={18} />
+          <span>Archery</span>
+        </button>
+
+        {/* Canon Dispute Tribunal */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowTribunalModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Lore Fact-Checker & Canon Dispute Tribunal"
+        >
+          <Scale size={18} />
+          <span>Tribunal</span>
+        </button>
+
+        {/* Gold Leaf Volcano */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVolcanoModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Hype Train Level 100: Gold Leaf Volcano Eruption"
+        >
+          <Flame size={18} />
+          <span>Volcano</span>
+        </button>
         {/* Guild Territory Wars */}
         <button
           onClick={() => {
@@ -3072,6 +3149,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <GlobalReadingRelayModal
           streamerName={streamerName}
           onClose={() => setShowRelayModal(false)}
+        />
+      )}
+
+      {showCrosswordModal && (
+        <ChapterCrosswordWordleModal
+          streamerName={streamerName}
+          onClose={() => setShowCrosswordModal(false)}
+        />
+      )}
+
+      {showFamiliarModal && (
+        <BookwormFamiliarModal
+          streamerName={streamerName}
+          onClose={() => setShowFamiliarModal(false)}
+        />
+      )}
+
+      {showArcheryModal && (
+        <TriviaArcheryRangeModal
+          streamerName={streamerName}
+          onClose={() => setShowArcheryModal(false)}
+        />
+      )}
+
+      {showTribunalModal && (
+        <LoreCanonTribunalModal
+          streamerName={streamerName}
+          onClose={() => setShowTribunalModal(false)}
+        />
+      )}
+
+      {showVolcanoModal && (
+        <GoldLeafVolcanoModal
+          streamerName={streamerName}
+          onClose={() => setShowVolcanoModal(false)}
         />
       )}
     </div>

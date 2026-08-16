@@ -44768,6 +44768,1033 @@
   padding-top: 12px;
 }
 
+/* ================= LIVE CHAPTER CROSSWORD & WORDLE ================= */
+.crossword-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.crossword-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.crossword-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-teal);
+  letter-spacing: 0.08em;
+}
+
+.crossword-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.puzzle-tabs-bar {
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.puzzle-tab-btn {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.puzzle-tab-btn.active {
+  background: var(--accent-teal);
+  color: #000;
+  border-color: var(--accent-teal);
+}
+
+.crossword-view-layout {
+  display: flex;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .crossword-view-layout {
+    flex-direction: column;
+  }
+}
+
+.crossword-mini-grid {
+  background: #0b0b12;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.cw-row {
+  display: flex;
+  gap: 6px;
+}
+
+.cw-cell {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 0.85rem;
+  font-family: monospace;
+}
+
+.cw-cell.empty {
+  background: transparent;
+}
+
+.cw-cell.filled {
+  background: var(--bg-panel);
+  border: 1px solid var(--accent-teal);
+  color: #fff;
+}
+
+.crossword-clues-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.clue-item-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.clue-item-card.solved {
+  border-color: #00ff88;
+}
+
+.clue-top-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.clue-number-pill {
+  font-size: 0.6rem;
+  font-weight: 900;
+  color: var(--accent-teal);
+}
+
+.solved-badge {
+  font-size: 0.6rem;
+  color: #00ff88;
+  font-weight: 800;
+}
+
+.btn-solve-clue {
+  background: var(--bg-surface);
+  border: 1px solid var(--accent-teal);
+  color: var(--accent-teal);
+  font-size: 0.62rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.clue-item-card p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.wordle-view-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 10px;
+}
+
+.wordle-board-display {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wordle-row {
+  display: flex;
+  gap: 8px;
+}
+
+.wordle-tile {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 900;
+  font-family: monospace;
+}
+
+.wordle-tile.correct {
+  background: #2e7d32;
+  color: #fff;
+  border: 2px solid #4caf50;
+}
+
+.wordle-tile.solved {
+  background: #ffd700;
+  color: #000;
+  border: 2px solid #fff;
+}
+
+.wordle-stats-box {
+  text-align: center;
+}
+
+.wordle-stats-box h4 {
+  font-size: 1rem;
+  color: #fff;
+  margin: 0;
+}
+
+.wordle-stats-box p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 4px 0 0 0;
+}
+
+.crossword-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-puzzle-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= EVOLVING BOOKWORM FAMILIAR ================= */
+.familiar-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.familiar-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.familiar-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ff69b4;
+  letter-spacing: 0.08em;
+}
+
+.familiar-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.familiar-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid #ff69b4;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .familiar-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.familiar-pet-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.familiar-avatar-bubble {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #3d1b2e 0%, #150a10 100%);
+  border: 2px solid #ff69b4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+}
+
+.pet-emoji {
+  font-size: 2.8rem;
+}
+
+.pet-accessory-tag {
+  position: absolute;
+  bottom: -6px;
+  background: #000;
+  font-size: 0.5rem;
+  color: #ffd700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid #ffd700;
+  white-space: nowrap;
+}
+
+.pet-mood-pill {
+  font-size: 0.6rem;
+  font-weight: 900;
+  color: #00ff88;
+}
+
+.familiar-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.familiar-streak-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  color: #ff3b3b;
+  font-weight: 800;
+}
+
+.familiar-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.evolution-stage-sub {
+  font-size: 0.68rem;
+  color: var(--accent-teal);
+}
+
+.xp-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.pct-xp {
+  color: #ffd700;
+  font-weight: 800;
+}
+
+.btn-feed-familiar {
+  background: linear-gradient(135deg, #ff69b4, #7209b7);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.familiar-perks-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .familiar-perks-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.perk-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.perk-box-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.perk-box-text strong {
+  font-size: 0.75rem;
+  color: #fff;
+}
+
+.perk-box-text span {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.familiar-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-familiar-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= COMMUNITY TRIVIA ARCHERY RANGE ================= */
+.archery-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.archery-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.archery-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.08em;
+}
+
+.archery-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.archery-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid #ffd700;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .archery-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.archery-target-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.target-ring.outer-white {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.target-ring.mid-blue {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  background: #0077b6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.target-ring.inner-gold {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #ffd700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.target-ring.center-bullseye {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #d90429;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrows-shot-pill {
+  font-size: 0.58rem;
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.archery-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trivia-time-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  color: #ffd700;
+}
+
+.archery-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.archery-hero-meta p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.archery-rings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .archery-rings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.archery-ring-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.archery-ring-card:hover {
+  transform: translateY(-2px);
+  border-color: #ffd700;
+}
+
+.archery-ring-card.chosen {
+  border-color: #00ff88;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+.ring-card-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.6rem;
+}
+
+.ring-type-tag {
+  color: var(--accent-teal);
+  font-weight: 800;
+}
+
+.ring-pts {
+  color: #ffd700;
+  font-weight: 900;
+}
+
+.archery-ring-card strong {
+  font-size: 0.78rem;
+  color: #fff;
+}
+
+.ring-votes-bar {
+  font-size: 0.58rem;
+  color: var(--text-muted);
+}
+
+.archery-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-archery-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= CANON DISPUTE TRIBUNAL ================= */
+.tribunal-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.tribunal-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.tribunal-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  letter-spacing: 0.08em;
+}
+
+.tribunal-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.tribunal-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid var(--accent-secondary);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .tribunal-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.tribunal-scale-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.verdict-pill {
+  font-size: 0.55rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.verdict-pill.verified_canon { background: rgba(0,255,136,0.2); color: #00ff88; }
+.verdict-pill.heresy_apocrypha { background: rgba(255,59,59,0.2); color: #ff3b3b; }
+.verdict-pill.in_deliberation { background: rgba(255,215,0,0.2); color: #ffd700; }
+
+.tribunal-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.source-citation-tag {
+  font-size: 0.62rem;
+  color: var(--accent-teal);
+}
+
+.tribunal-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.citation-quote-box {
+  background: var(--bg-surface);
+  border-left: 3px solid #ffd700;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.citation-quote-box p {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+.tribunal-vote-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.btn-canon-vote {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-canon-vote.pro { background: #00ff88; color: #000; }
+.btn-canon-vote.anti { background: #ff3b3b; color: #fff; }
+
+.tribunal-docket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.docket-tile {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.docket-tile.selected {
+  border-color: #00ff88;
+}
+
+.docket-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.docket-top strong {
+  font-size: 0.75rem;
+  color: #fff;
+}
+
+.docket-verdict-badge {
+  font-size: 0.55rem;
+  font-weight: 800;
+}
+
+.docket-verdict-badge.verified_canon { color: #00ff88; }
+.docket-verdict-badge.heresy_apocrypha { color: #ff3b3b; }
+.docket-verdict-badge.in_deliberation { color: #ffd700; }
+
+.docket-sub {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.tribunal-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-tribunal-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= HYPE TRAIN LEVEL 100 GOLD LEAF VOLCANO ================= */
+.volcano-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.volcano-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.volcano-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ff3b3b;
+  letter-spacing: 0.08em;
+}
+
+.volcano-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.volcano-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid #ffd700;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .volcano-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.volcano-dial-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.volcano-emoji {
+  font-size: 2.8rem;
+}
+
+.level-100-badge {
+  background: #ff3b3b;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.erupted-count {
+  font-size: 0.6rem;
+  color: #ffd700;
+  font-weight: 800;
+}
+
+.volcano-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.volcano-status-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  color: #ffd700;
+  font-weight: 900;
+}
+
+.volcano-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.gold-volcano-bar {
+  background: linear-gradient(90deg, #ff3b3b, #ffd700, #ff3b3b);
+  animation: pulse 1.5s infinite;
+}
+
+.volcano-hero-meta p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.btn-erupt-volcano {
+  background: linear-gradient(135deg, #ffd700, #ff3b3b);
+  color: #000;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.volcano-perks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .volcano-perks-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.volcano-perk-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.68rem;
+  color: #fff;
+}
+
+.volcano-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-volcano-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+
 
 
 

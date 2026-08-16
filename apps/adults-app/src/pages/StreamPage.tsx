@@ -124,6 +124,11 @@ import { D20SkillCheckModal } from '../components/D20SkillCheckModal';
 import { LoreTradingCardsModal } from '../components/LoreTradingCardsModal';
 import { ReaderCitadelBookshelfModal } from '../components/ReaderCitadelBookshelfModal';
 import { GlobalReadingRelayModal } from '../components/GlobalReadingRelayModal';
+import { ChapterCrosswordWordleModal } from '../components/ChapterCrosswordWordleModal';
+import { BookwormFamiliarModal } from '../components/BookwormFamiliarModal';
+import { TriviaArcheryRangeModal } from '../components/TriviaArcheryRangeModal';
+import { LoreCanonTribunalModal } from '../components/LoreCanonTribunalModal';
+import { GoldLeafVolcanoModal } from '../components/GoldLeafVolcanoModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -201,7 +206,9 @@ import {
   Map,
   Castle,
   Globe,
-  Layers
+  Layers,
+  HelpCircle,
+  Scale
 } from 'lucide-react';
 
 interface StreamData {
@@ -381,6 +388,11 @@ export const StreamPage: React.FC = () => {
   const [showLoreCardsModal, setShowLoreCardsModal] = useState(false);
   const [showCitadelModal, setShowCitadelModal] = useState(false);
   const [showRelayModal, setShowRelayModal] = useState(false);
+  const [showCrosswordModal, setShowCrosswordModal] = useState(false);
+  const [showFamiliarModal, setShowFamiliarModal] = useState(false);
+  const [showArcheryModal, setShowArcheryModal] = useState(false);
+  const [showTribunalModal, setShowTribunalModal] = useState(false);
+  const [showVolcanoModal, setShowVolcanoModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -2210,6 +2222,71 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">World Relay</span>
             </button>
 
+            {/* Live Chapter Crossword & Wordle */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowCrosswordModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Chapter Crossword & Lore Wordle Overlay"
+            >
+              <HelpCircle size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Crossword</span>
+            </button>
+
+            {/* Evolving Bookworm Familiar */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowFamiliarModal(true);
+              }}
+              className="btn-secondary"
+              title="Reader Loyalty Streaks & Evolving Bookworm Familiar"
+            >
+              <Heart size={16} color="#ff69b4" />
+              <span className="hide-mobile">Familiar</span>
+            </button>
+
+            {/* Trivia Archery Range */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowArcheryModal(true);
+              }}
+              className="btn-secondary"
+              title="Community Archery & Trivia Target Range"
+            >
+              <Target size={16} color="#ffd700" />
+              <span className="hide-mobile">Archery</span>
+            </button>
+
+            {/* Canon Dispute Tribunal */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowTribunalModal(true);
+              }}
+              className="btn-secondary"
+              title="Lore Fact-Checker & Canon Dispute Tribunal"
+            >
+              <Scale size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Tribunal</span>
+            </button>
+
+            {/* Gold Leaf Volcano */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVolcanoModal(true);
+              }}
+              className="btn-secondary"
+              title="Hype Train Level 100: Gold Leaf Volcano Eruption"
+            >
+              <Flame size={16} color="#ff3b3b" />
+              <span className="hide-mobile">Volcano</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -3306,6 +3383,46 @@ export const StreamPage: React.FC = () => {
         <GlobalReadingRelayModal
           streamerName={stream.streamerName}
           onClose={() => setShowRelayModal(false)}
+        />
+      )}
+
+      {/* Live Chapter Crossword & Wordle */}
+      {showCrosswordModal && (
+        <ChapterCrosswordWordleModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowCrosswordModal(false)}
+        />
+      )}
+
+      {/* Evolving Bookworm Familiar */}
+      {showFamiliarModal && (
+        <BookwormFamiliarModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowFamiliarModal(false)}
+        />
+      )}
+
+      {/* Trivia Archery Range */}
+      {showArcheryModal && (
+        <TriviaArcheryRangeModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowArcheryModal(false)}
+        />
+      )}
+
+      {/* Canon Dispute Tribunal */}
+      {showTribunalModal && (
+        <LoreCanonTribunalModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowTribunalModal(false)}
+        />
+      )}
+
+      {/* Gold Leaf Volcano */}
+      {showVolcanoModal && (
+        <GoldLeafVolcanoModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVolcanoModal(false)}
         />
       )}
 
