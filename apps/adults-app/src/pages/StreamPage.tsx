@@ -61,6 +61,10 @@ import { CoStreamRoleSplitterModal } from '../components/CoStreamRoleSplitterMod
 import { CreatorAchievementsModal } from '../components/CreatorAchievementsModal';
 import { VipReaderFlairsModal } from '../components/VipReaderFlairsModal';
 import { LiveChapterRecapModal } from '../components/LiveChapterRecapModal';
+import { VocalDynamicsRackModal } from '../components/VocalDynamicsRackModal';
+import { SquadSpatialAudioModal } from '../components/SquadSpatialAudioModal';
+import { ReadingHabitsHubModal } from '../components/ReadingHabitsHubModal';
+import { DonationTtsStudioModal } from '../components/DonationTtsStudioModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -116,7 +120,9 @@ import {
   Swords,
   Mic,
   Gem,
-  Trophy
+  Trophy,
+  Headphones,
+  Volume2
 } from 'lucide-react';
 
 interface StreamData {
@@ -233,6 +239,10 @@ export const StreamPage: React.FC = () => {
   const [showAchievementsModal, setShowAchievementsModal] = useState(false);
   const [showVipFlairsModal, setShowVipFlairsModal] = useState(false);
   const [showChapterRecapModal, setShowChapterRecapModal] = useState(false);
+  const [showVocalDynamicsModal, setShowVocalDynamicsModal] = useState(false);
+  const [showSpatialAudioModal, setShowSpatialAudioModal] = useState(false);
+  const [showHabitsHubModal, setShowHabitsHubModal] = useState(false);
+  const [showDonationTtsModal, setShowDonationTtsModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1243,6 +1253,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Recap</span>
             </button>
 
+            {/* Vocal Dynamics Master Rack */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVocalDynamicsModal(true);
+              }}
+              className="btn-secondary"
+              title="Vocal Dynamics, Noise Gate & De-Esser Studio"
+            >
+              <Sliders size={16} color="#ffd700" />
+              <span className="hide-mobile">Rack</span>
+            </button>
+
+            {/* Squad 3D Audio Spatializer */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSpatialAudioModal(true);
+              }}
+              className="btn-secondary"
+              title="Squad Multi-Narrator 3D Audio Spatializer & Soundstage"
+            >
+              <Headphones size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Spatial</span>
+            </button>
+
+            {/* Community Reading Habits Hub */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowHabitsHubModal(true);
+              }}
+              className="btn-secondary"
+              title="Community Reading Habits & Daily Streak Hub"
+            >
+              <Flame size={16} color="#ff8c00" />
+              <span className="hide-mobile">Habits</span>
+            </button>
+
+            {/* Literary Dono TTS Studio */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowDonationTtsModal(true);
+              }}
+              className="btn-secondary"
+              title="Literary TTS Custom Voices & Sparks Dono Reader"
+            >
+              <Volume2 size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Dono TTS</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -1835,6 +1897,38 @@ export const StreamPage: React.FC = () => {
         <LiveChapterRecapModal
           streamerName={stream.streamerName}
           onClose={() => setShowChapterRecapModal(false)}
+        />
+      )}
+
+      {/* Vocal Dynamics Master Rack */}
+      {showVocalDynamicsModal && (
+        <VocalDynamicsRackModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVocalDynamicsModal(false)}
+        />
+      )}
+
+      {/* Squad 3D Audio Spatializer */}
+      {showSpatialAudioModal && (
+        <SquadSpatialAudioModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSpatialAudioModal(false)}
+        />
+      )}
+
+      {/* Community Reading Habits Hub */}
+      {showHabitsHubModal && (
+        <ReadingHabitsHubModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowHabitsHubModal(false)}
+        />
+      )}
+
+      {/* Literary Dono TTS Studio */}
+      {showDonationTtsModal && (
+        <DonationTtsStudioModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowDonationTtsModal(false)}
         />
       )}
 

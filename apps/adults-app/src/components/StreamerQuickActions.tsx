@@ -54,7 +54,9 @@ import {
   TrendingUp,
   MessageSquare,
   Tag,
-  Gem
+  Gem,
+  Headphones,
+  Volume2
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -128,6 +130,10 @@ import { CoStreamRoleSplitterModal } from './CoStreamRoleSplitterModal';
 import { CreatorAchievementsModal } from './CreatorAchievementsModal';
 import { VipReaderFlairsModal } from './VipReaderFlairsModal';
 import { LiveChapterRecapModal } from './LiveChapterRecapModal';
+import { VocalDynamicsRackModal } from './VocalDynamicsRackModal';
+import { SquadSpatialAudioModal } from './SquadSpatialAudioModal';
+import { ReadingHabitsHubModal } from './ReadingHabitsHubModal';
+import { DonationTtsStudioModal } from './DonationTtsStudioModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -215,6 +221,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showAchievementsModal, setShowAchievementsModal] = useState(false);
   const [showVipFlairsModal, setShowVipFlairsModal] = useState(false);
   const [showChapterRecapModal, setShowChapterRecapModal] = useState(false);
+  const [showVocalDynamicsModal, setShowVocalDynamicsModal] = useState(false);
+  const [showSpatialAudioModal, setShowSpatialAudioModal] = useState(false);
+  const [showHabitsHubModal, setShowHabitsHubModal] = useState(false);
+  const [showDonationTtsModal, setShowDonationTtsModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -228,6 +238,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Vocal Dynamics Master Rack */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVocalDynamicsModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Vocal Dynamics, Noise Gate & De-Esser Studio"
+        >
+          <Sliders size={18} />
+          <span>Vocal Rack</span>
+        </button>
+
+        {/* Squad 3D Audio Spatializer */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSpatialAudioModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Squad Multi-Narrator 3D Audio Spatializer & Soundstage"
+        >
+          <Headphones size={18} />
+          <span>3D Audio</span>
+        </button>
+
+        {/* Community Reading Habits Hub */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowHabitsHubModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Community Reading Habits & Daily Streak Hub"
+        >
+          <Flame size={18} />
+          <span>Habits Hub</span>
+        </button>
+
+        {/* Literary Dono TTS Studio */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowDonationTtsModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Literary TTS Custom Voices & Sparks Dono Reader"
+        >
+          <Volume2 size={18} />
+          <span>Dono TTS</span>
+        </button>
         {/* Co-Stream Voice Theatre */}
         <button
           onClick={() => {
@@ -1685,6 +1746,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <LiveChapterRecapModal
           streamerName={streamerName}
           onClose={() => setShowChapterRecapModal(false)}
+        />
+      )}
+
+      {showVocalDynamicsModal && (
+        <VocalDynamicsRackModal
+          streamerName={streamerName}
+          onClose={() => setShowVocalDynamicsModal(false)}
+        />
+      )}
+
+      {showSpatialAudioModal && (
+        <SquadSpatialAudioModal
+          streamerName={streamerName}
+          onClose={() => setShowSpatialAudioModal(false)}
+        />
+      )}
+
+      {showHabitsHubModal && (
+        <ReadingHabitsHubModal
+          streamerName={streamerName}
+          onClose={() => setShowHabitsHubModal(false)}
+        />
+      )}
+
+      {showDonationTtsModal && (
+        <DonationTtsStudioModal
+          streamerName={streamerName}
+          onClose={() => setShowDonationTtsModal(false)}
         />
       )}
     </div>
