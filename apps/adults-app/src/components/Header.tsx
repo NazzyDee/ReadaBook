@@ -22,13 +22,15 @@ import {
   Settings,
   Award,
   Headphones,
-  BookMarked
+  BookMarked,
+  Trophy
 } from 'lucide-react';
 import { ShortcutsModal } from './ShortcutsModal';
 import { UserSettingsModal } from './UserSettingsModal';
 import { BookwormBattlePassModal } from './BookwormBattlePassModal';
 import { CoListeningRoomModal } from './CoListeningRoomModal';
 import { ReaderPassportModal } from './ReaderPassportModal';
+import { HallOfFameModal } from './HallOfFameModal';
 
 export const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -46,6 +48,7 @@ export const Header: React.FC = () => {
   const [showBattlePassModal, setShowBattlePassModal] = useState(false);
   const [showCoListeningModal, setShowCoListeningModal] = useState(false);
   const [showPassportModal, setShowPassportModal] = useState(false);
+  const [showHallOfFameModal, setShowHallOfFameModal] = useState(false);
   const [userStatus, setUserStatus] = useState<'Online' | 'Reading' | 'Away'>('Online');
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -202,6 +205,17 @@ export const Header: React.FC = () => {
       <div className="header-right" ref={userMenuRef}>
         {user ? (
           <div className="header-user-menu">
+            {/* Hall of Fame Button */}
+            <button
+              onClick={() => setShowHallOfFameModal(true)}
+              className="btn-battlepass-nav-chip"
+              style={{ color: '#ffd700', borderColor: 'rgba(255, 215, 0, 0.4)' }}
+              title="Global Hall of Fame & Platform Records"
+            >
+              <Trophy size={14} color="#ffd700" />
+              <span>Hall of Fame</span>
+            </button>
+
             {/* Reader Passport Button */}
             <button
               onClick={() => setShowPassportModal(true)}
@@ -467,6 +481,10 @@ export const Header: React.FC = () => {
 
       {showPassportModal && (
         <ReaderPassportModal onClose={() => setShowPassportModal(false)} />
+      )}
+
+      {showHallOfFameModal && (
+        <HallOfFameModal onClose={() => setShowHallOfFameModal(false)} />
       )}
     </header>
   );

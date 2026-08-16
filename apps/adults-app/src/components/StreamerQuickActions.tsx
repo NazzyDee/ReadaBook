@@ -19,7 +19,9 @@ import {
   Compass,
   Bot,
   Swords,
-  Smartphone
+  Smartphone,
+  Languages,
+  ShoppingBag
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -37,6 +39,8 @@ import { InteractiveMapHUD } from './InteractiveMapHUD';
 import { ChroniclerOracleModal } from './ChroniclerOracleModal';
 import { NarratorDuelModal } from './NarratorDuelModal';
 import { CompanionModeModal } from './CompanionModeModal';
+import { UniversalTranslatorModal } from './UniversalTranslatorModal';
+import { GrandBazaarModal } from './GrandBazaarModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -68,6 +72,8 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showChroniclerModal, setShowChroniclerModal] = useState(false);
   const [showDuelModal, setShowDuelModal] = useState(false);
   const [showCompanionModal, setShowCompanionModal] = useState(false);
+  const [showTranslatorModal, setShowTranslatorModal] = useState(false);
+  const [showBazaarModal, setShowBazaarModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -81,6 +87,32 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Universal Translator */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowTranslatorModal(true);
+          }}
+          className="btn-quick-action action-cyan"
+          title="Universal Multi-Language Live Translator"
+        >
+          <Languages size={18} />
+          <span>Subtitles</span>
+        </button>
+
+        {/* Grand Bazaar Merch */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBazaarModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="The Grand Bazaar Merch & Book Swag Shop"
+        >
+          <ShoppingBag size={18} />
+          <span>Merch Shop</span>
+        </button>
+
         {/* Narrator Duel Face-Off */}
         <button
           onClick={() => {
@@ -437,6 +469,18 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showCompanionModal && (
         <CompanionModeModal
           onClose={() => setShowCompanionModal(false)}
+        />
+      )}
+
+      {showTranslatorModal && (
+        <UniversalTranslatorModal
+          onClose={() => setShowTranslatorModal(false)}
+        />
+      )}
+
+      {showBazaarModal && (
+        <GrandBazaarModal
+          onClose={() => setShowBazaarModal(false)}
         />
       )}
     </div>
