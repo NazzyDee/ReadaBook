@@ -67,7 +67,10 @@ import {
   Lightbulb,
   HeartPulse,
   Eye,
-  Search
+  Search,
+  Map,
+  Castle,
+  Globe
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -199,6 +202,11 @@ import { RsvpSpeedReaderModal } from './RsvpSpeedReaderModal';
 import { ManuscriptZoomLoupeModal } from './ManuscriptZoomLoupeModal';
 import { VocalHealthTelemetryModal } from './VocalHealthTelemetryModal';
 import { BackstageIntercomModal } from './BackstageIntercomModal';
+import { GuildTerritoryWarsModal } from './GuildTerritoryWarsModal';
+import { D20SkillCheckModal } from './D20SkillCheckModal';
+import { LoreTradingCardsModal } from './LoreTradingCardsModal';
+import { ReaderCitadelBookshelfModal } from './ReaderCitadelBookshelfModal';
+import { GlobalReadingRelayModal } from './GlobalReadingRelayModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -344,6 +352,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showManuscriptZoomModal, setShowManuscriptZoomModal] = useState(false);
   const [showVocalHealthModal, setShowVocalHealthModal] = useState(false);
   const [showIntercomModal, setShowIntercomModal] = useState(false);
+  const [showTerritoryWarsModal, setShowTerritoryWarsModal] = useState(false);
+  const [showD20Modal, setShowD20Modal] = useState(false);
+  const [showLoreCardsModal, setShowLoreCardsModal] = useState(false);
+  const [showCitadelModal, setShowCitadelModal] = useState(false);
+  const [showRelayModal, setShowRelayModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -357,6 +370,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Guild Territory Wars */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowTerritoryWarsModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Guild Territory Wars: World Map Conquest"
+        >
+          <Map size={18} />
+          <span>Realm Wars</span>
+        </button>
+
+        {/* Interactive D20 Skill-Check */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowD20Modal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Interactive D20 Skill-Check Narrative Branching"
+        >
+          <Dices size={18} />
+          <span>D20 Check</span>
+        </button>
+
+        {/* Character Lore Trading Cards */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowLoreCardsModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Character Inventory & Lore Deck Trading Cards"
+        >
+          <Layers size={18} />
+          <span>Lore Cards</span>
+        </button>
+
+        {/* Reader Citadel & 3D Bookshelf */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCitadelModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Reader Citadel & 3D Digital Bookshelf Trophy Room"
+        >
+          <Castle size={18} />
+          <span>3D Citadel</span>
+        </button>
+
+        {/* Global Reading Relay */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowRelayModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Global Speed Reading Relay & 24hr Read-a-thon"
+        >
+          <Globe size={18} />
+          <span>World Relay</span>
+        </button>
         {/* Eye-Contact AI Corrector */}
         <button
           onClick={() => {
@@ -2960,6 +3037,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <BackstageIntercomModal
           streamerName={streamerName}
           onClose={() => setShowIntercomModal(false)}
+        />
+      )}
+
+      {showTerritoryWarsModal && (
+        <GuildTerritoryWarsModal
+          streamerName={streamerName}
+          onClose={() => setShowTerritoryWarsModal(false)}
+        />
+      )}
+
+      {showD20Modal && (
+        <D20SkillCheckModal
+          streamerName={streamerName}
+          onClose={() => setShowD20Modal(false)}
+        />
+      )}
+
+      {showLoreCardsModal && (
+        <LoreTradingCardsModal
+          streamerName={streamerName}
+          onClose={() => setShowLoreCardsModal(false)}
+        />
+      )}
+
+      {showCitadelModal && (
+        <ReaderCitadelBookshelfModal
+          streamerName={streamerName}
+          onClose={() => setShowCitadelModal(false)}
+        />
+      )}
+
+      {showRelayModal && (
+        <GlobalReadingRelayModal
+          streamerName={streamerName}
+          onClose={() => setShowRelayModal(false)}
         />
       )}
     </div>
