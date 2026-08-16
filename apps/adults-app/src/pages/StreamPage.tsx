@@ -57,6 +57,10 @@ import { MysteryBookBoxModal } from '../components/MysteryBookBoxModal';
 import { ReadingTelemetryModal } from '../components/ReadingTelemetryModal';
 import { BookTriviaArenaModal } from '../components/BookTriviaArenaModal';
 import { VocalWarmupStudioModal } from '../components/VocalWarmupStudioModal';
+import { CoStreamRoleSplitterModal } from '../components/CoStreamRoleSplitterModal';
+import { CreatorAchievementsModal } from '../components/CreatorAchievementsModal';
+import { VipReaderFlairsModal } from '../components/VipReaderFlairsModal';
+import { LiveChapterRecapModal } from '../components/LiveChapterRecapModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -110,7 +114,9 @@ import {
   Tag,
   Radio,
   Swords,
-  Mic
+  Mic,
+  Gem,
+  Trophy
 } from 'lucide-react';
 
 interface StreamData {
@@ -223,6 +229,10 @@ export const StreamPage: React.FC = () => {
   const [showTelemetryModal, setShowTelemetryModal] = useState(false);
   const [showTriviaArenaModal, setShowTriviaArenaModal] = useState(false);
   const [showVocalWarmupModal, setShowVocalWarmupModal] = useState(false);
+  const [showCoStreamRolesModal, setShowCoStreamRolesModal] = useState(false);
+  const [showAchievementsModal, setShowAchievementsModal] = useState(false);
+  const [showVipFlairsModal, setShowVipFlairsModal] = useState(false);
+  const [showChapterRecapModal, setShowChapterRecapModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1181,6 +1191,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Vocal Suite</span>
             </button>
 
+            {/* Co-Stream Voice Theatre */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowCoStreamRolesModal(true);
+              }}
+              className="btn-secondary"
+              title="Co-Stream Voice Theatre & Full Cast Role Splitter"
+            >
+              <Users size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Cast Roles</span>
+            </button>
+
+            {/* Broadcaster Achievements */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowAchievementsModal(true);
+              }}
+              className="btn-secondary"
+              title="Broadcaster Quests & Path to Master Storyteller"
+            >
+              <Trophy size={16} color="#ffd700" />
+              <span className="hide-mobile">Quests</span>
+            </button>
+
+            {/* VIP Reader Badges */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVipFlairsModal(true);
+              }}
+              className="btn-secondary"
+              title="Archivist VIP Reader Badges & Custom Chat Flairs"
+            >
+              <Gem size={16} color="#00ff88" />
+              <span className="hide-mobile">VIP</span>
+            </button>
+
+            {/* Live Chapter Recap */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowChapterRecapModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Chapter Summary & Previously On... Catch-Up HUD"
+            >
+              <FileText size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Recap</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -1741,6 +1803,38 @@ export const StreamPage: React.FC = () => {
         <VocalWarmupStudioModal
           streamerName={stream.streamerName}
           onClose={() => setShowVocalWarmupModal(false)}
+        />
+      )}
+
+      {/* Co-Stream Voice Theatre */}
+      {showCoStreamRolesModal && (
+        <CoStreamRoleSplitterModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowCoStreamRolesModal(false)}
+        />
+      )}
+
+      {/* Broadcaster Achievements */}
+      {showAchievementsModal && (
+        <CreatorAchievementsModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowAchievementsModal(false)}
+        />
+      )}
+
+      {/* VIP Reader Badges */}
+      {showVipFlairsModal && (
+        <VipReaderFlairsModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVipFlairsModal(false)}
+        />
+      )}
+
+      {/* Live Chapter Recap */}
+      {showChapterRecapModal && (
+        <LiveChapterRecapModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowChapterRecapModal(false)}
         />
       )}
 

@@ -53,7 +53,8 @@ import {
   Megaphone,
   TrendingUp,
   MessageSquare,
-  Tag
+  Tag,
+  Gem
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -123,6 +124,10 @@ import { MysteryBookBoxModal } from './MysteryBookBoxModal';
 import { ReadingTelemetryModal } from './ReadingTelemetryModal';
 import { BookTriviaArenaModal } from './BookTriviaArenaModal';
 import { VocalWarmupStudioModal } from './VocalWarmupStudioModal';
+import { CoStreamRoleSplitterModal } from './CoStreamRoleSplitterModal';
+import { CreatorAchievementsModal } from './CreatorAchievementsModal';
+import { VipReaderFlairsModal } from './VipReaderFlairsModal';
+import { LiveChapterRecapModal } from './LiveChapterRecapModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -206,6 +211,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showTelemetryModal, setShowTelemetryModal] = useState(false);
   const [showTriviaArenaModal, setShowTriviaArenaModal] = useState(false);
   const [showVocalWarmupModal, setShowVocalWarmupModal] = useState(false);
+  const [showCoStreamRolesModal, setShowCoStreamRolesModal] = useState(false);
+  const [showAchievementsModal, setShowAchievementsModal] = useState(false);
+  const [showVipFlairsModal, setShowVipFlairsModal] = useState(false);
+  const [showChapterRecapModal, setShowChapterRecapModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -219,6 +228,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Co-Stream Voice Theatre */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCoStreamRolesModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Co-Stream Voice Theatre & Full Cast Role Splitter"
+        >
+          <Users size={18} />
+          <span>Cast Roles</span>
+        </button>
+
+        {/* Broadcaster Achievements */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowAchievementsModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Broadcaster Quests & Path to Master Storyteller"
+        >
+          <Trophy size={18} />
+          <span>Quests</span>
+        </button>
+
+        {/* VIP Reader Badges */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVipFlairsModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Archivist VIP Reader Badges & Custom Chat Flairs"
+        >
+          <Gem size={18} />
+          <span>VIP Flairs</span>
+        </button>
+
+        {/* Live Chapter Recap */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowChapterRecapModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Live Chapter Summary & Previously On... Catch-Up HUD"
+        >
+          <FileText size={18} />
+          <span>Story Recap</span>
+        </button>
         {/* Mystery Book Box Prize Wheel */}
         <button
           onClick={() => {
@@ -1597,6 +1657,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <VocalWarmupStudioModal
           streamerName={streamerName}
           onClose={() => setShowVocalWarmupModal(false)}
+        />
+      )}
+
+      {showCoStreamRolesModal && (
+        <CoStreamRoleSplitterModal
+          streamerName={streamerName}
+          onClose={() => setShowCoStreamRolesModal(false)}
+        />
+      )}
+
+      {showAchievementsModal && (
+        <CreatorAchievementsModal
+          streamerName={streamerName}
+          onClose={() => setShowAchievementsModal(false)}
+        />
+      )}
+
+      {showVipFlairsModal && (
+        <VipReaderFlairsModal
+          streamerName={streamerName}
+          onClose={() => setShowVipFlairsModal(false)}
+        />
+      )}
+
+      {showChapterRecapModal && (
+        <LiveChapterRecapModal
+          streamerName={streamerName}
+          onClose={() => setShowChapterRecapModal(false)}
         />
       )}
     </div>
