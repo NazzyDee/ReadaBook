@@ -64,7 +64,10 @@ import {
   Music,
   Lock,
   Type,
-  Lightbulb
+  Lightbulb,
+  HeartPulse,
+  Eye,
+  Search
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -191,6 +194,11 @@ import { ObsVirtualKeyerModal } from './ObsVirtualKeyerModal';
 import { VerticalClipTranscoderModal } from './VerticalClipTranscoderModal';
 import { StreamDeckWebSocketModal } from './StreamDeckWebSocketModal';
 import { SpatialBinauralPannerModal } from './SpatialBinauralPannerModal';
+import { EyeContactCorrectorModal } from './EyeContactCorrectorModal';
+import { RsvpSpeedReaderModal } from './RsvpSpeedReaderModal';
+import { ManuscriptZoomLoupeModal } from './ManuscriptZoomLoupeModal';
+import { VocalHealthTelemetryModal } from './VocalHealthTelemetryModal';
+import { BackstageIntercomModal } from './BackstageIntercomModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -331,6 +339,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showVerticalClipModal, setShowVerticalClipModal] = useState(false);
   const [showStreamDeckWsModal, setShowStreamDeckWsModal] = useState(false);
   const [showSpatialPannerModal, setShowSpatialPannerModal] = useState(false);
+  const [showEyeContactModal, setShowEyeContactModal] = useState(false);
+  const [showRsvpModal, setShowRsvpModal] = useState(false);
+  const [showManuscriptZoomModal, setShowManuscriptZoomModal] = useState(false);
+  const [showVocalHealthModal, setShowVocalHealthModal] = useState(false);
+  const [showIntercomModal, setShowIntercomModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -344,6 +357,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Eye-Contact AI Corrector */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowEyeContactModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Teleprompter Eye-Contact AI Corrector"
+        >
+          <Eye size={18} />
+          <span>Eye Contact</span>
+        </button>
+
+        {/* Speed-Reading RSVP Flasher */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowRsvpModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Speed-Reading RSVP Flasher Overlay"
+        >
+          <Gauge size={18} />
+          <span>RSVP Reader</span>
+        </button>
+
+        {/* Macro-Lens Manuscript Zoom Loupe */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowManuscriptZoomModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Macro-Lens Manuscript Zoom Loupe"
+        >
+          <Search size={18} />
+          <span>Desk Loupe</span>
+        </button>
+
+        {/* Vocal Health Telemetry */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVocalHealthModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Voice Fatigue & Vocal Cord Health Telemetry"
+        >
+          <HeartPulse size={18} />
+          <span>Vocal Health</span>
+        </button>
+
+        {/* Backstage Intercom & Talkback */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowIntercomModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Backstage Intercom & Producer Talkback Channel"
+        >
+          <Radio size={18} />
+          <span>Intercom</span>
+        </button>
         {/* Multi-Cast Audio Drama */}
         <button
           onClick={() => {
@@ -2848,6 +2925,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <SpatialBinauralPannerModal
           streamerName={streamerName}
           onClose={() => setShowSpatialPannerModal(false)}
+        />
+      )}
+
+      {showEyeContactModal && (
+        <EyeContactCorrectorModal
+          streamerName={streamerName}
+          onClose={() => setShowEyeContactModal(false)}
+        />
+      )}
+
+      {showRsvpModal && (
+        <RsvpSpeedReaderModal
+          streamerName={streamerName}
+          onClose={() => setShowRsvpModal(false)}
+        />
+      )}
+
+      {showManuscriptZoomModal && (
+        <ManuscriptZoomLoupeModal
+          streamerName={streamerName}
+          onClose={() => setShowManuscriptZoomModal(false)}
+        />
+      )}
+
+      {showVocalHealthModal && (
+        <VocalHealthTelemetryModal
+          streamerName={streamerName}
+          onClose={() => setShowVocalHealthModal(false)}
+        />
+      )}
+
+      {showIntercomModal && (
+        <BackstageIntercomModal
+          streamerName={streamerName}
+          onClose={() => setShowIntercomModal(false)}
         />
       )}
     </div>

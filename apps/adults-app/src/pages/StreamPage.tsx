@@ -114,6 +114,11 @@ import { ObsVirtualKeyerModal } from '../components/ObsVirtualKeyerModal';
 import { VerticalClipTranscoderModal } from '../components/VerticalClipTranscoderModal';
 import { StreamDeckWebSocketModal } from '../components/StreamDeckWebSocketModal';
 import { SpatialBinauralPannerModal } from '../components/SpatialBinauralPannerModal';
+import { EyeContactCorrectorModal } from '../components/EyeContactCorrectorModal';
+import { RsvpSpeedReaderModal } from '../components/RsvpSpeedReaderModal';
+import { ManuscriptZoomLoupeModal } from '../components/ManuscriptZoomLoupeModal';
+import { VocalHealthTelemetryModal } from '../components/VocalHealthTelemetryModal';
+import { BackstageIntercomModal } from '../components/BackstageIntercomModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -184,7 +189,10 @@ import {
   Video,
   Smartphone,
   Type,
-  Lightbulb
+  Lightbulb,
+  HeartPulse,
+  Eye,
+  Search
 } from 'lucide-react';
 
 interface StreamData {
@@ -354,6 +362,11 @@ export const StreamPage: React.FC = () => {
   const [showVerticalClipModal, setShowVerticalClipModal] = useState(false);
   const [showStreamDeckWsModal, setShowStreamDeckWsModal] = useState(false);
   const [showSpatialPannerModal, setShowSpatialPannerModal] = useState(false);
+  const [showEyeContactModal, setShowEyeContactModal] = useState(false);
+  const [showRsvpModal, setShowRsvpModal] = useState(false);
+  const [showManuscriptZoomModal, setShowManuscriptZoomModal] = useState(false);
+  const [showVocalHealthModal, setShowVocalHealthModal] = useState(false);
+  const [showIntercomModal, setShowIntercomModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -2053,6 +2066,71 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">3D Audio</span>
             </button>
 
+            {/* Eye-Contact AI Corrector */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowEyeContactModal(true);
+              }}
+              className="btn-secondary"
+              title="Teleprompter Eye-Contact AI Corrector"
+            >
+              <Eye size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Eye Contact</span>
+            </button>
+
+            {/* Speed-Reading RSVP Flasher */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowRsvpModal(true);
+              }}
+              className="btn-secondary"
+              title="Speed-Reading RSVP Flasher Overlay"
+            >
+              <Gauge size={16} color="#ffd700" />
+              <span className="hide-mobile">RSVP</span>
+            </button>
+
+            {/* Macro-Lens Manuscript Zoom Loupe */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowManuscriptZoomModal(true);
+              }}
+              className="btn-secondary"
+              title="Macro-Lens Manuscript Zoom Loupe"
+            >
+              <Search size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Desk Loupe</span>
+            </button>
+
+            {/* Vocal Health Telemetry */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVocalHealthModal(true);
+              }}
+              className="btn-secondary"
+              title="Voice Fatigue & Vocal Cord Health Telemetry"
+            >
+              <HeartPulse size={16} color="var(--accent-danger)" />
+              <span className="hide-mobile">Vocal Health</span>
+            </button>
+
+            {/* Backstage Intercom & Talkback */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowIntercomModal(true);
+              }}
+              className="btn-secondary"
+              title="Backstage Intercom & Producer Talkback Channel"
+            >
+              <Radio size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Intercom</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -3069,6 +3147,46 @@ export const StreamPage: React.FC = () => {
         <SpatialBinauralPannerModal
           streamerName={stream.streamerName}
           onClose={() => setShowSpatialPannerModal(false)}
+        />
+      )}
+
+      {/* Eye-Contact AI Corrector */}
+      {showEyeContactModal && (
+        <EyeContactCorrectorModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowEyeContactModal(false)}
+        />
+      )}
+
+      {/* Speed-Reading RSVP Flasher */}
+      {showRsvpModal && (
+        <RsvpSpeedReaderModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowRsvpModal(false)}
+        />
+      )}
+
+      {/* Macro-Lens Manuscript Zoom Loupe */}
+      {showManuscriptZoomModal && (
+        <ManuscriptZoomLoupeModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowManuscriptZoomModal(false)}
+        />
+      )}
+
+      {/* Vocal Health Telemetry */}
+      {showVocalHealthModal && (
+        <VocalHealthTelemetryModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVocalHealthModal(false)}
+        />
+      )}
+
+      {/* Backstage Intercom & Talkback */}
+      {showIntercomModal && (
+        <BackstageIntercomModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowIntercomModal(false)}
         />
       )}
 
