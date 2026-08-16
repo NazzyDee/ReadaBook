@@ -47,7 +47,9 @@ import {
   Award,
   Library,
   Scissors,
-  ShieldCheck
+  ShieldCheck,
+  Coffee,
+  Gift
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -101,6 +103,10 @@ import { ClipEditorStudioModal } from './ClipEditorStudioModal';
 import { ChannelRulesGateModal } from './ChannelRulesGateModal';
 import { BookshelfCustomizerModal } from './BookshelfCustomizerModal';
 import { SubMilestonesModal } from './SubMilestonesModal';
+import { CommunityGiftBombModal } from './CommunityGiftBombModal';
+import { ChannelPointsStudioModal } from './ChannelPointsStudioModal';
+import { CommercialBreakModal } from './CommercialBreakModal';
+import { DualAudioMixerModal } from './DualAudioMixerModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -168,6 +174,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showChannelRulesModal, setShowChannelRulesModal] = useState(false);
   const [showBookshelfModal, setShowBookshelfModal] = useState(false);
   const [showSubMilestonesModal, setShowSubMilestonesModal] = useState(false);
+  const [showGiftBombModal, setShowGiftBombModal] = useState(false);
+  const [showPointsStudioModal, setShowPointsStudioModal] = useState(false);
+  const [showCommercialModal, setShowCommercialModal] = useState(false);
+  const [showDualAudioModal, setShowDualAudioModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -181,6 +191,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Community Gift Bomb */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowGiftBombModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Community Gift Subscriptions & Bomb Shower"
+        >
+          <Gift size={18} />
+          <span>Gift Bomb</span>
+        </button>
+
+        {/* Channel Points Custom Rewards Studio */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowPointsStudioModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Sparks & Channel Points Custom Rewards Studio"
+        >
+          <Sparkles size={18} />
+          <span>Points Studio</span>
+        </button>
+
+        {/* Chapter Intermission Tea Break */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCommercialModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Chapter Intermission & Cozy Tea Break Manager"
+        >
+          <Coffee size={18} />
+          <span>Intermission</span>
+        </button>
+
+        {/* Dual-Narrator Audio Mixer */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowDualAudioModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Dual-Narrator Gain & Foley Ducking Mixer"
+        >
+          <Sliders size={18} />
+          <span>Audio Mixer</span>
+        </button>
+
         {/* VOD Highlights & Shorts Trimmer */}
         <button
           onClick={() => {
@@ -1243,6 +1305,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <SubMilestonesModal
           streamerName={streamerName}
           onClose={() => setShowSubMilestonesModal(false)}
+        />
+      )}
+
+      {showGiftBombModal && (
+        <CommunityGiftBombModal
+          streamerName={streamerName}
+          onClose={() => setShowGiftBombModal(false)}
+        />
+      )}
+
+      {showPointsStudioModal && (
+        <ChannelPointsStudioModal
+          streamerName={streamerName}
+          onClose={() => setShowPointsStudioModal(false)}
+        />
+      )}
+
+      {showCommercialModal && (
+        <CommercialBreakModal
+          streamerName={streamerName}
+          onClose={() => setShowCommercialModal(false)}
+        />
+      )}
+
+      {showDualAudioModal && (
+        <DualAudioMixerModal
+          streamerName={streamerName}
+          onClose={() => setShowDualAudioModal(false)}
         />
       )}
     </div>

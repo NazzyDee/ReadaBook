@@ -41,6 +41,10 @@ import { ClipEditorStudioModal } from '../components/ClipEditorStudioModal';
 import { ChannelRulesGateModal } from '../components/ChannelRulesGateModal';
 import { BookshelfCustomizerModal } from '../components/BookshelfCustomizerModal';
 import { SubMilestonesModal } from '../components/SubMilestonesModal';
+import { CommunityGiftBombModal } from '../components/CommunityGiftBombModal';
+import { ChannelPointsStudioModal } from '../components/ChannelPointsStudioModal';
+import { CommercialBreakModal } from '../components/CommercialBreakModal';
+import { DualAudioMixerModal } from '../components/DualAudioMixerModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -84,7 +88,10 @@ import {
   Gift,
   Library,
   ShieldCheck,
-  Crown
+  Crown,
+  Coffee,
+  Sliders,
+  Sparkles
 } from 'lucide-react';
 
 interface StreamData {
@@ -181,6 +188,10 @@ export const StreamPage: React.FC = () => {
   const [showChannelRulesModal, setShowChannelRulesModal] = useState(false);
   const [showBookshelfModal, setShowBookshelfModal] = useState(false);
   const [showSubMilestonesModal, setShowSubMilestonesModal] = useState(false);
+  const [showGiftBombModal, setShowGiftBombModal] = useState(false);
+  const [showPointsStudioModal, setShowPointsStudioModal] = useState(false);
+  const [showCommercialModal, setShowCommercialModal] = useState(false);
+  const [showDualAudioModal, setShowDualAudioModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -931,6 +942,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Streaks</span>
             </button>
 
+            {/* Gift Bomb */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowGiftBombModal(true);
+              }}
+              className="btn-secondary"
+              title="Community Gift Subscriptions & Bomb Shower"
+            >
+              <Gift size={16} color="#ffd700" />
+              <span className="hide-mobile">Gift Bomb</span>
+            </button>
+
+            {/* Points Studio */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowPointsStudioModal(true);
+              }}
+              className="btn-secondary"
+              title="Sparks & Channel Points Custom Rewards Studio"
+            >
+              <Sparkles size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Points</span>
+            </button>
+
+            {/* Commercial Break */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowCommercialModal(true);
+              }}
+              className="btn-secondary"
+              title="Chapter Intermission & Cozy Tea Break Manager"
+            >
+              <Coffee size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Break</span>
+            </button>
+
+            {/* Dual Audio Mixer */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowDualAudioModal(true);
+              }}
+              className="btn-secondary"
+              title="Dual-Narrator Gain & Foley Ducking Mixer"
+            >
+              <Sliders size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Mixer</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -1366,6 +1429,38 @@ export const StreamPage: React.FC = () => {
         <SubMilestonesModal
           streamerName={stream.streamerName}
           onClose={() => setShowSubMilestonesModal(false)}
+        />
+      )}
+
+      {/* Community Gift Bomb */}
+      {showGiftBombModal && (
+        <CommunityGiftBombModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowGiftBombModal(false)}
+        />
+      )}
+
+      {/* Channel Points Custom Rewards Studio */}
+      {showPointsStudioModal && (
+        <ChannelPointsStudioModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowPointsStudioModal(false)}
+        />
+      )}
+
+      {/* Chapter Intermission Tea Break */}
+      {showCommercialModal && (
+        <CommercialBreakModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowCommercialModal(false)}
+        />
+      )}
+
+      {/* Dual-Narrator Audio Mixer */}
+      {showDualAudioModal && (
+        <DualAudioMixerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowDualAudioModal(false)}
         />
       )}
 
