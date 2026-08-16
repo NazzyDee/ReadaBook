@@ -416,12 +416,13 @@ export const BookClubsPage: React.FC = () => {
   };
 
   return (
-    <div className="dashboard-container" style={{ padding: '24px', color: '#fff' }}>
+    <div className="bookclubs-page-container">
+      <div className="bookclubs-content-wrapper">
       
       {/* Directory View */}
       {!activeClub ? (
         <>
-          <div className="flex-between" style={{ marginBottom: '24px' }}>
+          <div className="bookclubs-header-row">
             <div>
               <h1 className="dashboard-title">Book Clubs</h1>
               <p className="studio-subtitle">Join reading circles, buddy read classics, and discuss chapter by chapter</p>
@@ -1137,6 +1138,7 @@ export const BookClubsPage: React.FC = () => {
         </div>
       )}
 
+      </div>
     </div>
   );
 };

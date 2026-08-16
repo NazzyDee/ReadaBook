@@ -38,7 +38,7 @@ export const FollowingPage: React.FC = () => {
 
   const followedCategories = [
     { name: 'Fantasy', count: 18, banner: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80', viewers: '14.2k' },
-    { name: 'Classics', count: 24, banner: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80', viewers: '11.5k' }
+    { name: 'Classics', count: 24, banner: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=600&q=80', viewers: '11.5k' }
   ];
 
   return (
@@ -186,7 +186,8 @@ export const FollowingPage: React.FC = () => {
                       <h3>{cat.name}</h3>
                       <div className="category-mosaic-stats">
                         <span>{cat.viewers} Live Viewers</span>
-                        <span>• {cat.count} Active Channels</span>
+                        <span className="dot-separator">•</span>
+                        <span>{cat.count} Active Channels</span>
                       </div>
                     </div>
                   </Link>
@@ -209,7 +210,8 @@ export const FollowingPage: React.FC = () => {
                   <h3>{cat.name}</h3>
                   <div className="category-mosaic-stats">
                     <span>{cat.viewers} Live Viewers</span>
-                    <span>• {cat.count} Active Channels</span>
+                    <span className="dot-separator">•</span>
+                    <span>{cat.count} Active Channels</span>
                   </div>
                 </div>
               </Link>

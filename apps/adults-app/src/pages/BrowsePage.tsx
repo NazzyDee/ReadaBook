@@ -162,9 +162,9 @@ export const BrowsePage: React.FC = () => {
 
   const categories = [
     { name: 'Fantasy', count: 18, banner: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80', viewers: '14.2k' },
-    { name: 'Sci-Fi', count: 12, banner: 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=600&q=80', viewers: '8.9k' },
-    { name: 'Classics', count: 24, banner: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80', viewers: '11.5k' },
-    { name: 'Mystery & Thriller', count: 15, banner: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80', viewers: '6.4k' },
+    { name: 'Sci-Fi', count: 12, banner: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80', viewers: '8.9k' },
+    { name: 'Classics', count: 24, banner: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=600&q=80', viewers: '11.5k' },
+    { name: 'Mystery & Thriller', count: 15, banner: 'https://images.unsplash.com/photo-1587876931567-564ce588bfbd?auto=format&fit=crop&w=600&q=80', viewers: '6.4k' },
     { name: 'Silent Study & Lofi', count: 9, banner: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=600&q=80', viewers: '19.8k' },
     { name: 'Young Adult', count: 14, banner: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80', viewers: '7.1k' }
   ];
@@ -267,7 +267,11 @@ export const BrowsePage: React.FC = () => {
               </div>
 
               <div className="carousel-preview-card">
-                <img src={featuredBook?.coverUrl || ''} alt="Cover" className="carousel-book-cover" />
+                <img
+                  src={featuredBook?.coverUrl || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'}
+                  alt={featuredBook?.title || 'Featured Book'}
+                  className="carousel-book-cover"
+                />
                 <div className="carousel-viewer-badge">
                   <Users size={13} />
                   <span>{(featuredStream.viewerCount).toLocaleString()} Watching</span>
@@ -477,7 +481,8 @@ export const BrowsePage: React.FC = () => {
                   <h3>{cat.name}</h3>
                   <div className="category-mosaic-stats">
                     <span>{cat.viewers} Live Viewers</span>
-                    <span>• {cat.count} Active Titles</span>
+                    <span className="dot-separator">•</span>
+                    <span>{cat.count} Active Titles</span>
                   </div>
                 </div>
               </div>

@@ -18182,6 +18182,350 @@
   color: var(--text-muted);
 }
 
+/* ================= BOOK CLUBS PAGE LAYOUT ================= */
+.bookclubs-page-container {
+  width: 100%;
+  min-height: 100%;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+.bookclubs-content-wrapper {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.bookclubs-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ================= LIVE CHAT TIMESTAMP & AUTHOR FORMATTING ================= */
+.chat-timestamp {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-right: 6px;
+  font-weight: 500;
+  display: inline-block;
+  opacity: 0.75;
+}
+
+.chat-author-name {
+  margin-left: 2px;
+  margin-right: 4px;
+}
+
+/* ================= SQUAD STREAMS SPOTLIGHT & CARDS ================= */
+.twitch-squads-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.squads-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.squad-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.squad-spotlight-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.squad-spotlight-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 24px rgba(138, 43, 226, 0.2);
+}
+
+.squad-avatars-cluster {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  background: #000;
+  height: 180px;
+  overflow: hidden;
+}
+
+.squad-cluster-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.squad-spotlight-details {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.squad-live-badge-sm {
+  align-self: flex-start;
+  background: var(--accent-danger);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+.squad-spotlight-details h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.squad-book-sub {
+  font-size: 0.82rem;
+  color: var(--accent-secondary);
+  margin: 0;
+}
+
+.squad-viewers-count {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ================= SQUAD STREAM PAGE CONTROLS ================= */
+.squad-selector-dropdown select {
+  background: var(--bg-panel);
+  color: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.squad-selector-dropdown select:hover,
+.squad-selector-dropdown select:focus {
+  border-color: var(--accent-primary);
+}
+
+.squad-tag-pill {
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ================= TRENDING CLIPS PREVIEW CARDS ================= */
+.twitch-clips-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.clips-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.clips-section-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.btn-link-viewall {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+  transition: color 0.15s;
+}
+
+.btn-link-viewall:hover {
+  color: var(--accent-secondary);
+}
+
+.clips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.clip-card-link {
+  text-decoration: none;
+  color: #fff;
+  display: block;
+}
+
+.clip-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.clip-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 24px rgba(138, 43, 226, 0.2);
+}
+
+.clip-thumb-wrapper {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  background: #000;
+}
+
+.clip-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.clip-duration-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.clip-card-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.clip-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clip-creator-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ================= CATEGORY MOSAIC & STATS ================= */
+.categories-mosaic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.category-mosaic-card {
+  position: relative;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
+}
+
+.category-mosaic-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+}
+
+.category-mosaic-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.category-mosaic-card:hover .category-mosaic-img {
+  transform: scale(1.05);
+}
+
+.category-mosaic-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.85) 100%);
+}
+
+.category-mosaic-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.category-mosaic-info h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.category-mosaic-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.dot-separator {
+  margin: 0 4px;
+  opacity: 0.6;
+}
+
 
 
 
