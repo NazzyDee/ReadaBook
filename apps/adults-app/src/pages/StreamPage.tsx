@@ -105,6 +105,10 @@ import { CustomChannelFontModal } from '../components/CustomChannelFontModal';
 import { PrintOnDemandMerchModal } from '../components/PrintOnDemandMerchModal';
 import { PublisherBountyTrackerModal } from '../components/PublisherBountyTrackerModal';
 import { SubOnlyLoungeModal } from '../components/SubOnlyLoungeModal';
+import { SmartLightingSyncModal } from '../components/SmartLightingSyncModal';
+import { AutomatedModShieldRulesModal } from '../components/AutomatedModShieldRulesModal';
+import { SilentStudyRadioModal } from '../components/SilentStudyRadioModal';
+import { InteractiveVodArchivesModal } from '../components/InteractiveVodArchivesModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -174,7 +178,8 @@ import {
   Compass,
   Video,
   Smartphone,
-  Type
+  Type,
+  Lightbulb
 } from 'lucide-react';
 
 interface StreamData {
@@ -335,6 +340,10 @@ export const StreamPage: React.FC = () => {
   const [showMerchShopModal, setShowMerchShopModal] = useState(false);
   const [showBountyTrackerModal, setShowBountyTrackerModal] = useState(false);
   const [showSubLoungeModal, setShowSubLoungeModal] = useState(false);
+  const [showLightingModal, setShowLightingModal] = useState(false);
+  const [showModShieldModal, setShowModShieldModal] = useState(false);
+  const [showRadioModal, setShowRadioModal] = useState(false);
+  const [showVodArchivesModal, setShowVodArchivesModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1917,6 +1926,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Sub Salon</span>
             </button>
 
+            {/* Smart Ambient Lighting Sync */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowLightingModal(true);
+              }}
+              className="btn-secondary"
+              title="Smart Ambient Lighting Sync & Hue Bridge"
+            >
+              <Lightbulb size={16} color="#ffd700" />
+              <span className="hide-mobile">Hue Lights</span>
+            </button>
+
+            {/* Arcane Moderation Shield */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowModShieldModal(true);
+              }}
+              className="btn-secondary"
+              title="Arcane Moderation Shield & Anti-Spoiler Rules"
+            >
+              <ShieldAlert size={16} color="var(--accent-danger)" />
+              <span className="hide-mobile">AI Mod Shield</span>
+            </button>
+
+            {/* 24/7 Silent Study Radio */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowRadioModal(true);
+              }}
+              className="btn-secondary"
+              title="24/7 Silent Study Radio & Pomodoro Room"
+            >
+              <Radio size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Study Radio</span>
+            </button>
+
+            {/* Interactive VOD Archives */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVodArchivesModal(true);
+              }}
+              className="btn-secondary"
+              title="Interactive VOD Archives & Chapter Scribe"
+            >
+              <Film size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">VOD Archives</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2861,6 +2922,38 @@ export const StreamPage: React.FC = () => {
         <SubOnlyLoungeModal
           streamerName={stream.streamerName}
           onClose={() => setShowSubLoungeModal(false)}
+        />
+      )}
+
+      {/* Smart Ambient Lighting Sync */}
+      {showLightingModal && (
+        <SmartLightingSyncModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowLightingModal(false)}
+        />
+      )}
+
+      {/* Arcane Moderation Shield */}
+      {showModShieldModal && (
+        <AutomatedModShieldRulesModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowModShieldModal(false)}
+        />
+      )}
+
+      {/* 24/7 Silent Study Radio */}
+      {showRadioModal && (
+        <SilentStudyRadioModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowRadioModal(false)}
+        />
+      )}
+
+      {/* Interactive VOD Archives */}
+      {showVodArchivesModal && (
+        <InteractiveVodArchivesModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVodArchivesModal(false)}
         />
       )}
 

@@ -63,7 +63,8 @@ import {
   TreePine,
   Music,
   Lock,
-  Type
+  Type,
+  Lightbulb
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -181,6 +182,10 @@ import { CustomChannelFontModal } from './CustomChannelFontModal';
 import { PrintOnDemandMerchModal } from './PrintOnDemandMerchModal';
 import { PublisherBountyTrackerModal } from './PublisherBountyTrackerModal';
 import { SubOnlyLoungeModal } from './SubOnlyLoungeModal';
+import { SmartLightingSyncModal } from './SmartLightingSyncModal';
+import { AutomatedModShieldRulesModal } from './AutomatedModShieldRulesModal';
+import { SilentStudyRadioModal } from './SilentStudyRadioModal';
+import { InteractiveVodArchivesModal } from './InteractiveVodArchivesModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -312,6 +317,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showMerchShopModal, setShowMerchShopModal] = useState(false);
   const [showBountyTrackerModal, setShowBountyTrackerModal] = useState(false);
   const [showSubLoungeModal, setShowSubLoungeModal] = useState(false);
+  const [showLightingModal, setShowLightingModal] = useState(false);
+  const [showModShieldModal, setShowModShieldModal] = useState(false);
+  const [showRadioModal, setShowRadioModal] = useState(false);
+  const [showVodArchivesModal, setShowVodArchivesModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -325,6 +334,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Smart Ambient Lighting Sync */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowLightingModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Smart Ambient Lighting Sync & Hue Bridge"
+        >
+          <Lightbulb size={18} />
+          <span>Hue Lights</span>
+        </button>
+
+        {/* Arcane Moderation Shield */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowModShieldModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Arcane Moderation Shield & Anti-Spoiler Rules"
+        >
+          <ShieldAlert size={18} />
+          <span>AI Mod Shield</span>
+        </button>
+
+        {/* 24/7 Silent Study Radio */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowRadioModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="24/7 Silent Study Radio & Pomodoro Room"
+        >
+          <Radio size={18} />
+          <span>Study Radio</span>
+        </button>
+
+        {/* Interactive VOD Archives */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVodArchivesModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Interactive VOD Archives & Chapter Scribe"
+        >
+          <Film size={18} />
+          <span>VOD Archives</span>
+        </button>
         {/* Sub Tier 3 Scribe Grimoire Fonts */}
         <button
           onClick={() => {
@@ -2651,6 +2711,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <SubOnlyLoungeModal
           streamerName={streamerName}
           onClose={() => setShowSubLoungeModal(false)}
+        />
+      )}
+
+      {showLightingModal && (
+        <SmartLightingSyncModal
+          streamerName={streamerName}
+          onClose={() => setShowLightingModal(false)}
+        />
+      )}
+
+      {showModShieldModal && (
+        <AutomatedModShieldRulesModal
+          streamerName={streamerName}
+          onClose={() => setShowModShieldModal(false)}
+        />
+      )}
+
+      {showRadioModal && (
+        <SilentStudyRadioModal
+          streamerName={streamerName}
+          onClose={() => setShowRadioModal(false)}
+        />
+      )}
+
+      {showVodArchivesModal && (
+        <InteractiveVodArchivesModal
+          streamerName={streamerName}
+          onClose={() => setShowVodArchivesModal(false)}
         />
       )}
     </div>
