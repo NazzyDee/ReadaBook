@@ -97,6 +97,10 @@ import { RoomAcousticOptimizerModal } from '../components/RoomAcousticOptimizerM
 import { VoiceMorphPresetPadModal } from '../components/VoiceMorphPresetPadModal';
 import { BackstageAudioRoutingModal } from '../components/BackstageAudioRoutingModal';
 import { WpmTachometerModal } from '../components/WpmTachometerModal';
+import { ReadingBossEncounterModal } from '../components/ReadingBossEncounterModal';
+import { BookTournamentBracketModal } from '../components/BookTournamentBracketModal';
+import { BookGiveawayRandomizerModal } from '../components/BookGiveawayRandomizerModal';
+import { ChapterBookmarkStampModal } from '../components/ChapterBookmarkStampModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -318,6 +322,10 @@ export const StreamPage: React.FC = () => {
   const [showVoicePadModal, setShowVoicePadModal] = useState(false);
   const [showAudioRoutingModal, setShowAudioRoutingModal] = useState(false);
   const [showWpmModal, setShowWpmModal] = useState(false);
+  const [showBossRaidModal, setShowBossRaidModal] = useState(false);
+  const [showTournamentModal, setShowTournamentModal] = useState(false);
+  const [showGiveawayModal, setShowGiveawayModal] = useState(false);
+  const [showBookmarkStampModal, setShowBookmarkStampModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1796,6 +1804,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">WPM Meter</span>
             </button>
 
+            {/* Community Reading Boss Raid */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBossRaidModal(true);
+              }}
+              className="btn-secondary"
+              title="Community Reading Boss Raid & Encounter"
+            >
+              <Swords size={16} color="#ff3b3b" />
+              <span className="hide-mobile">Boss Raid</span>
+            </button>
+
+            {/* Grand Tournament Bracket */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowTournamentModal(true);
+              }}
+              className="btn-secondary"
+              title="Grand Tournament Bracket & Book of the Year"
+            >
+              <Trophy size={16} color="#ffd700" />
+              <span className="hide-mobile">Tournament</span>
+            </button>
+
+            {/* Book Box Giveaways */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowGiveawayModal(true);
+              }}
+              className="btn-secondary"
+              title="Community Book Box Giveaway & Roll Picker"
+            >
+              <Gift size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Giveaway</span>
+            </button>
+
+            {/* Chapter Bookmark Stamps */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBookmarkStampModal(true);
+              }}
+              className="btn-secondary"
+              title="Chapter Bookmark Stamp & Marginalia Wall"
+            >
+              <Bookmark size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Marginalia</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2676,6 +2736,38 @@ export const StreamPage: React.FC = () => {
         <WpmTachometerModal
           streamerName={stream.streamerName}
           onClose={() => setShowWpmModal(false)}
+        />
+      )}
+
+      {/* Community Reading Boss Raid */}
+      {showBossRaidModal && (
+        <ReadingBossEncounterModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowBossRaidModal(false)}
+        />
+      )}
+
+      {/* Grand Tournament Bracket */}
+      {showTournamentModal && (
+        <BookTournamentBracketModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowTournamentModal(false)}
+        />
+      )}
+
+      {/* Book Box Giveaways */}
+      {showGiveawayModal && (
+        <BookGiveawayRandomizerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowGiveawayModal(false)}
+        />
+      )}
+
+      {/* Chapter Bookmark Stamps */}
+      {showBookmarkStampModal && (
+        <ChapterBookmarkStampModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowBookmarkStampModal(false)}
         />
       )}
 

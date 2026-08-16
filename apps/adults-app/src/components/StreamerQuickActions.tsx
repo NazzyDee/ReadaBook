@@ -172,6 +172,10 @@ import { RoomAcousticOptimizerModal } from './RoomAcousticOptimizerModal';
 import { VoiceMorphPresetPadModal } from './VoiceMorphPresetPadModal';
 import { BackstageAudioRoutingModal } from './BackstageAudioRoutingModal';
 import { WpmTachometerModal } from './WpmTachometerModal';
+import { ReadingBossEncounterModal } from './ReadingBossEncounterModal';
+import { BookTournamentBracketModal } from './BookTournamentBracketModal';
+import { BookGiveawayRandomizerModal } from './BookGiveawayRandomizerModal';
+import { ChapterBookmarkStampModal } from './ChapterBookmarkStampModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -295,6 +299,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showVoicePadModal, setShowVoicePadModal] = useState(false);
   const [showAudioRoutingModal, setShowAudioRoutingModal] = useState(false);
   const [showWpmModal, setShowWpmModal] = useState(false);
+  const [showBossRaidModal, setShowBossRaidModal] = useState(false);
+  const [showTournamentModal, setShowTournamentModal] = useState(false);
+  const [showGiveawayModal, setShowGiveawayModal] = useState(false);
+  const [showBookmarkStampModal, setShowBookmarkStampModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -308,6 +316,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Community Reading Boss Raid */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBossRaidModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Community Reading Boss Raid & Encounter"
+        >
+          <Swords size={18} />
+          <span>Boss Raid</span>
+        </button>
+
+        {/* Grand Tournament Bracket */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowTournamentModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Grand Tournament Bracket & Book of the Year"
+        >
+          <Trophy size={18} />
+          <span>Tournament</span>
+        </button>
+
+        {/* Book Box Giveaways */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowGiveawayModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Community Book Box Giveaway & Roll Picker"
+        >
+          <Gift size={18} />
+          <span>Giveaway</span>
+        </button>
+
+        {/* Chapter Bookmark Stamps */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBookmarkStampModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Chapter Bookmark Stamp & Marginalia Wall"
+        >
+          <Bookmark size={18} />
+          <span>Marginalia</span>
+        </button>
         {/* Studio Acoustic Room Optimizer */}
         <button
           onClick={() => {
@@ -2476,6 +2535,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <WpmTachometerModal
           streamerName={streamerName}
           onClose={() => setShowWpmModal(false)}
+        />
+      )}
+
+      {showBossRaidModal && (
+        <ReadingBossEncounterModal
+          streamerName={streamerName}
+          onClose={() => setShowBossRaidModal(false)}
+        />
+      )}
+
+      {showTournamentModal && (
+        <BookTournamentBracketModal
+          streamerName={streamerName}
+          onClose={() => setShowTournamentModal(false)}
+        />
+      )}
+
+      {showGiveawayModal && (
+        <BookGiveawayRandomizerModal
+          streamerName={streamerName}
+          onClose={() => setShowGiveawayModal(false)}
+        />
+      )}
+
+      {showBookmarkStampModal && (
+        <ChapterBookmarkStampModal
+          streamerName={streamerName}
+          onClose={() => setShowBookmarkStampModal(false)}
         />
       )}
     </div>
