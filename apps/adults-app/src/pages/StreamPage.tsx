@@ -27,6 +27,10 @@ import { OBSOverlayStudioModal } from '../components/OBSOverlayStudioModal';
 import { ShieldModeModal } from '../components/ShieldModeModal';
 import { MerchStorefrontModal } from '../components/MerchStorefrontModal';
 import { CharacterCastMatrixModal } from '../components/CharacterCastMatrixModal';
+import { RaidStationModal } from '../components/RaidStationModal';
+import { ChannelRolesModal } from '../components/ChannelRolesModal';
+import { StreamHealthModal } from '../components/StreamHealthModal';
+import { CommunityGoalHubModal } from '../components/CommunityGoalHubModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -58,7 +62,10 @@ import {
   CalendarDays,
   ShieldAlert,
   ShoppingBag,
-  Theater
+  Theater,
+  Activity,
+  Target,
+  Shield
 } from 'lucide-react';
 
 interface StreamData {
@@ -141,6 +148,10 @@ export const StreamPage: React.FC = () => {
   const [showShieldModal, setShowShieldModal] = useState(false);
   const [showMerchModal, setShowMerchModal] = useState(false);
   const [showCastMatrixModal, setShowCastMatrixModal] = useState(false);
+  const [showRaidStationModal, setShowRaidStationModal] = useState(false);
+  const [showRolesModal, setShowRolesModal] = useState(false);
+  const [showStreamHealthModal, setShowStreamHealthModal] = useState(false);
+  const [showGoalHubModal, setShowGoalHubModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -709,6 +720,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Shield</span>
             </button>
 
+            {/* End-of-Stream Raid Station */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowRaidStationModal(true);
+              }}
+              className="btn-secondary"
+              title="Outgoing Book Raid Station & Host Matchmaker"
+            >
+              <Flame size={16} color="var(--accent-danger)" />
+              <span className="hide-mobile">Raid</span>
+            </button>
+
+            {/* Channel Roles & Badges */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowRolesModal(true);
+              }}
+              className="btn-secondary"
+              title="VIP, Moderator & Author Badge Management"
+            >
+              <Shield size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Roles</span>
+            </button>
+
+            {/* Stream Health & Audio Ingest */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowStreamHealthModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Stream Health, Ingest Latency & LUFS Audio Meter"
+            >
+              <Activity size={16} color="var(--accent-success)" />
+              <span className="hide-mobile">Health</span>
+            </button>
+
+            {/* Community Reading Goals */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowGoalHubModal(true);
+              }}
+              className="btn-secondary"
+              title="Community Reading Goals & Stretch Unlock Rewards"
+            >
+              <Target size={16} color="#ffd700" />
+              <span className="hide-mobile">Goals</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -1036,6 +1099,37 @@ export const StreamPage: React.FC = () => {
       {showCastMatrixModal && (
         <CharacterCastMatrixModal
           onClose={() => setShowCastMatrixModal(false)}
+        />
+      )}
+
+      {/* End-of-Stream Raid Station */}
+      {showRaidStationModal && (
+        <RaidStationModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowRaidStationModal(false)}
+        />
+      )}
+
+      {/* Channel Roles & Badges */}
+      {showRolesModal && (
+        <ChannelRolesModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowRolesModal(false)}
+        />
+      )}
+
+      {/* Stream Health Inspector */}
+      {showStreamHealthModal && (
+        <StreamHealthModal
+          onClose={() => setShowStreamHealthModal(false)}
+        />
+      )}
+
+      {/* Community Reading Goals Hub */}
+      {showGoalHubModal && (
+        <CommunityGoalHubModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowGoalHubModal(false)}
         />
       )}
 

@@ -39,7 +39,9 @@ import {
   CalendarDays,
   ShieldAlert,
   CreditCard,
-  Theater
+  Theater,
+  Activity,
+  Target
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -79,6 +81,10 @@ import { ShieldModeModal } from './ShieldModeModal';
 import { CreatorPayoutsModal } from './CreatorPayoutsModal';
 import { MerchStorefrontModal } from './MerchStorefrontModal';
 import { CharacterCastMatrixModal } from './CharacterCastMatrixModal';
+import { RaidStationModal } from './RaidStationModal';
+import { ChannelRolesModal } from './ChannelRolesModal';
+import { StreamHealthModal } from './StreamHealthModal';
+import { CommunityGoalHubModal } from './CommunityGoalHubModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -132,6 +138,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showPayoutsModal, setShowPayoutsModal] = useState(false);
   const [showMerchModal, setShowMerchModal] = useState(false);
   const [showCastMatrixModal, setShowCastMatrixModal] = useState(false);
+  const [showRaidStationModal, setShowRaidStationModal] = useState(false);
+  const [showRolesModal, setShowRolesModal] = useState(false);
+  const [showStreamHealthModal, setShowStreamHealthModal] = useState(false);
+  const [showGoalHubModal, setShowGoalHubModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -145,6 +155,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* End-of-Stream Raid Station */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowRaidStationModal(true);
+          }}
+          className="btn-quick-action action-red"
+          title="Outgoing Book Raid Station & Host Matchmaker"
+        >
+          <Flame size={18} />
+          <span>Raid Station</span>
+        </button>
+
+        {/* Channel Roles & Badges */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowRolesModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="VIP, Moderator & Author Badge Management"
+        >
+          <Shield size={18} />
+          <span>Roles & Badges</span>
+        </button>
+
+        {/* Stream Health & Audio Ingest Inspector */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowStreamHealthModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Live Stream Health, Ingest Latency & LUFS Audio Meter"
+        >
+          <Activity size={18} />
+          <span>Stream Health</span>
+        </button>
+
+        {/* Community Reading Goals */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowGoalHubModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Community Reading Goals & Stretch Unlock Rewards"
+        >
+          <Target size={18} />
+          <span>Goals Hub</span>
+        </button>
+
         {/* Streamer Shield Mode */}
         <button
           onClick={() => {
@@ -931,6 +993,33 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showCastMatrixModal && (
         <CharacterCastMatrixModal
           onClose={() => setShowCastMatrixModal(false)}
+        />
+      )}
+
+      {showRaidStationModal && (
+        <RaidStationModal
+          streamerName={streamerName}
+          onClose={() => setShowRaidStationModal(false)}
+        />
+      )}
+
+      {showRolesModal && (
+        <ChannelRolesModal
+          streamerName={streamerName}
+          onClose={() => setShowRolesModal(false)}
+        />
+      )}
+
+      {showStreamHealthModal && (
+        <StreamHealthModal
+          onClose={() => setShowStreamHealthModal(false)}
+        />
+      )}
+
+      {showGoalHubModal && (
+        <CommunityGoalHubModal
+          streamerName={streamerName}
+          onClose={() => setShowGoalHubModal(false)}
         />
       )}
     </div>
