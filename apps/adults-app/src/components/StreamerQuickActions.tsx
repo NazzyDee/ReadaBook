@@ -52,7 +52,8 @@ import {
   Gift,
   Megaphone,
   TrendingUp,
-  MessageSquare
+  MessageSquare,
+  Tag
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -114,6 +115,10 @@ import { PinnedMessageStudioModal } from './PinnedMessageStudioModal';
 import { VodChapterMarkersModal } from './VodChapterMarkersModal';
 import { CommunityPredictionsModal } from './CommunityPredictionsModal';
 import { WhisperMessagesModal } from './WhisperMessagesModal';
+import { ModActionAuditLogModal } from './ModActionAuditLogModal';
+import { ContentClassificationModal } from './ContentClassificationModal';
+import { StreamLatencySettingsModal } from './StreamLatencySettingsModal';
+import { ChatEmoteComboWidget } from './ChatEmoteComboWidget';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -189,6 +194,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showVodMarkersModal, setShowVodMarkersModal] = useState(false);
   const [showPredictionsModal, setShowPredictionsModal] = useState(false);
   const [showWhispersModal, setShowWhispersModal] = useState(false);
+  const [showModAuditModal, setShowModAuditModal] = useState(false);
+  const [showContentWarnModal, setShowContentWarnModal] = useState(false);
+  const [showLatencyModal, setShowLatencyModal] = useState(false);
+  const [showEmoteComboWidget, setShowEmoteComboWidget] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -202,6 +211,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Mod Action Audit Trail */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowModAuditModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="High Council Moderation Action Log & Safety Audit Trail"
+        >
+          <ShieldAlert size={18} />
+          <span>Mod Log</span>
+        </button>
+
+        {/* Content Classification & Warnings */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowContentWarnModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Literary Content & Trigger Warnings Studio"
+        >
+          <Tag size={18} />
+          <span>Warnings</span>
+        </button>
+
+        {/* Stream Latency & Audio-Only Transcoder */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowLatencyModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Stream Latency & Audio-Only Commuter Mode Switcher"
+        >
+          <Radio size={18} />
+          <span>Latency</span>
+        </button>
+
+        {/* Live Chat Emote Combos */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowEmoteComboWidget(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Live Chat Emote Combos & Reading Hype Multiplier"
+        >
+          <Flame size={18} />
+          <span>Combos</span>
+        </button>
+
         {/* Pinned Announcements */}
         <button
           onClick={() => {
@@ -1423,6 +1484,32 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showWhispersModal && (
         <WhisperMessagesModal
           onClose={() => setShowWhispersModal(false)}
+        />
+      )}
+
+      {showModAuditModal && (
+        <ModActionAuditLogModal
+          streamerName={streamerName}
+          onClose={() => setShowModAuditModal(false)}
+        />
+      )}
+
+      {showContentWarnModal && (
+        <ContentClassificationModal
+          streamerName={streamerName}
+          onClose={() => setShowContentWarnModal(false)}
+        />
+      )}
+
+      {showLatencyModal && (
+        <StreamLatencySettingsModal
+          onClose={() => setShowLatencyModal(false)}
+        />
+      )}
+
+      {showEmoteComboWidget && (
+        <ChatEmoteComboWidget
+          onClose={() => setShowEmoteComboWidget(false)}
         />
       )}
     </div>

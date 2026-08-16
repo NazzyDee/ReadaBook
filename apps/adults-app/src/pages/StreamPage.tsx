@@ -49,6 +49,10 @@ import { PinnedMessageStudioModal } from '../components/PinnedMessageStudioModal
 import { VodChapterMarkersModal } from '../components/VodChapterMarkersModal';
 import { CommunityPredictionsModal } from '../components/CommunityPredictionsModal';
 import { WhisperMessagesModal } from '../components/WhisperMessagesModal';
+import { ModActionAuditLogModal } from '../components/ModActionAuditLogModal';
+import { ContentClassificationModal } from '../components/ContentClassificationModal';
+import { StreamLatencySettingsModal } from '../components/StreamLatencySettingsModal';
+import { ChatEmoteComboWidget } from '../components/ChatEmoteComboWidget';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -98,7 +102,9 @@ import {
   Sparkles,
   Megaphone,
   TrendingUp,
-  MessageSquare
+  MessageSquare,
+  Tag,
+  Radio
 } from 'lucide-react';
 
 interface StreamData {
@@ -203,6 +209,10 @@ export const StreamPage: React.FC = () => {
   const [showVodMarkersModal, setShowVodMarkersModal] = useState(false);
   const [showPredictionsModal, setShowPredictionsModal] = useState(false);
   const [showWhispersModal, setShowWhispersModal] = useState(false);
+  const [showModAuditModal, setShowModAuditModal] = useState(false);
+  const [showContentWarnModal, setShowContentWarnModal] = useState(false);
+  const [showLatencyModal, setShowLatencyModal] = useState(false);
+  const [showEmoteComboWidget, setShowEmoteComboWidget] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1057,6 +1067,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Whispers</span>
             </button>
 
+            {/* Mod Action Audit Trail */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowModAuditModal(true);
+              }}
+              className="btn-secondary"
+              title="High Council Moderation Action Log & Safety Audit Trail"
+            >
+              <ShieldAlert size={16} color="#ffd700" />
+              <span className="hide-mobile">Mod Log</span>
+            </button>
+
+            {/* Content Warnings */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowContentWarnModal(true);
+              }}
+              className="btn-secondary"
+              title="Literary Content & Trigger Warnings Studio"
+            >
+              <Tag size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Warnings</span>
+            </button>
+
+            {/* Stream Latency Engine */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowLatencyModal(true);
+              }}
+              className="btn-secondary"
+              title="Stream Latency & Audio-Only Commuter Mode Switcher"
+            >
+              <Radio size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Latency</span>
+            </button>
+
+            {/* Live Chat Emote Combos */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowEmoteComboWidget(true);
+              }}
+              className="btn-secondary"
+              title="Live Chat Emote Combos & Reading Hype Multiplier"
+            >
+              <Flame size={16} color="#ff0055" />
+              <span className="hide-mobile">Combos</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -1555,6 +1617,36 @@ export const StreamPage: React.FC = () => {
       {showWhispersModal && (
         <WhisperMessagesModal
           onClose={() => setShowWhispersModal(false)}
+        />
+      )}
+
+      {/* High Council Mod Action Log */}
+      {showModAuditModal && (
+        <ModActionAuditLogModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowModAuditModal(false)}
+        />
+      )}
+
+      {/* Content Classification & Warnings */}
+      {showContentWarnModal && (
+        <ContentClassificationModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowContentWarnModal(false)}
+        />
+      )}
+
+      {/* Stream Latency Engine */}
+      {showLatencyModal && (
+        <StreamLatencySettingsModal
+          onClose={() => setShowLatencyModal(false)}
+        />
+      )}
+
+      {/* Live Chat Emote Combos */}
+      {showEmoteComboWidget && (
+        <ChatEmoteComboWidget
+          onClose={() => setShowEmoteComboWidget(false)}
         />
       )}
 
