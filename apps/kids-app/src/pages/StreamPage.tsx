@@ -5,6 +5,8 @@ import { collection, addDoc, query, onSnapshot, serverTimestamp, doc, where } fr
 import { db } from '../lib/firebase';
 import { books } from '../lib/booksData';
 import { Smile, AlertCircle, Radio, LogOut } from 'lucide-react';
+import { KidReactionsBar } from '../components/KidReactionsBar';
+import { StarCelebrationModal } from '../components/StarCelebrationModal';
 import '../App.css';
 
 interface ChatReaction {
@@ -49,6 +51,7 @@ export const StreamPage: React.FC = () => {
   const [textAnimationMode, setTextAnimationMode] = useState<'static' | 'word' | 'kinetic'>('kinetic');
   const [typographyMode, setTypographyMode] = useState<'outfit' | 'rounded' | 'dyslexic'>('outfit');
   const [calmMode, setCalmMode] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const [pomodoroSecondsLeft, setPomodoroSecondsLeft] = useState(1500);
   const [soundscape, setSoundscape] = useState<'none' | 'rain' | 'fireplace' | 'lofi'>('none');
   
@@ -878,6 +881,9 @@ export const StreamPage: React.FC = () => {
               <div ref={messagesEndRef} />
             </div>
 
+            {/* Floating Stickers and Bedtime Timer */}
+            <KidReactionsBar />
+
             {/* Interactive Emoji & Phrase Pad */}
             <div className="kids-reaction-board">
               {user ? (
@@ -919,6 +925,15 @@ export const StreamPage: React.FC = () => {
         )}
 
       </main>
+
+      {/* Star Celebration Modal on Story Complete */}
+      {showCelebration && (
+        <StarCelebrationModal
+          bookTitle={activeBook?.title || 'Storytime Book'}
+          onRestart={() => setShowCelebration(false)}
+          onClose={() => setShowCelebration(false)}
+        />
+      )}
     </div>
   );
 };

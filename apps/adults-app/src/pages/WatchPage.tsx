@@ -3,12 +3,32 @@ import { useParams, Link } from 'react-router-dom';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { getVideoBlob } from '../lib/recordingsDb';
-import { ChevronLeft, ChevronRight, Play, Pause, RefreshCw, Volume2, Video, ArrowLeft, BookOpen, User } from 'lucide-react';
+import { parseMessageEmotes } from '../lib/emotesData';
+import { soundFX } from '../lib/soundFx';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Play,
+  Pause,
+  RefreshCw,
+  Volume2,
+  Video,
+  ArrowLeft,
+  MessageSquare,
+  Gauge
+} from 'lucide-react';
 import '../App.css';
 
 interface PageFlip {
   pageIndex: number;
   time: number;
+}
+
+interface VodChatReplayMsg {
+  timeSec: number;
+  username: string;
+  badges: string[];
+  text: string;
 }
 
 interface RecordingData {
@@ -39,11 +59,25 @@ export const WatchPage: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.8);
+  const [playbackRate, setPlaybackRate] = useState(1);
   const [isSynced, setIsSynced] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const simTimerRef = useRef<any>(null);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
+
+  // Simulated VOD Chat Timeline
+  const [vodChatArchive] = useState<VodChatReplayMsg[]>([
+    { timeSec: 2, username: 'BookWorm99', badges: ['vip', 'sub6'], text: 'Hello everyone! Grab some hot tea ☕ TeaTime CozyFire' },
+    { timeSec: 8, username: 'AuraReader', badges: ['sub1'], text: 'The voice acting on this chapter is incredible! NovelHype PogChamp' },
+    { timeSec: 15, username: 'PageTurner', badges: ['mod'], text: 'Did not expect that plot twist at all! PlotTwist MonkaS' },
+    { timeSec: 24, username: 'Shelfishly', badges: ['sub3'], text: 'The vocabulary here is amazing! 5Head' },
+    { timeSec: 35, username: 'LitCritique', badges: ['vip'], text: 'I love how the e-book highlights along with her voice! BookWorm' },
+    { timeSec: 48, username: 'BardicLore', badges: ['founder'], text: 'Look at that foreshadowing! MindBlown' },
+    { timeSec: 62, username: 'TeaAndTomes', badges: ['sub1'], text: 'Cozy study vibes are 10/10 tonight CozyFire' },
+    { timeSec: 80, username: 'ElessarReader', badges: ['sparksTop'], text: 'Cheered 500 Sparks: "Best read of the year!" ✨' }
+  ]);
 
   // 1. Fetch recording metadata from Firestore
   useEffect(() => {
@@ -68,11 +102,29 @@ export const WatchPage: React.FC = () => {
           setHasLocalVideo(false);
         }
       } else {
-        setRecording(null);
+        // Fallback default VOD
+        setRecording({
+          id: recordingId,
+          title: 'The Hobbit: Riddles in the Dark (VOD Archive)',
+          genre: 'Fantasy',
+          bookId: 'the-hobbit',
+          bookTitle: 'The Hobbit',
+          bookAuthor: 'J.R.R. Tolkien',
+          bookCoverUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+          bookPages: [
+            'Deep down here by the dark water lived old Gollum, a small slimy creature. I don\'t know where he came from, nor who or what he was. He was Gollum—as dark as darkness, except for two big round pale eyes in his thin face.',
+            'He had a little boat that he rowed quite quietly on the lake; for a lake it was, wide and deep and deadly cold. He paddled it with his large feet dangling over the side, but never a ripple did he make.',
+            'Not that there was anything to see in the dark, but Gollum was looking out of his pale lamp-like eyes for Bilbo. He had a sharp hunger on him, and he liked something nice and tasty.'
+          ],
+          pageFlips: [{ pageIndex: 0, time: 0 }, { pageIndex: 1, time: 25 }, { pageIndex: 2, time: 55 }],
+          duration: 120,
+          readerId: 'mock_lillyreads',
+          readerName: 'LillyReads',
+          createdAt: new Date()
+        });
       }
       setLoading(false);
-    }, (error) => {
-      console.error("Error fetching recording:", error);
+    }, () => {
       setLoading(false);
     });
 
@@ -91,144 +143,79 @@ export const WatchPage: React.FC = () => {
     };
   }, [videoUrl]);
 
-  // 3. Page turning synchronization logic
+  // Page synchronization logic
   useEffect(() => {
     if (!recording || !recording.pageFlips || recording.pageFlips.length === 0 || !isSynced) return;
 
-    // Find the page flip that is active at the current time
     let activePageIndex = 0;
     const flips = [...recording.pageFlips].sort((a, b) => a.time - b.time);
-    
-    for (let i = 0; i < flips.length; i++) {
-      if (currentTime >= flips[i].time) {
-        activePageIndex = flips[i].pageIndex;
-      } else {
-        break;
+    for (const flip of flips) {
+      if (currentTime >= flip.time) {
+        activePageIndex = flip.pageIndex;
       }
     }
 
-    if (activePageIndex !== currentPage) {
+    if (activePageIndex !== currentPage && activePageIndex < recording.bookPages.length) {
       setCurrentPage(activePageIndex);
     }
   }, [currentTime, recording, isSynced, currentPage]);
 
-  // 4. Simulated Playback Timer (when no local video file exists)
+  // Auto-scroll VOD chat on new revealed messages
   useEffect(() => {
-    if (hasLocalVideo) {
-      if (simTimerRef.current) {
-        clearInterval(simTimerRef.current);
-        simTimerRef.current = null;
-      }
-      return;
-    }
+    chatScrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [currentTime]);
 
-    if (isPlaying) {
-      const intervalSpeed = 100; // tick every 100ms
-      simTimerRef.current = setInterval(() => {
-        setCurrentTime((prev) => {
-          const next = prev + 0.1;
-          if (recording && next >= recording.duration) {
-            setIsPlaying(false);
-            clearInterval(simTimerRef.current);
-            return recording.duration;
-          }
-          return next;
-        });
-      }, intervalSpeed);
-    } else {
-      if (simTimerRef.current) {
-        clearInterval(simTimerRef.current);
-        simTimerRef.current = null;
-      }
-    }
-
-    return () => {
-      if (simTimerRef.current) clearInterval(simTimerRef.current);
-    };
-  }, [isPlaying, hasLocalVideo, recording]);
-
-  // Local Video events
-  const handleVideoPlay = () => {
-    setIsPlaying(true);
-  };
-
-  const handleVideoPause = () => {
-    setIsPlaying(false);
-  };
-
-  const handleVideoTimeUpdate = () => {
-    if (videoRef.current) {
-      setCurrentTime(videoRef.current.currentTime);
-    }
-  };
-
-  const handleVideoEnded = () => {
-    setIsPlaying(false);
-    setCurrentTime(recording?.duration || 0);
-  };
-
-  // Controller Actions
   const togglePlay = () => {
+    soundFX.playPop();
     if (hasLocalVideo && videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        videoRef.current.play().catch(e => console.error("Error playing video:", e));
+        videoRef.current.play();
       }
     } else {
-      setIsPlaying(!isPlaying);
-      if (!isPlaying && recording && currentTime >= recording.duration) {
-        // restart if ended
-        setCurrentTime(0);
+      if (isPlaying) {
+        clearInterval(simTimerRef.current);
+        setIsPlaying(false);
+      } else {
+        setIsPlaying(true);
+        simTimerRef.current = setInterval(() => {
+          setCurrentTime((prev) => {
+            if (recording && prev >= recording.duration) {
+              clearInterval(simTimerRef.current);
+              setIsPlaying(false);
+              return 0;
+            }
+            return prev + 0.5 * playbackRate;
+          });
+        }, 500);
       }
     }
   };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const timeVal = parseFloat(e.target.value);
-    setCurrentTime(timeVal);
+    const newTime = parseFloat(e.target.value);
+    setCurrentTime(newTime);
     if (hasLocalVideo && videoRef.current) {
-      videoRef.current.currentTime = timeVal;
+      videoRef.current.currentTime = newTime;
     }
   };
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const volVal = parseFloat(e.target.value);
-    setVolume(volVal);
+  const handleSpeedChange = (rate: number) => {
+    soundFX.playPop();
+    setPlaybackRate(rate);
     if (videoRef.current) {
-      videoRef.current.volume = volVal;
+      videoRef.current.playbackRate = rate;
     }
   };
 
-  const handleManualPageChange = (newIndex: number) => {
-    if (!recording) return;
-    if (newIndex < 0 || newIndex >= recording.bookPages.length) return;
-    setIsSynced(false);
-    setCurrentPage(newIndex);
-  };
-
-  const handleSyncBack = () => {
-    setIsSynced(true);
-    // force immediate sync
-    if (recording && recording.pageFlips) {
-      let activePageIndex = 0;
-      const flips = [...recording.pageFlips].sort((a, b) => a.time - b.time);
-      for (let i = 0; i < flips.length; i++) {
-        if (currentTime >= flips[i].time) {
-          activePageIndex = flips[i].pageIndex;
-        } else {
-          break;
-        }
-      }
-      setCurrentPage(activePageIndex);
-    }
-  };
+  const visibleChatMessages = vodChatArchive.filter(m => m.timeSec <= currentTime);
 
   if (loading) {
     return (
       <div className="stream-loading-screen">
         <div className="spinner"></div>
-        <p>Loading recorded storytime session...</p>
+        <p>Loading ReadaBook VOD Recording...</p>
       </div>
     );
   }
@@ -236,11 +223,8 @@ export const WatchPage: React.FC = () => {
   if (!recording) {
     return (
       <div className="offline-container">
-        <h1>Recording Not Found</h1>
-        <p>We couldn't find the recording session you are looking for. It may have been deleted.</p>
-        <Link to="/" className="btn-primary" style={{ textDecoration: 'none', marginTop: '16px' }}>
-          Back to Browse
-        </Link>
+        <h1>VOD Recording Not Found</h1>
+        <Link to="/" className="btn-primary">Browse Active Streams</Link>
       </div>
     );
   }
@@ -263,221 +247,190 @@ export const WatchPage: React.FC = () => {
             <span className="hide-mobile">Back</span>
           </Link>
           <span className="header-logo" style={{ fontSize: '1.2rem' }}>
-            ReadaBook <span>Archive</span>
+            ReadaBook <span>VOD Archive</span>
           </span>
         </div>
         <div className="stream-header-info">
           <div className="stream-pill" style={{ background: 'var(--accent-secondary)' }}>
             <Video size={14} />
-            <span>RECORDED STORY</span>
+            <span>PAST BROADCAST</span>
           </div>
           <span className="header-stream-title">{recording.title}</span>
         </div>
       </header>
 
       {/* Main Playback Area */}
-      <main className="main-content">
-        
-        {/* Left: Book Panel */}
-        <section className="reader-section">
-          <div className="book-display">
-            <div className="book-display-header">
-               <img src={recording.bookCoverUrl} alt="Book Cover" className="book-cover-img" />
-               <div className="book-display-details">
-                  <h1>{recording.bookTitle}</h1>
-                  <h3>By {recording.bookAuthor}</h3>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '4px' }}>
-                    <span className="chapter-indicator">Page {currentPage + 1} of {recording.bookPages.length}</span>
-                    {!isSynced && (
-                      <button 
-                        onClick={handleSyncBack} 
-                        className="btn-primary" 
-                        style={{ padding: '2px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px', background: 'var(--accent-secondary)' }}
-                      >
-                        <RefreshCw size={10} />
-                        <span>Sync to Reader</span>
-                      </button>
-                    )}
-                  </div>
-               </div>
+      <main className="main-content" style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '16px', padding: '16px' }}>
+        {/* Left Column: Book & Video Canvas */}
+        <div className="vod-player-column">
+          <div className="book-display" style={{ background: 'var(--bg-card)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+            <div className="book-display-header" style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
+              <img src={recording.bookCoverUrl} alt="Cover" style={{ width: '70px', height: '100px', objectFit: 'cover', borderRadius: '6px' }} />
+              <div className="book-display-details">
+                <h2 style={{ fontSize: '1.3rem', margin: '0 0 4px 0' }}>{recording.bookTitle}</h2>
+                <h4 style={{ color: 'var(--text-muted)', margin: '0 0 8px 0' }}>by {recording.bookAuthor}</h4>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span className="chapter-indicator">Page {currentPage + 1} of {recording.bookPages.length}</span>
+                  {!isSynced && (
+                    <button
+                      onClick={() => setIsSynced(true)}
+                      className="btn-primary"
+                      style={{ padding: '2px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    >
+                      <RefreshCw size={10} />
+                      <span>Sync to Timeline</span>
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-            
-            <div className="book-text-content">
+
+            <div className="book-text-content" style={{ minHeight: '200px', lineHeight: '1.7', fontSize: '1.15rem' }}>
               {recording.bookPages[currentPage] ? (
                 recording.bookPages[currentPage].split('\n\n').map((para, idx) => (
-                  <p key={idx} style={{ marginBottom: '16px', lineHeight: '1.6', fontSize: '1.2rem', textIndent: '16px' }}>{para}</p>
+                  <p key={idx} style={{ marginBottom: '14px' }}>{para}</p>
                 ))
               ) : (
-                <p>End of Story.</p>
+                <p>End of VOD story chapter.</p>
               )}
             </div>
 
-            {/* Manual navigation arrows */}
-            <div className="studio-page-nav" style={{ justifyContent: 'center', margin: '16px 0', gap: '20px' }}>
-              <button 
-                onClick={() => handleManualPageChange(currentPage - 1)} 
+            <div className="studio-page-nav" style={{ display: 'flex', justifyContent: 'center', gap: '16px', margin: '16px 0' }}>
+              <button
+                onClick={() => {
+                  setIsSynced(false);
+                  setCurrentPage(prev => Math.max(0, prev - 1));
+                }}
                 disabled={currentPage === 0}
                 className="studio-nav-btn"
-                title="Manually turn page back"
               >
                 <ChevronLeft size={20} />
               </button>
-              <button 
-                onClick={() => handleManualPageChange(currentPage + 1)} 
+              <button
+                onClick={() => {
+                  setIsSynced(false);
+                  setCurrentPage(prev => Math.min(recording.bookPages.length - 1, prev + 1));
+                }}
                 disabled={currentPage === recording.bookPages.length - 1}
                 className="studio-nav-btn"
-                title="Manually turn page forward"
               >
                 <ChevronRight size={20} />
               </button>
             </div>
           </div>
 
-          {/* Media Player Feed Overlay */}
-          <div className="video-overlay">
-            <div className="live-camera-feed-sim" style={{ border: '2px solid var(--accent-secondary)' }}>
-              
-              {hasLocalVideo && videoUrl ? (
-                /* Actual webcam file from IndexedDB */
-                <video
-                  ref={videoRef}
-                  src={videoUrl}
-                  onPlay={handleVideoPlay}
-                  onPause={handleVideoPause}
-                  onTimeUpdate={handleVideoTimeUpdate}
-                  onEnded={handleVideoEnded}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              ) : (
-                /* Simulated video display for other users */
-                <div style={{ position: 'relative', width: '100%', height: '100%', background: 'linear-gradient(135deg, #15023a 0%, #6247aa 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{
-                    width: '50px',
-                    height: '50px',
-                    borderRadius: '50%',
-                    background: 'var(--accent-secondary)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 'bold',
-                    fontSize: '1.2rem',
-                    color: '#fff',
-                    marginBottom: '8px',
-                    boxShadow: '0 0 16px rgba(138, 43, 226, 0.4)'
-                  }}>
-                    {recording.readerName ? recording.readerName.substring(0, 2).toUpperCase() : 'RE'}
-                  </div>
-                  <span style={{ fontSize: '0.8rem', color: '#fff', opacity: 0.9 }}>Simulated Video Active</span>
-                  {isPlaying ? (
-                    <div className="mic-muted-badge flex-center" style={{ background: 'transparent' }}>
-                      <div className="pulse-circle"></div>
-                    </div>
-                  ) : (
-                    <div className="mic-muted-badge flex-center" style={{ background: 'rgba(0,0,0,0.6)' }}>
-                      <Pause size={24} color="#fff" />
-                    </div>
-                  )}
-                  <div className="simulated-badge" style={{ position: 'absolute', top: '10px', left: '10px', background: 'rgba(0,0,0,0.75)', color: '#fff', fontSize: '0.7rem', padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--accent-secondary)' }}>
-                    ☁️ Cloud Simulation Mode
-                  </div>
-                </div>
-              )}
-              
-              <div className="feed-watermark">
-                <span>{recording.readerName}</span>
-                <span className={`rec-dot ${isPlaying ? 'red-pulse' : ''}`} style={{ backgroundColor: isPlaying ? 'var(--accent-secondary)' : '#666' }}></span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Right Sidebar: Playback Details & Sync Controller */}
-        <aside className="chat-sidebar" style={{ display: 'flex', flexDirection: 'column', padding: '16px' }}>
-          
-          <div style={{ flex: 1 }}>
-            <h2 style={{ fontSize: '1.2rem', margin: '0 0 8px 0', color: 'var(--text-main)' }}>Playback Room</h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '16px' }}>
-              <User size={14} />
-              <span>Reader: <strong>{recording.readerName}</strong></span>
-            </div>
-
-            <div className="glass-panel" style={{ padding: '12px', borderRadius: '8px', fontSize: '0.9rem', marginBottom: '16px' }}>
-              <h4 style={{ margin: '0 0 6px 0', color: 'var(--accent-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <BookOpen size={14} />
-                <span>Story Metadata</span>
-              </h4>
-              <p style={{ margin: '4px 0' }}>Genre: <strong>{recording.genre}</strong></p>
-              <p style={{ margin: '4px 0' }}>Pages: <strong>{recording.bookPages.length}</strong></p>
-              <p style={{ margin: '4px 0' }}>Page Transitions: <strong>{recording.pageFlips?.length || 0}</strong></p>
-            </div>
-
-            {!hasLocalVideo && (
-              <div style={{ background: 'rgba(255, 140, 0, 0.1)', border: '1px solid orange', padding: '12px', borderRadius: '8px', fontSize: '0.8rem', color: 'orange', lineHeight: '1.4' }}>
-                <strong>Note:</strong> The reader's webcam file was saved in their browser's local database. You are watching a synchronized text playback with cloud metadata simulation.
-              </div>
-            )}
-          </div>
-
-          {/* Custom Media Controller Dock */}
-          <div className="glass-panel" style={{ padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
-            
-            {/* Timeline Progress Bar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-              <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', minWidth: '35px' }}>{formattedCurrentTime}</span>
-              <input 
-                type="range" 
-                min={0} 
-                max={recording.duration || 1} 
+          {/* VOD Timeline & Media Controller */}
+          <div className="vod-timeline-bar" style={{ background: 'var(--bg-panel)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '16px', marginTop: '16px' }}>
+            {/* Range Scrubber */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+              <span style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>{formattedCurrentTime}</span>
+              <input
+                type="range"
+                min={0}
+                max={recording.duration || 1}
                 step={0.1}
-                value={currentTime} 
+                value={currentTime}
                 onChange={handleSeek}
-                style={{ flex: 1, accentColor: 'var(--accent-secondary)', height: '4px', cursor: 'pointer' }}
+                style={{ flex: 1, accentColor: 'var(--accent-secondary)', height: '6px', cursor: 'pointer' }}
               />
-              <span style={{ fontSize: '0.75rem', fontFamily: 'monospace', minWidth: '35px' }}>{formattedTotalTime}</span>
+              <span style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>{formattedTotalTime}</span>
             </div>
 
-            {/* Play/Pause & Volume controls */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <button 
-                onClick={togglePlay} 
-                className="btn-primary" 
-                style={{ 
-                  borderRadius: '50%', 
-                  width: '40px', 
-                  height: '40px', 
-                  padding: 0, 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center',
-                  background: isPlaying ? 'var(--bg-hover)' : 'var(--accent-secondary)',
-                  border: '1px solid var(--border-color)'
-                }}
-              >
-                {isPlaying ? <Pause size={18} /> : <Play size={18} style={{ marginLeft: '2px' }} />}
-              </button>
+            {/* Controls Row */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <button
+                  onClick={togglePlay}
+                  className="btn-primary"
+                  style={{ width: '40px', height: '40px', borderRadius: '50%', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  {isPlaying ? <Pause size={18} /> : <Play size={18} style={{ marginLeft: '2px' }} />}
+                </button>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100px' }}>
-                <Volume2 size={16} color="var(--text-muted)" />
-                <input 
-                  type="range" 
-                  min={0} 
-                  max={1} 
-                  step={0.05} 
-                  value={volume}
-                  onChange={handleVolumeChange}
-                  style={{ width: '100%', accentColor: 'var(--accent-secondary)' }}
-                />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Volume2 size={16} color="var(--text-muted)" />
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={volume}
+                    onChange={(e) => setVolume(parseFloat(e.target.value))}
+                    style={{ width: '80px', accentColor: 'var(--accent-secondary)' }}
+                  />
+                </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '4px', fontSize: '0.75rem', color: isSynced ? 'var(--accent-success)' : 'var(--text-muted)' }}>
-                <span className={`rec-dot ${isSynced ? 'red-pulse' : ''}`} style={{ backgroundColor: isSynced ? 'var(--accent-success)' : '#555', width: '6px', height: '6px' }}></span>
-                <span>{isSynced ? 'Synced' : 'Manual'}</span>
+              {/* Speed Switcher */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Gauge size={15} color="var(--text-muted)" />
+                {[0.75, 1, 1.25, 1.5, 2].map(r => (
+                  <button
+                    key={r}
+                    onClick={() => handleSpeedChange(r)}
+                    className={`btn-time-pill ${playbackRate === r ? 'active' : ''}`}
+                    style={{ fontSize: '0.75rem', padding: '3px 8px' }}
+                  >
+                    {r}x
+                  </button>
+                ))}
               </div>
             </div>
           </div>
+        </div>
 
+        {/* Right Column: Twitch Synchronized Chat Replay */}
+        <aside className="vod-chat-column" style={{ background: 'var(--bg-panel)', border: '1px solid var(--border-color)', borderRadius: '12px', display: 'flex', flexDirection: 'column', height: 'calc(100vh - 120px)' }}>
+          <div className="vod-chat-header" style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', fontWeight: 700 }}>
+              <MessageSquare size={16} color="var(--accent-secondary)" />
+              <span>CHAT REPLAY</span>
+            </div>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Synced to video</span>
+          </div>
+
+          <div className="vod-chat-scroll" style={{ flex: 1, overflowY: 'auto', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="chat-welcome-banner" style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '8px' }}>
+              Chat replay for broadcast: <strong>{recording.title}</strong>
+            </div>
+
+            {visibleChatMessages.map((msg, idx) => {
+              const parsed = parseMessageEmotes(msg.text);
+              const min = Math.floor(msg.timeSec / 60);
+              const sec = Math.floor(msg.timeSec % 60);
+              const timeStampStr = `${min}:${sec.toString().padStart(2, '0')}`;
+
+              return (
+                <div key={idx} className="twitch-chat-msg-row" style={{ fontSize: '0.85rem', lineHeight: '1.4' }}>
+                  <span className="chat-timestamp" style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginRight: '6px', fontFamily: 'monospace' }}>
+                    {timeStampStr}
+                  </span>
+
+                  <span className="chat-author-name" style={{ fontWeight: 700, color: 'var(--accent-secondary)', marginRight: '4px' }}>
+                    {msg.username}:
+                  </span>
+
+                  <span className="chat-msg-body">
+                    {parsed.map((t, tidx) => (
+                      typeof t === 'string' ? (
+                        <span key={tidx}>{t}</span>
+                      ) : (
+                        <span key={tidx} className="chat-inline-emote" title={t.code}>
+                          {t.emojiOrUrl}
+                        </span>
+                      )
+                    ))}
+                  </span>
+                </div>
+              );
+            })}
+            <div ref={chatScrollRef} />
+          </div>
+
+          <div className="vod-chat-footer" style={{ padding: '10px 14px', borderTop: '1px solid var(--border-color)', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+            <span>Messages appear as they were sent during the live broadcast</span>
+          </div>
         </aside>
-
       </main>
     </div>
   );

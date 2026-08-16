@@ -104,7 +104,35 @@ export const BookClubsPage: React.FC = () => {
       snapshot.forEach((doc) => {
         list.push({ id: doc.id, ...doc.data() } as BookClub);
       });
-      setClubs(list);
+
+      if (list.length === 0) {
+        const defaultClubs: BookClub[] = [
+          {
+            id: 'club_rivendell',
+            name: 'The Rivendell Reading Fellowship 🧝',
+            description: 'A cozy community dedicated to discussing Tolkien classics, fantasy worldbuilding, and epic lore.',
+            adminId: 'mock_admin_1',
+            currentBookId: 'the-fellowship-of-the-ring',
+            currentBookTitle: 'The Fellowship of the Ring',
+            groupCode: 'LOTR2026',
+            members: [user?.uid || 'guest', 'user_lilly', 'user_bard', 'user_elven']
+          },
+          {
+            id: 'club_classics',
+            name: 'Midnight Classics & Tea Society ☕',
+            description: 'Late night read-alongs, character analyses, and friendly discussions of classic literature.',
+            adminId: 'mock_admin_2',
+            currentBookId: 'pride-and-prejudice',
+            currentBookTitle: 'Pride and Prejudice',
+            groupCode: 'TEA1337',
+            members: [user?.uid || 'guest', 'user_aura', 'user_turner']
+          }
+        ];
+        setClubs(defaultClubs);
+      } else {
+        setClubs(list);
+      }
+
       // Keep active club metadata fresh if selected
       if (activeClub) {
         const updated = list.find(c => c.id === activeClub.id);

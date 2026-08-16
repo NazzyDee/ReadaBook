@@ -4,6 +4,9 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { getVideoBlob } from '../lib/recordingsDb';
 import { ChevronLeft, ChevronRight, Play, Pause, RefreshCw, Video, ArrowLeft, BookOpen, Star } from 'lucide-react';
+import { KidStickerBlaster } from '../components/KidStickerBlaster';
+import { KidDrawTogether } from '../components/KidDrawTogether';
+import { KidKaraokeReader } from '../components/KidKaraokeReader';
 import '../App.css';
 
 interface PageFlip {
@@ -444,9 +447,19 @@ export const WatchPage: React.FC = () => {
               </div>
             </div>
             
-            <div className={`book-text-content font-${typographyMode}`} style={{ minHeight: '240px', display: 'flex', alignItems: 'center', fontSize: '1.5rem', color: calmMode ? '#3e2723' : '#2b2d42' }}>
-              {renderHighlightedText()}
-            </div>
+            {isReadAlongEnabled ? (
+              <KidKaraokeReader
+                title={recording.bookTitle}
+                author={recording.bookAuthor}
+                pages={recording.bookPages}
+                currentPage={currentPage}
+                onPageChange={(p) => handleManualPageChange(p)}
+              />
+            ) : (
+              <div className={`book-text-content font-${typographyMode}`} style={{ minHeight: '240px', display: 'flex', alignItems: 'center', fontSize: '1.5rem', color: calmMode ? '#3e2723' : '#2b2d42' }}>
+                {renderHighlightedText()}
+              </div>
+            )}
 
             {/* Large Kids Page Nav */}
             <div className="studio-page-nav" style={{ justifyContent: 'center', margin: '24px 0', gap: '30px' }}>
@@ -537,6 +550,9 @@ export const WatchPage: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* Magical Kid Sticker Cannon & Floating Blaster */}
+          <KidStickerBlaster />
         </section>
 
         {/* Right Sidebar: Kids Playback Panel */}
@@ -682,6 +698,14 @@ export const WatchPage: React.FC = () => {
                 <span className={`rec-dot ${isSynced ? 'red-pulse' : ''}`} style={{ backgroundColor: isSynced ? '#00b4d8' : '#888', width: '8px', height: '8px' }}></span>
                 <span>{isSynced ? 'Synced to Reader' : 'Manual Turning'}</span>
               </div>
+            </div>
+
+            {/* Collaborative Story Drawing Pad */}
+            <div style={{ marginTop: '16px' }}>
+              <KidDrawTogether
+                storytellerName={recording.readerName}
+                storyPrompt={`Draw a scene from "${recording.bookTitle}"!`}
+              />
             </div>
           </aside>
         )}

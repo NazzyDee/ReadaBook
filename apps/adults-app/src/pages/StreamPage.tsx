@@ -1,19 +1,41 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
-import { collection, addDoc, query, onSnapshot, serverTimestamp, doc, where, setDoc, deleteDoc } from 'firebase/firestore';
+import { onSnapshot, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { books, type Book } from '../lib/booksData';
-import { Users, Send, AlertCircle, Radio, LogOut, Heart, Pin } from 'lucide-react';
-import '../App.css';
-
-interface ChatMessage {
-  id: string;
-  text: string;
-  username: string;
-  createdAt: any;
-  type?: 'announcement' | 'normal';
-}
+import { STREAMERS, type StreamerProfile } from '../lib/streamersData';
+import { VideoPlayer } from '../components/VideoPlayer';
+import { SyncedReader } from '../components/SyncedReader';
+import { LiveChat, type ChatMsg } from '../components/LiveChat';
+import { PredictionsOverlay } from '../components/PredictionsOverlay';
+import { StreamExtensions } from '../components/StreamExtensions';
+import { CommunityGoalWidget } from '../components/CommunityGoalWidget';
+import { StreamMarkerModal } from '../components/StreamMarkerModal';
+import { ClipCreator } from '../components/ClipCreator';
+import { SubModal } from '../components/SubModal';
+import { StreamInfoModal } from '../components/StreamInfoModal';
+import { RaidBanner } from '../components/RaidBanner';
+import { MiniPlayer } from '../components/MiniPlayer';
+import { GuestStarModal } from '../components/GuestStarModal';
+import { type GuestParticipant, type GuestLayoutMode } from '../components/GuestStarStage';
+import { ReadingSprintHUD } from '../components/ReadingSprintHUD';
+import { AmbientSoundMixer } from '../components/AmbientSoundMixer';
+import { SprintSummaryModal } from '../components/SprintSummaryModal';
+import { BookCommercePanel } from '../components/BookCommercePanel';
+import { soundFX } from '../lib/soundFx';
+import {
+  Heart,
+  Star,
+  Scissors,
+  Share2,
+  AlertCircle,
+  CheckCircle2,
+  Edit3,
+  Minimize2,
+  Bookmark,
+  Users
+} from 'lucide-react';
 
 interface StreamData {
   streamerId: string;
@@ -29,41 +51,105 @@ interface StreamData {
   pinnedMessage?: string | null;
   broadcastSource?: 'webcam' | 'obs';
   isObsConnected?: boolean;
+  slowModeSeconds?: number;
+  tags?: string[];
 }
-
 
 export const StreamPage: React.FC = () => {
   const { streamerId } = useParams<{ streamerId: string }>();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+
   const [stream, setStream] = useState<StreamData | null>(null);
   const [activeBook, setActiveBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [theaterMode, setTheaterMode] = useState(false);
+  const [audioOnly, setAudioOnly] = useState(false);
+  const [showMiniPlayer, setShowMiniPlayer] = useState(false);
 
-  // 1. Fetch and subscribe to Stream Document
+  // Guest Star Multi-Reader State
+  const [showGuestStarModal, setShowGuestStarModal] = useState(false);
+  const [guestStarActive, setGuestStarActive] = useState(false);
+  const [guestLayout, setGuestLayout] = useState<GuestLayoutMode>('side-by-side');
+  const [guestParticipants, setGuestParticipants] = useState<GuestParticipant[]>([
+    {
+      id: 'host_p1',
+      name: 'LillyReads',
+      role: 'Host & Narrator',
+      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+      isMuted: false,
+      isVideoOff: false,
+      audioLevel: 75,
+      isSpeaking: true,
+      volume: 100,
+      isHost: true
+    },
+    {
+      id: 'guest_p2',
+      name: 'ElessarVoiceActor',
+      role: 'Voice Actor: Aragorn',
+      avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
+      isMuted: false,
+      isVideoOff: false,
+      audioLevel: 60,
+      isSpeaking: false,
+      volume: 90
+    }
+  ]);
+
+  // Modals & Toolbars
+  const [showClipModal, setShowClipModal] = useState(false);
+  const [showSubModal, setShowSubModal] = useState(false);
+  const [showEditInfoModal, setShowEditInfoModal] = useState(false);
+  const [showMarkerModal, setShowMarkerModal] = useState(false);
+  const [showAmbientMixer, setShowAmbientMixer] = useState(false);
+  const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
+  const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
+  const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
+
+  // 1. Fetch & Subscribe to Stream Document (with mock fallbacks)
   useEffect(() => {
     if (!streamerId) return;
 
+    // Check if mock streamer
+    const fallbackProfile = STREAMERS[streamerId];
+    const defaultMockStream: StreamData = {
+      streamerId: streamerId,
+      streamerName: fallbackProfile?.username || 'Storyteller',
+      title: fallbackProfile?.currentStreamTitle || 'Live Reading & Book Discussion ☕',
+      bookId: fallbackProfile?.currentBookId || books[0].id,
+      genre: 'Fantasy',
+      currentPage: 0,
+      currentParagraph: 0,
+      isLive: true,
+      viewerCount: fallbackProfile?.followersCount ? Math.round(fallbackProfile.followersCount / 20) : 1420,
+      broadcastSource: 'webcam',
+      tags: fallbackProfile?.tags || ['VoiceActing', 'Fantasy', 'CozyVibes']
+    };
+
     const streamDocRef = doc(db, 'streams', streamerId);
-    const unsubscribe = onSnapshot(streamDocRef, (docSnap) => {
-      if (docSnap.exists()) {
-        setStream(docSnap.data() as StreamData);
-      } else {
-        setStream(null);
+    const unsubscribe = onSnapshot(
+      streamDocRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setStream(docSnap.data() as StreamData);
+        } else {
+          setStream(defaultMockStream);
+        }
+        setLoading(false);
+      },
+      (err) => {
+        console.warn('Using mock stream fallback:', err);
+        setStream(defaultMockStream);
+        setLoading(false);
       }
-      setLoading(false);
-    }, (error) => {
-      console.error("Error reading stream document: ", error);
-      setLoading(false);
-    });
+    );
 
     return () => unsubscribe();
   }, [streamerId]);
 
-  // 2. Resolve active book (static or custom Firestore book)
+  // 2. Resolve active book (static or Firestore custom book)
   useEffect(() => {
     if (!stream) {
       setActiveBook(null);
@@ -81,12 +167,10 @@ export const StreamPage: React.FC = () => {
             setActiveBook(staticBook);
           }
         })
-        .catch(err => {
-          console.error("Failed to load book pages:", err);
+        .catch(() => {
           setActiveBook(staticBook);
         });
     } else {
-      // Listen to custom book dynamically in Firestore
       const bookDocRef = doc(db, 'books', stream.bookId);
       const unsubscribe = onSnapshot(bookDocRef, (docSnap) => {
         if (docSnap.exists()) {
@@ -97,105 +181,147 @@ export const StreamPage: React.FC = () => {
     }
   }, [stream]);
 
-  // 3. Subscribe to Follow status
+  // 3. Follow state
   useEffect(() => {
     if (!user || !streamerId) return;
 
-    if (streamerId.startsWith('mock-')) {
+    if (streamerId.startsWith('mock_') || streamerId.startsWith('mock-')) {
       const mockFollows = JSON.parse(localStorage.getItem('mockFollows') || '[]');
       setIsFollowing(mockFollows.includes(streamerId));
-      return;
+    } else {
+      const followDocRef = doc(db, 'users', user.uid, 'following', streamerId);
+      const unsubscribe = onSnapshot(followDocRef, (docSnap) => {
+        setIsFollowing(docSnap.exists());
+      });
+      return () => unsubscribe();
     }
-
-    const followDocRef = doc(db, 'users', user.uid, 'follows', streamerId);
-    const unsubscribe = onSnapshot(followDocRef, (docSnap) => {
-      setIsFollowing(docSnap.exists());
-    });
-
-    return () => unsubscribe();
   }, [user, streamerId]);
 
-  // 4. Fetch and subscribe to Chat Messages
+  // 4. Keyboard Shortcuts: Alt+X (Clip), Alt+M (Marker), Alt+T (Theater)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        document.activeElement?.tagName === 'INPUT' ||
+        document.activeElement?.tagName === 'TEXTAREA'
+      ) {
+        return;
+      }
+
+      if (e.altKey && (e.key === 'x' || e.key === 'X')) {
+        e.preventDefault();
+        soundFX.playPop();
+        setShowClipModal(true);
+      } else if (e.altKey && (e.key === 'm' || e.key === 'M')) {
+        e.preventDefault();
+        soundFX.playPop();
+        setShowMarkerModal(true);
+      } else if (e.altKey && (e.key === 't' || e.key === 'T')) {
+        e.preventDefault();
+        setTheaterMode(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // 4. Live Chat messages simulation
   useEffect(() => {
     if (!streamerId) return;
 
-    if (streamerId.startsWith('mock-')) {
-      const initialMockMsgs = [
-        { id: 'm1', text: 'I love this chapter so much!', username: 'ReaderPro', createdAt: new Date() },
-        { id: 'm2', text: 'Lofi beats are perfect for this book.', username: 'ChillVibes', createdAt: new Date() },
-        { id: 'm3', text: 'Where can I buy this edition?', username: 'NovelWorm', createdAt: new Date() }
-      ];
-      setMessages(initialMockMsgs);
+    const initialMockMsgs: ChatMsg[] = [
+      {
+        id: 'm1',
+        text: 'Hello everyone! Grab some hot tea ☕ TeaTime CozyFire',
+        username: 'BookWorm99',
+        createdAt: new Date(),
+        badges: ['vip', 'sub6']
+      },
+      {
+        id: 'm2',
+        text: 'The voice acting on this chapter is incredible! NovelHype PogChamp',
+        username: 'AuraReader',
+        createdAt: new Date(),
+        badges: ['sub1']
+      },
+      {
+        id: 'm3',
+        text: 'Did not expect that plot twist at all! PlotTwist MonkaS',
+        username: 'PageTurner',
+        createdAt: new Date(),
+        badges: ['mod']
+      }
+    ];
+    setMessages(initialMockMsgs);
 
-      const mockChatUsers = ['AuraReader', 'BookWorm99', 'PageTurner', 'Shelfishly', 'LitCritique', 'NovelEnthusiast'];
-      const mockChatPhrases = [
-        'Oh wow, I did not expect that!',
-        'Can you read that page again?',
-        'The vocabulary here is amazing.',
-        'This matches the title perfectly.',
-        'Wait, is that a typo in the original print?',
-        'Such an engaging voice! Thanks for streaming!',
-        'Alice is my favorite character.',
-        'What genre is this categorized under?'
-      ];
+    const mockChatUsers = ['Shelfishly', 'LitCritique', 'NovelEnthusiast', 'BardicLore', 'TeaAndTomes', 'MysticReader'];
+    const mockChatPhrases = [
+      'The vocabulary here is amazing! 5Head',
+      'I love how the e-book highlights along with her voice! BookWorm',
+      'Look at that foreshadowing! MindBlown',
+      'Can we predict what happens to the ring next? VoteYea',
+      'Cozy study vibes are 10/10 tonight CozyFire',
+      'Speed reading sprint in the next chapter? SpeedReader',
+      'Aslan voice gives me goosebumps every time! NovelHype PogChamp',
+      'Cheering 100 sparks for this chapter! ✨'
+    ];
 
-      const interval = setInterval(() => {
-        const randomUser = mockChatUsers[Math.floor(Math.random() * mockChatUsers.length)];
-        const randomText = mockChatPhrases[Math.floor(Math.random() * mockChatPhrases.length)];
-        
-        setMessages(prev => [
-          ...prev, 
-          {
-            id: `mock-msg-${Math.random()}`,
-            text: randomText,
-            username: randomUser,
-            createdAt: new Date()
-          }
-        ]);
-      }, 7000);
+    const interval = setInterval(() => {
+      const randomUser = mockChatUsers[Math.floor(Math.random() * mockChatUsers.length)];
+      const randomText = mockChatPhrases[Math.floor(Math.random() * mockChatPhrases.length)];
+      const randomBadges: ('sub1' | 'vip' | 'founder')[] = Math.random() > 0.5 ? ['sub1'] : [];
 
-      return () => clearInterval(interval);
-    }
+      setMessages(prev => [
+        ...prev.slice(-49),
+        {
+          id: `msg_${Math.random()}`,
+          text: randomText,
+          username: randomUser,
+          createdAt: new Date(),
+          badges: randomBadges
+        }
+      ]);
+    }, 6000);
 
-    const q = query(
-      collection(db, 'messages'),
-      where('streamId', '==', streamerId)
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const msgs: ChatMessage[] = [];
-      snapshot.forEach((doc) => {
-        msgs.push({ id: doc.id, ...doc.data() } as ChatMessage);
-      });
-      // Sort client-side by createdAt ascending, then limit to 50
-      msgs.sort((a, b) => {
-        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : (a.createdAt?.seconds || 0);
-        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : (b.createdAt?.seconds || 0);
-        return timeA - timeB;
-      });
-      setMessages(msgs.slice(-50));
-    });
-
-    return () => unsubscribe();
+    return () => clearInterval(interval);
   }, [streamerId]);
 
-  // Scroll to bottom on new message
+  // 5. Global Keyboard Shortcuts Listener
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  const handleFollowToggle = async () => {
-    if (!user || !streamerId) return;
-
-    if (streamerId.startsWith('mock-')) {
-      const mockFollows = JSON.parse(localStorage.getItem('mockFollows') || '[]');
-      let updatedFollows = [];
-      if (isFollowing) {
-        updatedFollows = mockFollows.filter((id: string) => id !== streamerId);
-      } else {
-        updatedFollows = [...mockFollows, streamerId];
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') {
+        return;
       }
-      localStorage.setItem('mockFollows', JSON.stringify(updatedFollows));
+
+      if (e.altKey && (e.key === 't' || e.key === 'T')) {
+        e.preventDefault();
+        setTheaterMode(prev => !prev);
+      } else if (e.altKey && (e.key === 'x' || e.key === 'X')) {
+        e.preventDefault();
+        setShowClipModal(true);
+      } else if (e.altKey && (e.key === 'm' || e.key === 'M')) {
+        e.preventDefault();
+        setShowMarkerModal(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleToggleFollow = async () => {
+    if (!user || !streamerId) return;
+    soundFX.playPop();
+
+    if (streamerId.startsWith('mock_') || streamerId.startsWith('mock-')) {
+      const mockFollows = JSON.parse(localStorage.getItem('mockFollows') || '[]');
+      let updated = [];
+      if (isFollowing) {
+        updated = mockFollows.filter((id: string) => id !== streamerId);
+      } else {
+        updated = [...mockFollows, streamerId];
+      }
+      localStorage.setItem('mockFollows', JSON.stringify(updated));
       setIsFollowing(!isFollowing);
       window.dispatchEvent(new Event('storage'));
       return;
@@ -212,56 +338,88 @@ export const StreamPage: React.FC = () => {
         });
       }
     } catch (err) {
-      console.error("Error toggling follow: ", err);
+      console.error('Error toggling follow:', err);
     }
   };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newMessage.trim() || !user || !streamerId) return;
+  const handleSendMessage = (text: string) => {
+    if (!text.trim() || !user) return;
+    const username = user.email ? user.email.split('@')[0] : 'You';
 
-    if (stream?.emoteOnly) {
-      return;
-    }
+    const newMsg: ChatMsg = {
+      id: `msg_user_${Date.now()}`,
+      text: text.trim(),
+      username,
+      createdAt: new Date(),
+      badges: ['sub1']
+    };
 
-    const username = user.email ? user.email.split('@')[0] : 'Anonymous';
-    const msgText = newMessage;
-    setNewMessage('');
+    setMessages(prev => [...prev.slice(-49), newMsg]);
+  };
 
-    try {
-      await addDoc(collection(db, 'messages'), {
-        text: msgText,
-        username,
-        streamId: streamerId,
-        createdAt: serverTimestamp()
+  const handleSendCheer = (bits: number, message: string) => {
+    const username = user?.email ? user.email.split('@')[0] : 'You';
+    const cheerAnim = {
+      id: `cheer_${Date.now()}`,
+      bits,
+      username,
+      message,
+      icon: bits >= 1000 ? '👑' : bits >= 500 ? '💎' : '✨'
+    };
+
+    setActiveCheerAnimation(cheerAnim);
+    setTimeout(() => setActiveCheerAnimation(null), 5000);
+
+    const cheerMsg: ChatMsg = {
+      id: `cheer_msg_${Date.now()}`,
+      text: `Cheered ${bits} Sparks: "${message}"`,
+      username,
+      createdAt: new Date(),
+      type: 'cheer',
+      bitsAmount: bits,
+      badges: ['sparksTop', 'sub1'],
+      isHighlighted: true
+    };
+
+    setMessages(prev => [...prev.slice(-49), cheerMsg]);
+  };
+
+  const handleDeleteMessage = (id: string) => {
+    setMessages(prev => prev.filter(m => m.id !== id));
+  };
+
+  const handleClearChat = () => {
+    setMessages([]);
+  };
+
+  const handleSaveStreamInfo = (title: string, genre: string, tags: string[]) => {
+    if (stream) {
+      setStream({
+        ...stream,
+        title,
+        genre,
+        tags
       });
-    } catch (err) {
-      console.error("Error sending message: ", err);
     }
   };
 
-  const handleSendEmoji = async (emoji: string) => {
-    if (!user || !streamerId) return;
-    const username = user.email ? user.email.split('@')[0] : 'Anonymous';
-
-    try {
-      await addDoc(collection(db, 'messages'), {
-        text: emoji,
-        username,
-        streamId: streamerId,
-        createdAt: serverTimestamp()
-      });
-    } catch (err) {
-      console.error("Error sending emoji: ", err);
-    }
+  const handleInitiateRaid = (_target: StreamerProfile) => {
+    setIncomingRaid({
+      raiderName: stream?.streamerName || 'Broadcaster',
+      raiderAvatar: streamerProfile?.avatarUrl || '',
+      readerCount: 1420
+    });
   };
 
+  const handleAddStreamMarker = (desc: string, timestamp: string) => {
+    handleSendMessage(`📌 Stream Marker dropped at ${timestamp}: "${desc}"`);
+  };
 
   if (loading) {
     return (
       <div className="stream-loading-screen">
         <div className="spinner"></div>
-        <p>Connecting to stream feed...</p>
+        <p>Connecting to ReadaBook Live Stream...</p>
       </div>
     );
   }
@@ -271,7 +429,7 @@ export const StreamPage: React.FC = () => {
       <div className="offline-container">
         <AlertCircle size={64} color="var(--accent-primary)" />
         <h1>Stream Offline</h1>
-        <p>This channel is not currently broadcasting. Head back to Browse to find active reading streams.</p>
+        <p>This channel is not currently broadcasting. Head back to Browse to find active storytellers.</p>
         <Link to="/" className="btn-primary" style={{ textDecoration: 'none', marginTop: '16px' }}>
           Back to Browse
         </Link>
@@ -279,296 +437,337 @@ export const StreamPage: React.FC = () => {
     );
   }
 
+  const streamerProfile = STREAMERS[stream.streamerId] || null;
+
   return (
-    <div className="app-container">
-      {/* Header */}
-      <header className="header">
-        <Link to="/" className="header-logo">
-          ReadaBook <span>Live</span>
-        </Link>
-        <div className="stream-header-info">
-          <div className="stream-pill">
-            <Radio size={14} className="pulse" />
-            <span>LIVE</span>
+    <div className={`twitch-stream-page ${theaterMode ? 'theater-active' : ''}`}>
+      {/* Main Left Watch Column */}
+      <div className="twitch-watch-main-column">
+        {/* Incoming Raid Banner Alert (if raided) */}
+        {incomingRaid && (
+          <RaidBanner
+            raiderName={incomingRaid.raiderName}
+            raiderAvatar={incomingRaid.raiderAvatar}
+            readerCount={incomingRaid.readerCount}
+            onShoutout={(name) => handleSendMessage(`🎉 Huge thanks to ${name} for the raid! Check out their channel! ✨`)}
+            onDismiss={() => setIncomingRaid(null)}
+          />
+        )}
+
+        {/* Top: Video Player Canvas */}
+        <div className="stream-video-wrapper">
+          <VideoPlayer
+            streamerName={stream.streamerName}
+            streamTitle={stream.title}
+            viewerCount={stream.viewerCount}
+            broadcastSource={stream.broadcastSource}
+            isObsConnected={stream.isObsConnected}
+            activeCheer={activeCheerAnimation}
+            theaterMode={theaterMode}
+            onToggleTheater={() => setTheaterMode(!theaterMode)}
+            audioOnly={audioOnly}
+            onToggleAudioOnly={() => setAudioOnly(!audioOnly)}
+            guestStarActive={guestStarActive}
+            guestLayout={guestLayout}
+            guestParticipants={guestParticipants}
+            onOpenGuestStarModal={() => setShowGuestStarModal(true)}
+          />
+        </div>
+
+        {/* Middle: Streamer Metadata Bar & Action Buttons */}
+        <div className="twitch-stream-meta-bar">
+          <div className="stream-meta-left">
+            <Link to={`/channel/${stream.streamerId}`} className="streamer-avatar-link">
+              <img
+                src={streamerProfile?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=250&q=80'}
+                alt={stream.streamerName}
+                className="streamer-meta-avatar"
+              />
+              <span className="live-pill-dot"></span>
+            </Link>
+
+            <div className="stream-meta-text">
+              <div className="stream-title-row">
+                <h2>{stream.title}</h2>
+                <button
+                  onClick={() => setShowEditInfoModal(true)}
+                  className="btn-edit-stream-title"
+                  title="Edit Stream Info"
+                >
+                  <Edit3 size={14} />
+                </button>
+              </div>
+
+              <div className="streamer-subline">
+                <Link to={`/channel/${stream.streamerId}`} className="streamer-name-link">
+                  {stream.streamerName}
+                </Link>
+                {streamerProfile?.isPartner && (
+                  <span title="Verified Literature Partner">
+                    <CheckCircle2 size={15} color="#00e5ff" />
+                  </span>
+                )}
+                <span className="meta-sep">•</span>
+                <Link to={`/directory/category/${stream.genre.toLowerCase()}`} className="meta-genre-link">
+                  {stream.genre}
+                </Link>
+                <span className="meta-sep">•</span>
+                <span className="meta-book-name">📖 {activeBook?.title || 'Book'} by {activeBook?.author}</span>
+              </div>
+
+              <div className="stream-tags-list">
+                {stream.tags?.map(t => (
+                  <span key={t} className="stream-tag-chip">#{t}</span>
+                ))}
+              </div>
+            </div>
           </div>
-          <span className="header-stream-title">{stream.title}</span>
-          
-          {user && user.uid !== streamerId && (
-            <button 
-              onClick={handleFollowToggle} 
-              className={`btn-follow ${isFollowing ? 'following' : ''}`}
+
+          <div className="stream-meta-right">
+            {/* Follow Button */}
+            <button
+              onClick={handleToggleFollow}
+              className={`btn-stream-follow ${isFollowing ? 'following' : ''}`}
             >
-              <Heart size={14} fill={isFollowing ? "currentColor" : "none"} />
+              <Heart size={16} fill={isFollowing ? 'currentColor' : 'none'} />
               <span>{isFollowing ? 'Following' : 'Follow'}</span>
             </button>
-          )}
-        </div>
-        <div className="user-profile">
-          {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <span className="profile-name">{user.email?.split('@')[0]}</span>
-              <button className="btn-primary" onClick={logout} style={{ background: 'var(--bg-hover)', color: 'var(--text-main)', boxShadow: 'none', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <LogOut size={14} />
-                <span>Sign Out</span>
-              </button>
-            </div>
-          ) : (
-            <Link to="/login" className="btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>
-              Sign In
-            </Link>
-          )}
-        </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="main-content">
-        
-        {/* Left: Reading and Video Section */}
-        <section className="reader-section" style={{ position: 'relative', width: '100%', height: '100%', padding: 0, overflow: 'hidden', display: 'flex', justifyContent: 'stretch', alignItems: 'stretch' }}>
-          
-          {/* The Main Camera Feed (Creator stream takes 100% space as background canvas) */}
-          <div className="live-camera-feed-sim" style={{ flex: 1, background: '#11032a', position: 'relative', width: '100%', height: '100%', minHeight: '500px' }}>
-            {stream.broadcastSource === 'obs' ? (
-              stream.isObsConnected ? (
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  background: 'linear-gradient(135deg, #0b011d 0%, #240046 100%)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                  padding: '24px',
-                  textAlign: 'center'
-                }}>
-                  <div style={{
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '50%',
-                    background: 'var(--accent-primary)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontWeight: 'bold',
-                    fontSize: '1.6rem',
-                    marginBottom: '12px',
-                    boxShadow: '0 0 24px rgba(157, 78, 221, 0.6)'
-                  }}>
-                    📡
+            {/* Subscribe Button */}
+            <button
+              onClick={() => setShowSubModal(true)}
+              className="btn-primary btn-stream-sub"
+            >
+              <Star size={16} fill="currentColor" />
+              <span>Subscribe</span>
+            </button>
+
+            {/* Guest Star Stage Launcher */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowGuestStarModal(true);
+              }}
+              className={`btn-secondary ${guestStarActive ? 'btn-guest-active' : ''}`}
+              title="Guest Star Multi-Reader Stage"
+            >
+              <Users size={16} />
+              <span className="hide-mobile">{guestStarActive ? 'Guest Star (Live)' : 'Guest Star'}</span>
+            </button>
+
+            {/* Drop Marker Button */}
+            <button
+              onClick={() => setShowMarkerModal(true)}
+              className="btn-secondary btn-icon-only"
+              title="Drop Stream Marker (Alt+M)"
+            >
+              <Bookmark size={16} />
+            </button>
+
+            {/* Clip That Button */}
+            <button
+              onClick={() => setShowClipModal(true)}
+              className="btn-secondary btn-clip-trigger"
+              title="Create 30s Clip (Alt+X)"
+            >
+              <Scissors size={16} />
+              <span className="hide-mobile">Clip</span>
+            </button>
+
+            {/* Picture-in-Picture Mini-Player */}
+            <button
+              onClick={() => setShowMiniPlayer(true)}
+              className="btn-secondary btn-icon-only"
+              title="Mini-Player (PiP)"
+            >
+              <Minimize2 size={16} />
+            </button>
+
+            {/* Share Button */}
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Stream link copied to clipboard!');
+              }}
+              className="btn-secondary btn-icon-only"
+              title="Share Stream"
+            >
+              <Share2 size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* Synchronized Community Reading Sprint HUD (Pomodoro Focus) */}
+        <ReadingSprintHUD
+          isBroadcaster={user?.uid === stream.streamerId}
+          onOpenAmbientMixer={() => setShowAmbientMixer(true)}
+          onSprintCompleted={(target) => {
+            setSprintCompletedTarget(target);
+            handleSendMessage(`🎯 Completed a 25-minute reading sprint! (Target: ${target} pages)`);
+          }}
+        />
+
+        {/* Live Community Sub / Follower Goal */}
+        <CommunityGoalWidget />
+
+        {/* Live Predictions Overlay */}
+        <PredictionsOverlay />
+
+        {/* Stream Extensions Toolbar & Overlays (Soundboard, Lore Map, Trivia Quiz) */}
+        <StreamExtensions
+          streamerName={stream.streamerName}
+          bookTitle={activeBook?.title || 'Current Book'}
+          onSendChatMessage={handleSendMessage}
+        />
+
+        {/* Bottom: Live Interactive Synced E-Reader */}
+        {activeBook && (
+          <div className="synced-reader-section">
+            <SyncedReader
+              activeBook={activeBook}
+              currentPage={stream.currentPage}
+              currentParagraph={stream.currentParagraph}
+              streamerName={stream.streamerName}
+            />
+          </div>
+        )}
+
+        {/* In-Stream Book Purchases & Goodreads / StoryGraph Shelf Sync */}
+        {activeBook && (
+          <BookCommercePanel
+            book={activeBook}
+            streamerName={stream.streamerName}
+            onSendChatMessage={handleSendMessage}
+          />
+        )}
+
+        {/* Streamer Markdown Info Panels */}
+        {streamerProfile && streamerProfile.panels && (
+          <div className="stream-about-panels-section">
+            <h3 className="section-heading">About {streamerProfile.displayName}</h3>
+            <div className="twitch-panels-grid">
+              {streamerProfile.panels.map(panel => (
+                <div key={panel.id} className="twitch-markdown-panel">
+                  <div className="panel-header">
+                    <h4>{panel.title}</h4>
                   </div>
-                  <h2 style={{ fontSize: '1.3rem', color: '#fff', margin: '0 0 4px 0' }}>{stream.streamerName}'s OBS Broadcast</h2>
-                  <span style={{ fontSize: '0.9rem', color: 'var(--accent-success)', fontWeight: 'bold' }}>🟢 Ingestion Feed Connected (1080p)</span>
-                  <span style={{ fontSize: '0.8rem', opacity: 0.6, marginTop: '8px' }}>Streaming from OBS Studio encoder-us-east-1</span>
+                  <div className="panel-body">
+                    {panel.content.split('\n').map((line, idx) => (
+                      <p key={idx}>{line}</p>
+                    ))}
+                  </div>
                 </div>
-              ) : (
-                <div style={{
-                  width: '100%',
-                  height: '100%',
-                  background: '#11032a',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#ffde6a',
-                  padding: '24px',
-                  textAlign: 'center'
-                }}>
-                  <span style={{ fontSize: '2.5rem', animation: 'pulse 1.5s infinite', display: 'block', marginBottom: '12px' }}>📡</span>
-                  <h2 style={{ fontSize: '1.2rem', color: '#fff', margin: '0 0 4px 0' }}>Awaiting OBS Signal...</h2>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>The stream has started but storyteller is still configuring OBS.</span>
-                </div>
-              )
-            ) : (
-              <div style={{
-                width: '100%',
-                height: '100%',
-                background: 'linear-gradient(135deg, #15023a 0%, #6247aa 100%)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                padding: '24px',
-                textAlign: 'center'
-              }}>
-                <div style={{
-                  width: '72px',
-                  height: '72px',
-                  borderRadius: '50%',
-                  background: 'var(--accent-secondary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontWeight: 'bold',
-                  fontSize: '1.5rem',
-                  marginBottom: '12px',
-                  boxShadow: '0 0 20px rgba(138, 43, 226, 0.6)'
-                }}>
-                  {stream.streamerName.substring(0, 2).toUpperCase()}
-                </div>
-                <h2 style={{ fontSize: '1.2rem', color: '#fff', margin: '0 0 4px 0' }}>{stream.streamerName} is Live!</h2>
-                <span style={{ fontSize: '0.9rem', opacity: 0.8 }}>Camera Feed Active</span>
-                <span style={{ fontSize: '0.8rem', opacity: 0.6, marginTop: '8px' }}>Storyteller is streaming live on camera! 🎥</span>
-              </div>
-            )}
-            <div className="feed-watermark" style={{ top: '20px', left: '20px', fontSize: '1rem', background: 'rgba(0,0,0,0.5)', padding: '4px 10px', borderRadius: '4px' }}>
-              <span>{stream.streamerName}</span>
-              <span className="rec-dot"></span>
-            </div>
-            <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', alignItems: 'center', gap: '6px', background: '#ff4d4d', color: '#fff', padding: '6px 12px', borderRadius: '12px', fontWeight: 'bold', fontSize: '0.8rem', letterSpacing: '1px', zIndex: 5 }}>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fff', animation: 'pulse 1.5s infinite' }}></span>
-              <span>LIVE</span>
+              ))}
             </div>
           </div>
+        )}
+      </div>
 
-          {/* The E-Book Text Overlay (Beautiful Floating Glass Card) */}
-          {activeBook ? (
-            <div className="book-display" style={{
-              position: 'absolute',
-              top: '20px',
-              left: '20px',
-              bottom: '20px',
-              width: '380px',
-              maxHeight: 'calc(100% - 40px)',
-              background: 'rgba(17, 3, 42, 0.85)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '12px',
-              padding: '20px',
-              display: 'flex',
-              flexDirection: 'column',
-              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.5)',
-              zIndex: 10,
-              color: '#fff',
-              overflow: 'hidden'
-            }}>
-              <div className="book-display-header" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px', marginBottom: '12px', display: 'flex', gap: '12px' }}>
-                 <img src={activeBook.coverUrl} alt="Book Cover" className="book-cover-img" style={{ width: '50px', height: '70px', borderRadius: '4px', objectFit: 'cover' }} />
-                 <div className="book-display-details">
-                    <h2 style={{ fontSize: '1.1rem', color: '#fff', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '240px' }}>{activeBook.title}</h2>
-                    <h4 style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>By {activeBook.author}</h4>
-                    <span className="chapter-indicator" style={{ display: 'inline-block', marginTop: '4px', fontSize: '0.75rem', color: 'var(--accent-secondary)' }}>Page {stream.currentPage + 1} of {activeBook.pages.length}</span>
-                 </div>
-              </div>
-              
-              <div className="book-text-content" style={{ flex: 1, overflowY: 'auto', paddingRight: '4px', fontSize: '1rem', lineHeight: '1.5' }}>
-                {activeBook.pages[stream.currentPage] ? (
-                  activeBook.pages[stream.currentPage].split('\n\n').map((para: string, idx: number) => {
-                    const isActive = stream.currentParagraph !== undefined ? idx === stream.currentParagraph : false;
-                    return (
-                      <p 
-                        key={idx} 
-                        style={{ 
-                          marginBottom: '12px', 
-                          padding: '6px 10px',
-                          borderRadius: '6px',
-                          backgroundColor: isActive ? 'rgba(0, 229, 255, 0.12)' : 'transparent',
-                          borderLeft: isActive ? '3px solid var(--accent-secondary)' : '3px solid transparent',
-                          transition: 'all 0.15s',
-                          color: isActive ? '#fff' : 'rgba(255,255,255,0.85)'
-                        }}
-                      >
-                        {para}
-                      </p>
-                    );
-                  })
-                ) : (
-                  <p>Loading page text...</p>
-                )}
-              </div>
-            </div>
-          ) : (
-            <div className="book-display" style={{
-              position: 'absolute',
-              top: '20px',
-              left: '20px',
-              bottom: '20px',
-              width: '380px',
-              background: 'rgba(17, 3, 42, 0.85)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '12px',
-              padding: '20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.5)',
-              zIndex: 10,
-              color: '#fff'
-            }}>
-              <div className="spinner"></div>
-              <p style={{ marginTop: '16px', color: 'var(--text-muted)' }}>Loading novel content...</p>
-            </div>
-          )}
+      {/* Right Column: Twitch Live Chat */}
+      <div className="twitch-chat-column">
+        <LiveChat
+          streamerName={stream.streamerName}
+          streamerId={stream.streamerId}
+          messages={messages}
+          onSendMessage={handleSendMessage}
+          onSendCheer={handleSendCheer}
+          onDeleteMessage={handleDeleteMessage}
+          onClearChat={handleClearChat}
+          onInitiateRaid={handleInitiateRaid}
+          emoteOnly={stream.emoteOnly}
+          pinnedMessage={stream.pinnedMessage}
+          slowModeSeconds={stream.slowModeSeconds}
+        />
+      </div>
 
-        </section>
+      {/* Guest Star Modal */}
+      {showGuestStarModal && (
+        <GuestStarModal
+          isOpen={showGuestStarModal}
+          isActiveOnStream={guestStarActive}
+          onToggleActiveOnStream={setGuestStarActive}
+          layout={guestLayout}
+          onChangeLayout={setGuestLayout}
+          participants={guestParticipants}
+          onUpdateParticipants={setGuestParticipants}
+          onClose={() => setShowGuestStarModal(false)}
+        />
+      )}
 
-        {/* Right: Live Chat Sidebar */}
-        <aside className="chat-sidebar">
-          <div className="chat-header">
-            <span>Stream Chat</span>
-            <div className="chat-viewer-count">
-              <Users size={14} />
-              <span>{stream.viewerCount}</span>
-            </div>
-          </div>
+      {/* Clip Creation Modal */}
+      {showClipModal && activeBook && (
+        <ClipCreator
+          streamerId={stream.streamerId}
+          streamerName={stream.streamerName}
+          streamerAvatar={streamerProfile?.avatarUrl}
+          bookId={activeBook.id}
+          bookTitle={activeBook.title}
+          bookAuthor={activeBook.author}
+          bookCoverUrl={activeBook.coverUrl}
+          onClose={() => setShowClipModal(false)}
+        />
+      )}
 
-          {/* Pinned Message Banner */}
-          {stream.pinnedMessage && (
-            <div className="chat-pinned-message">
-              <Pin size={12} fill="currentColor" style={{ marginRight: '6px', transform: 'rotate(45deg)', flexShrink: 0 }} />
-              <span className="pinned-text">Pinned: "{stream.pinnedMessage}"</span>
-            </div>
-          )}
-          
-          <div className="chat-messages">
-            {messages.map((msg) => (
-              <div key={msg.id} className={`chat-message ${msg.type === 'announcement' ? 'announcement-msg' : ''}`}>
-                <span className="username">{msg.username}:</span>
-                <span className="message-text">{msg.text}</span>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
+      {/* Stream Marker Modal */}
+      {showMarkerModal && (
+        <StreamMarkerModal
+          onAddMarker={handleAddStreamMarker}
+          onClose={() => setShowMarkerModal(false)}
+        />
+      )}
 
-          <div className="chat-input-container">
-            {stream.emoteOnly ? (
-              <div className="emote-only-panel">
-                <div className="emote-only-badge">Emote-Only Mode Active</div>
-                <div className="quick-emojis-row">
-                  {['👍', '❤️', '😂', '🎉', '😮', '📖'].map(emoji => (
-                    <button 
-                      key={emoji} 
-                      onClick={() => handleSendEmoji(emoji)} 
-                      disabled={!user}
-                      className="chat-quick-emoji-btn"
-                    >
-                      {emoji}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleSendMessage} style={{ display: 'flex', width: '100%', gap: '8px' }}>
-                <input 
-                  type="text" 
-                  className="chat-input" 
-                  placeholder={user ? "Send a message..." : "Sign in to chat"} 
-                  disabled={!user}
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                />
-                <button type="submit" className="btn-primary" style={{ padding: '8px 16px' }} disabled={!user}>
-                  <Send size={14} />
-                </button>
-              </form>
-            )}
-          </div>
-        </aside>
+      {/* Subscriptions Modal */}
+      {showSubModal && (
+        <SubModal
+          streamerName={stream.streamerName}
+          onSubscribe={(tier, isGift, count) => {
+            handleSendMessage(
+              isGift
+                ? `🎁 Just gifted ${count} Tier 1 Subscriptions to the community!`
+                : `⭐ Just subscribed at Tier ${tier}! Let's read!`
+            );
+          }}
+          onClose={() => setShowSubModal(false)}
+        />
+      )}
 
-      </main>
+      {/* Edit Stream Info Modal */}
+      {showEditInfoModal && (
+        <StreamInfoModal
+          initialTitle={stream.title}
+          initialGenre={stream.genre}
+          initialTags={stream.tags || []}
+          onSave={handleSaveStreamInfo}
+          onClose={() => setShowEditInfoModal(false)}
+        />
+      )}
+
+      {/* Picture-in-Picture Mini-Player */}
+      {showMiniPlayer && (
+        <MiniPlayer
+          streamerId={stream.streamerId}
+          streamerName={stream.streamerName}
+          streamTitle={stream.title}
+          avatarUrl={streamerProfile?.avatarUrl || ''}
+          viewerCount={stream.viewerCount}
+          onClose={() => setShowMiniPlayer(false)}
+        />
+      )}
+
+      {/* Lo-Fi Ambient Sound Mixer Drawer */}
+      {showAmbientMixer && (
+        <div className="ambient-mixer-floating-drawer">
+          <AmbientSoundMixer onClose={() => setShowAmbientMixer(false)} />
+        </div>
+      )}
+
+      {/* Reading Sprint Summary & Rewards Modal */}
+      {sprintCompletedTarget !== null && (
+        <SprintSummaryModal
+          targetPages={sprintCompletedTarget}
+          onClose={() => setSprintCompletedTarget(null)}
+        />
+      )}
     </div>
   );
 };

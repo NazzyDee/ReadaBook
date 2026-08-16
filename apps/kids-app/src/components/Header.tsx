@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
-import { Search, LogOut, Tv, Smile } from 'lucide-react';
+import { Search, LogOut, Tv, Sparkles } from 'lucide-react';
+import { KidAvatarStudioModal } from './KidAvatarStudioModal';
 
 export const Header: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAvatarStudio, setShowAvatarStudio] = useState(false);
+  const [activeAvatar, setActiveAvatar] = useState<{ emoji: string; bg: string }>({ emoji: '🦊', bg: '#8338ec' });
 
   useEffect(() => {
     const query = searchParams.get('search') || '';
@@ -67,10 +70,16 @@ export const Header: React.FC = () => {
               <Tv size={18} />
               <span>Parent Panel</span>
             </Link>
-            <div className="kids-avatar-badge">
-              <Smile size={18} color="#fff" />
+            <button
+              onClick={() => setShowAvatarStudio(true)}
+              className="kids-avatar-badge btn-avatar-studio-trigger"
+              style={{ backgroundColor: activeAvatar.bg }}
+              title="Customize My Magical Avatar!"
+            >
+              <span className="avatar-mini-icon">{activeAvatar.emoji}</span>
               <span className="header-username">{profileName}</span>
-            </div>
+              <Sparkles size={12} color="#ffd700" />
+            </button>
             <button 
               onClick={() => {
                 localStorage.removeItem('readabook_active_profile');
@@ -88,6 +97,15 @@ export const Header: React.FC = () => {
           </Link>
         )}
       </div>
+
+      {showAvatarStudio && (
+        <KidAvatarStudioModal
+          onSaveAvatar={(data) => {
+            setActiveAvatar({ emoji: data.base.emoji, bg: data.bg });
+          }}
+          onClose={() => setShowAvatarStudio(false)}
+        />
+      )}
     </header>
   );
 };
