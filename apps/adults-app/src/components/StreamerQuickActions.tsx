@@ -186,6 +186,11 @@ import { SmartLightingSyncModal } from './SmartLightingSyncModal';
 import { AutomatedModShieldRulesModal } from './AutomatedModShieldRulesModal';
 import { SilentStudyRadioModal } from './SilentStudyRadioModal';
 import { InteractiveVodArchivesModal } from './InteractiveVodArchivesModal';
+import { MultiCastAudioDramaModal } from './MultiCastAudioDramaModal';
+import { ObsVirtualKeyerModal } from './ObsVirtualKeyerModal';
+import { VerticalClipTranscoderModal } from './VerticalClipTranscoderModal';
+import { StreamDeckWebSocketModal } from './StreamDeckWebSocketModal';
+import { SpatialBinauralPannerModal } from './SpatialBinauralPannerModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -321,6 +326,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showModShieldModal, setShowModShieldModal] = useState(false);
   const [showRadioModal, setShowRadioModal] = useState(false);
   const [showVodArchivesModal, setShowVodArchivesModal] = useState(false);
+  const [showMultiCastDramaModal, setShowMultiCastDramaModal] = useState(false);
+  const [showObsKeyerModal, setShowObsKeyerModal] = useState(false);
+  const [showVerticalClipModal, setShowVerticalClipModal] = useState(false);
+  const [showStreamDeckWsModal, setShowStreamDeckWsModal] = useState(false);
+  const [showSpatialPannerModal, setShowSpatialPannerModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -334,6 +344,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Multi-Cast Audio Drama */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowMultiCastDramaModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Live Tabletop Audio-Drama & Multi-Cast Voice Staging"
+        >
+          <Theater size={18} />
+          <span>Multi-Cast</span>
+        </button>
+
+        {/* OBS Virtual Camera 3D Keyer */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowObsKeyerModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="OBS Studio Virtual Camera & 3D Medieval Set Keyer"
+        >
+          <Video size={18} />
+          <span>3D Virtual Set</span>
+        </button>
+
+        {/* 9:16 Vertical Clip Transcoder */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVerticalClipModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Instant 9:16 TikTok / Reels / Shorts Vertical Transcoder"
+        >
+          <Smartphone size={18} />
+          <span>9:16 BookTok</span>
+        </button>
+
+        {/* Stream Deck WebSocket Companion */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowStreamDeckWsModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Dual-PC Stream Deck WebSocket Companion"
+        >
+          <Sliders size={18} />
+          <span>Stream Deck</span>
+        </button>
+
+        {/* 3D Spatial Binaural Panner */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSpatialPannerModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Surround 5.1 & Spatial Headphone Binaural Panner"
+        >
+          <Headphones size={18} />
+          <span>3D Audio</span>
+        </button>
         {/* Smart Ambient Lighting Sync */}
         <button
           onClick={() => {
@@ -2739,6 +2813,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <InteractiveVodArchivesModal
           streamerName={streamerName}
           onClose={() => setShowVodArchivesModal(false)}
+        />
+      )}
+
+      {showMultiCastDramaModal && (
+        <MultiCastAudioDramaModal
+          streamerName={streamerName}
+          onClose={() => setShowMultiCastDramaModal(false)}
+        />
+      )}
+
+      {showObsKeyerModal && (
+        <ObsVirtualKeyerModal
+          streamerName={streamerName}
+          onClose={() => setShowObsKeyerModal(false)}
+        />
+      )}
+
+      {showVerticalClipModal && (
+        <VerticalClipTranscoderModal
+          streamerName={streamerName}
+          onClose={() => setShowVerticalClipModal(false)}
+        />
+      )}
+
+      {showStreamDeckWsModal && (
+        <StreamDeckWebSocketModal
+          streamerName={streamerName}
+          onClose={() => setShowStreamDeckWsModal(false)}
+        />
+      )}
+
+      {showSpatialPannerModal && (
+        <SpatialBinauralPannerModal
+          streamerName={streamerName}
+          onClose={() => setShowSpatialPannerModal(false)}
         />
       )}
     </div>

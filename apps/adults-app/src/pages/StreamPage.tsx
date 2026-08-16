@@ -109,6 +109,11 @@ import { SmartLightingSyncModal } from '../components/SmartLightingSyncModal';
 import { AutomatedModShieldRulesModal } from '../components/AutomatedModShieldRulesModal';
 import { SilentStudyRadioModal } from '../components/SilentStudyRadioModal';
 import { InteractiveVodArchivesModal } from '../components/InteractiveVodArchivesModal';
+import { MultiCastAudioDramaModal } from '../components/MultiCastAudioDramaModal';
+import { ObsVirtualKeyerModal } from '../components/ObsVirtualKeyerModal';
+import { VerticalClipTranscoderModal } from '../components/VerticalClipTranscoderModal';
+import { StreamDeckWebSocketModal } from '../components/StreamDeckWebSocketModal';
+import { SpatialBinauralPannerModal } from '../components/SpatialBinauralPannerModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -344,6 +349,11 @@ export const StreamPage: React.FC = () => {
   const [showModShieldModal, setShowModShieldModal] = useState(false);
   const [showRadioModal, setShowRadioModal] = useState(false);
   const [showVodArchivesModal, setShowVodArchivesModal] = useState(false);
+  const [showMultiCastDramaModal, setShowMultiCastDramaModal] = useState(false);
+  const [showObsKeyerModal, setShowObsKeyerModal] = useState(false);
+  const [showVerticalClipModal, setShowVerticalClipModal] = useState(false);
+  const [showStreamDeckWsModal, setShowStreamDeckWsModal] = useState(false);
+  const [showSpatialPannerModal, setShowSpatialPannerModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1978,6 +1988,71 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">VOD Archives</span>
             </button>
 
+            {/* Multi-Cast Audio Drama */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowMultiCastDramaModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Tabletop Audio-Drama & Multi-Cast Voice Staging"
+            >
+              <Theater size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Multi-Cast</span>
+            </button>
+
+            {/* OBS Virtual Camera 3D Keyer */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowObsKeyerModal(true);
+              }}
+              className="btn-secondary"
+              title="OBS Studio Virtual Camera & 3D Medieval Set Keyer"
+            >
+              <Video size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">3D Set</span>
+            </button>
+
+            {/* 9:16 Vertical Clip Transcoder */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVerticalClipModal(true);
+              }}
+              className="btn-secondary"
+              title="Instant 9:16 TikTok / Reels / Shorts Vertical Transcoder"
+            >
+              <Smartphone size={16} color="#ffd700" />
+              <span className="hide-mobile">9:16 Clip</span>
+            </button>
+
+            {/* Stream Deck WebSocket Companion */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowStreamDeckWsModal(true);
+              }}
+              className="btn-secondary"
+              title="Dual-PC Stream Deck WebSocket Companion"
+            >
+              <Sliders size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Stream Deck</span>
+            </button>
+
+            {/* 3D Spatial Binaural Panner */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSpatialPannerModal(true);
+              }}
+              className="btn-secondary"
+              title="Surround 5.1 & Spatial Headphone Binaural Panner"
+            >
+              <Headphones size={16} color="#00ff88" />
+              <span className="hide-mobile">3D Audio</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2954,6 +3029,46 @@ export const StreamPage: React.FC = () => {
         <InteractiveVodArchivesModal
           streamerName={stream.streamerName}
           onClose={() => setShowVodArchivesModal(false)}
+        />
+      )}
+
+      {/* Multi-Cast Audio Drama */}
+      {showMultiCastDramaModal && (
+        <MultiCastAudioDramaModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowMultiCastDramaModal(false)}
+        />
+      )}
+
+      {/* OBS Virtual Camera 3D Keyer */}
+      {showObsKeyerModal && (
+        <ObsVirtualKeyerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowObsKeyerModal(false)}
+        />
+      )}
+
+      {/* 9:16 Vertical Clip Transcoder */}
+      {showVerticalClipModal && (
+        <VerticalClipTranscoderModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVerticalClipModal(false)}
+        />
+      )}
+
+      {/* Stream Deck WebSocket Companion */}
+      {showStreamDeckWsModal && (
+        <StreamDeckWebSocketModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowStreamDeckWsModal(false)}
+        />
+      )}
+
+      {/* 3D Spatial Binaural Panner */}
+      {showSpatialPannerModal && (
+        <SpatialBinauralPannerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSpatialPannerModal(false)}
         />
       )}
 
