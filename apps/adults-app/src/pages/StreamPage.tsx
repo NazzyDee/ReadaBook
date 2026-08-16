@@ -85,6 +85,10 @@ import { ChatPacingThrottleModal } from '../components/ChatPacingThrottleModal';
 import { ChapterProgressSyncModal } from '../components/ChapterProgressSyncModal';
 import { CommunitySparksPinataModal } from '../components/CommunitySparksPinataModal';
 import { WorldLoreAtlasModal } from '../components/WorldLoreAtlasModal';
+import { AdBreakCountdownModal } from '../components/AdBreakCountdownModal';
+import { ReaderSentimentHeatmapModal } from '../components/ReaderSentimentHeatmapModal';
+import { GuildReadingBattlepassModal } from '../components/GuildReadingBattlepassModal';
+import { AutoHostChannelTeamsModal } from '../components/AutoHostChannelTeamsModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -292,6 +296,10 @@ export const StreamPage: React.FC = () => {
   const [showBookProgressModal, setShowBookProgressModal] = useState(false);
   const [showSparksPinataModal, setShowSparksPinataModal] = useState(false);
   const [showWorldAtlasModal, setShowWorldAtlasModal] = useState(false);
+  const [showAdBreakModal, setShowAdBreakModal] = useState(false);
+  const [showSentimentHeatmapModal, setShowSentimentHeatmapModal] = useState(false);
+  const [showGuildBattlepassModal, setShowGuildBattlepassModal] = useState(false);
+  const [showAutoHostTeamsModal, setShowAutoHostTeamsModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1614,6 +1622,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Atlas</span>
             </button>
 
+            {/* Cozy Intermission Ad Break */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowAdBreakModal(true);
+              }}
+              className="btn-secondary"
+              title="Cozy Intermission & Ad-Revenue Deck"
+            >
+              <Coffee size={16} color="#ffd700" />
+              <span className="hide-mobile">Intermission</span>
+            </button>
+
+            {/* Live Reader Sentiment Heatmap */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSentimentHeatmapModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Chapter Sentiment & Emotion Heatmap"
+            >
+              <Activity size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Sentiment</span>
+            </button>
+
+            {/* Seasonal Guild Battlepass */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowGuildBattlepassModal(true);
+              }}
+              className="btn-secondary"
+              title="Archivist Guild Seasonal Battlepass"
+            >
+              <Trophy size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Battlepass</span>
+            </button>
+
+            {/* Narrator Auto-Host Teams */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowAutoHostTeamsModal(true);
+              }}
+              className="btn-secondary"
+              title="Narrator Guilds & Auto-Host Raid Matrix"
+            >
+              <Users size={16} color="var(--accent-danger)" />
+              <span className="hide-mobile">Auto-Host</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2398,6 +2458,38 @@ export const StreamPage: React.FC = () => {
         <WorldLoreAtlasModal
           streamerName={stream.streamerName}
           onClose={() => setShowWorldAtlasModal(false)}
+        />
+      )}
+
+      {/* Cozy Intermission Ad Break */}
+      {showAdBreakModal && (
+        <AdBreakCountdownModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowAdBreakModal(false)}
+        />
+      )}
+
+      {/* Live Reader Sentiment Heatmap */}
+      {showSentimentHeatmapModal && (
+        <ReaderSentimentHeatmapModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSentimentHeatmapModal(false)}
+        />
+      )}
+
+      {/* Seasonal Guild Battlepass */}
+      {showGuildBattlepassModal && (
+        <GuildReadingBattlepassModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowGuildBattlepassModal(false)}
+        />
+      )}
+
+      {/* Narrator Auto-Host Teams */}
+      {showAutoHostTeamsModal && (
+        <AutoHostChannelTeamsModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowAutoHostTeamsModal(false)}
         />
       )}
 

@@ -160,6 +160,10 @@ import { ChatPacingThrottleModal } from './ChatPacingThrottleModal';
 import { ChapterProgressSyncModal } from './ChapterProgressSyncModal';
 import { CommunitySparksPinataModal } from './CommunitySparksPinataModal';
 import { WorldLoreAtlasModal } from './WorldLoreAtlasModal';
+import { AdBreakCountdownModal } from './AdBreakCountdownModal';
+import { ReaderSentimentHeatmapModal } from './ReaderSentimentHeatmapModal';
+import { GuildReadingBattlepassModal } from './GuildReadingBattlepassModal';
+import { AutoHostChannelTeamsModal } from './AutoHostChannelTeamsModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -271,6 +275,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showBookProgressModal, setShowBookProgressModal] = useState(false);
   const [showSparksPinataModal, setShowSparksPinataModal] = useState(false);
   const [showWorldAtlasModal, setShowWorldAtlasModal] = useState(false);
+  const [showAdBreakModal, setShowAdBreakModal] = useState(false);
+  const [showSentimentHeatmapModal, setShowSentimentHeatmapModal] = useState(false);
+  const [showGuildBattlepassModal, setShowGuildBattlepassModal] = useState(false);
+  const [showAutoHostTeamsModal, setShowAutoHostTeamsModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -284,6 +292,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Cozy Intermission Ad Break */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowAdBreakModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Cozy Intermission & Ad-Revenue Deck"
+        >
+          <Coffee size={18} />
+          <span>Intermission</span>
+        </button>
+
+        {/* Live Reader Sentiment Heatmap */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSentimentHeatmapModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Live Chapter Sentiment & Emotion Heatmap"
+        >
+          <Activity size={18} />
+          <span>Sentiment</span>
+        </button>
+
+        {/* Seasonal Guild Battlepass */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowGuildBattlepassModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Archivist Guild Seasonal Battlepass"
+        >
+          <Trophy size={18} />
+          <span>Battlepass</span>
+        </button>
+
+        {/* Narrator Auto-Host Teams */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowAutoHostTeamsModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Narrator Guilds & Auto-Host Raid Matrix"
+        >
+          <Users size={18} />
+          <span>Auto-Host</span>
+        </button>
         {/* Chat Throttle & Sub-Only Cockpit */}
         <button
           onClick={() => {
@@ -2215,6 +2274,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <WorldLoreAtlasModal
           streamerName={streamerName}
           onClose={() => setShowWorldAtlasModal(false)}
+        />
+      )}
+
+      {showAdBreakModal && (
+        <AdBreakCountdownModal
+          streamerName={streamerName}
+          onClose={() => setShowAdBreakModal(false)}
+        />
+      )}
+
+      {showSentimentHeatmapModal && (
+        <ReaderSentimentHeatmapModal
+          streamerName={streamerName}
+          onClose={() => setShowSentimentHeatmapModal(false)}
+        />
+      )}
+
+      {showGuildBattlepassModal && (
+        <GuildReadingBattlepassModal
+          streamerName={streamerName}
+          onClose={() => setShowGuildBattlepassModal(false)}
+        />
+      )}
+
+      {showAutoHostTeamsModal && (
+        <AutoHostChannelTeamsModal
+          streamerName={streamerName}
+          onClose={() => setShowAutoHostTeamsModal(false)}
         />
       )}
     </div>
