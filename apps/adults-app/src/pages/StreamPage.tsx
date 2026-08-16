@@ -89,6 +89,10 @@ import { AdBreakCountdownModal } from '../components/AdBreakCountdownModal';
 import { ReaderSentimentHeatmapModal } from '../components/ReaderSentimentHeatmapModal';
 import { GuildReadingBattlepassModal } from '../components/GuildReadingBattlepassModal';
 import { AutoHostChannelTeamsModal } from '../components/AutoHostChannelTeamsModal';
+import { StreamDirectorMultiCamModal } from '../components/StreamDirectorMultiCamModal';
+import { OverlayThemesStudioModal } from '../components/OverlayThemesStudioModal';
+import { ScreenFxEmoteCannonModal } from '../components/ScreenFxEmoteCannonModal';
+import { MobileTeleprompterRemoteModal } from '../components/MobileTeleprompterRemoteModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -155,7 +159,9 @@ import {
   TreePine,
   Music,
   Lock,
-  Compass
+  Compass,
+  Video,
+  Smartphone
 } from 'lucide-react';
 
 interface StreamData {
@@ -300,6 +306,10 @@ export const StreamPage: React.FC = () => {
   const [showSentimentHeatmapModal, setShowSentimentHeatmapModal] = useState(false);
   const [showGuildBattlepassModal, setShowGuildBattlepassModal] = useState(false);
   const [showAutoHostTeamsModal, setShowAutoHostTeamsModal] = useState(false);
+  const [showMultiCamModal, setShowMultiCamModal] = useState(false);
+  const [showOverlayThemesModal, setShowOverlayThemesModal] = useState(false);
+  const [showScreenFxModal, setShowScreenFxModal] = useState(false);
+  const [showTeleprompterModal, setShowTeleprompterModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1674,6 +1684,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Auto-Host</span>
             </button>
 
+            {/* Multi-Cam Stage Director */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowMultiCamModal(true);
+              }}
+              className="btn-secondary"
+              title="Studio Scene Director & Multi-Cam Controller"
+            >
+              <Video size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Multi-Cam</span>
+            </button>
+
+            {/* Custom Overlay Themes */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowOverlayThemesModal(true);
+              }}
+              className="btn-secondary"
+              title="Stream Overlay & Parchment Theme Studio"
+            >
+              <Palette size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Themes</span>
+            </button>
+
+            {/* Screen FX Emote Cannons */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowScreenFxModal(true);
+              }}
+              className="btn-secondary"
+              title="Custom Hype Emote Walls & Sparks Cannons"
+            >
+              <Sparkles size={16} color="#ffd700" />
+              <span className="hide-mobile">Screen FX</span>
+            </button>
+
+            {/* Mobile Teleprompter Remote */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowTeleprompterModal(true);
+              }}
+              className="btn-secondary"
+              title="Mobile Companion Teleprompter & Remote"
+            >
+              <Smartphone size={16} color="#00ff88" />
+              <span className="hide-mobile">Prompter</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2490,6 +2552,38 @@ export const StreamPage: React.FC = () => {
         <AutoHostChannelTeamsModal
           streamerName={stream.streamerName}
           onClose={() => setShowAutoHostTeamsModal(false)}
+        />
+      )}
+
+      {/* Multi-Cam Stage Director */}
+      {showMultiCamModal && (
+        <StreamDirectorMultiCamModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowMultiCamModal(false)}
+        />
+      )}
+
+      {/* Custom Overlay Themes */}
+      {showOverlayThemesModal && (
+        <OverlayThemesStudioModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowOverlayThemesModal(false)}
+        />
+      )}
+
+      {/* Screen FX Emote Cannons */}
+      {showScreenFxModal && (
+        <ScreenFxEmoteCannonModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowScreenFxModal(false)}
+        />
+      )}
+
+      {/* Mobile Teleprompter Remote */}
+      {showTeleprompterModal && (
+        <MobileTeleprompterRemoteModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowTeleprompterModal(false)}
         />
       )}
 

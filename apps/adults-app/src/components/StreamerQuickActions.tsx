@@ -164,6 +164,10 @@ import { AdBreakCountdownModal } from './AdBreakCountdownModal';
 import { ReaderSentimentHeatmapModal } from './ReaderSentimentHeatmapModal';
 import { GuildReadingBattlepassModal } from './GuildReadingBattlepassModal';
 import { AutoHostChannelTeamsModal } from './AutoHostChannelTeamsModal';
+import { StreamDirectorMultiCamModal } from './StreamDirectorMultiCamModal';
+import { OverlayThemesStudioModal } from './OverlayThemesStudioModal';
+import { ScreenFxEmoteCannonModal } from './ScreenFxEmoteCannonModal';
+import { MobileTeleprompterRemoteModal } from './MobileTeleprompterRemoteModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -279,6 +283,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showSentimentHeatmapModal, setShowSentimentHeatmapModal] = useState(false);
   const [showGuildBattlepassModal, setShowGuildBattlepassModal] = useState(false);
   const [showAutoHostTeamsModal, setShowAutoHostTeamsModal] = useState(false);
+  const [showMultiCamModal, setShowMultiCamModal] = useState(false);
+  const [showOverlayThemesModal, setShowOverlayThemesModal] = useState(false);
+  const [showScreenFxModal, setShowScreenFxModal] = useState(false);
+  const [showTeleprompterModal, setShowTeleprompterModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -292,6 +300,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Multi-Cam Stage Director */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowMultiCamModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Studio Scene Director & Multi-Cam Controller"
+        >
+          <Video size={18} />
+          <span>Multi-Cam</span>
+        </button>
+
+        {/* Custom Overlay Themes */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowOverlayThemesModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Stream Overlay & Parchment Theme Studio"
+        >
+          <Palette size={18} />
+          <span>Themes</span>
+        </button>
+
+        {/* Screen FX Emote Cannons */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowScreenFxModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Custom Hype Emote Walls & Sparks Cannons"
+        >
+          <Sparkles size={18} />
+          <span>Screen FX</span>
+        </button>
+
+        {/* Mobile Teleprompter Remote */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowTeleprompterModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Mobile Companion Teleprompter & Remote"
+        >
+          <Smartphone size={18} />
+          <span>Prompter</span>
+        </button>
         {/* Cozy Intermission Ad Break */}
         <button
           onClick={() => {
@@ -2302,6 +2361,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <AutoHostChannelTeamsModal
           streamerName={streamerName}
           onClose={() => setShowAutoHostTeamsModal(false)}
+        />
+      )}
+
+      {showMultiCamModal && (
+        <StreamDirectorMultiCamModal
+          streamerName={streamerName}
+          onClose={() => setShowMultiCamModal(false)}
+        />
+      )}
+
+      {showOverlayThemesModal && (
+        <OverlayThemesStudioModal
+          streamerName={streamerName}
+          onClose={() => setShowOverlayThemesModal(false)}
+        />
+      )}
+
+      {showScreenFxModal && (
+        <ScreenFxEmoteCannonModal
+          streamerName={streamerName}
+          onClose={() => setShowScreenFxModal(false)}
+        />
+      )}
+
+      {showTeleprompterModal && (
+        <MobileTeleprompterRemoteModal
+          streamerName={streamerName}
+          onClose={() => setShowTeleprompterModal(false)}
         />
       )}
     </div>
