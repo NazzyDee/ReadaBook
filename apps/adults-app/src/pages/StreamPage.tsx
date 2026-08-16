@@ -101,6 +101,10 @@ import { ReadingBossEncounterModal } from '../components/ReadingBossEncounterMod
 import { BookTournamentBracketModal } from '../components/BookTournamentBracketModal';
 import { BookGiveawayRandomizerModal } from '../components/BookGiveawayRandomizerModal';
 import { ChapterBookmarkStampModal } from '../components/ChapterBookmarkStampModal';
+import { CustomChannelFontModal } from '../components/CustomChannelFontModal';
+import { PrintOnDemandMerchModal } from '../components/PrintOnDemandMerchModal';
+import { PublisherBountyTrackerModal } from '../components/PublisherBountyTrackerModal';
+import { SubOnlyLoungeModal } from '../components/SubOnlyLoungeModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -169,7 +173,8 @@ import {
   Lock,
   Compass,
   Video,
-  Smartphone
+  Smartphone,
+  Type
 } from 'lucide-react';
 
 interface StreamData {
@@ -326,6 +331,10 @@ export const StreamPage: React.FC = () => {
   const [showTournamentModal, setShowTournamentModal] = useState(false);
   const [showGiveawayModal, setShowGiveawayModal] = useState(false);
   const [showBookmarkStampModal, setShowBookmarkStampModal] = useState(false);
+  const [showCustomFontModal, setShowCustomFontModal] = useState(false);
+  const [showMerchShopModal, setShowMerchShopModal] = useState(false);
+  const [showBountyTrackerModal, setShowBountyTrackerModal] = useState(false);
+  const [showSubLoungeModal, setShowSubLoungeModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1856,6 +1865,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Marginalia</span>
             </button>
 
+            {/* Sub Tier 3 Scribe Grimoire Fonts */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowCustomFontModal(true);
+              }}
+              className="btn-secondary"
+              title="Tier 3 Scribe Grimoire & Custom Fonts"
+            >
+              <Type size={16} color="#ffd700" />
+              <span className="hide-mobile">Grimoire</span>
+            </button>
+
+            {/* Print-on-Demand Merch Hub */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowMerchShopModal(true);
+              }}
+              className="btn-secondary"
+              title="Print-on-Demand Merch Store & Shop"
+            >
+              <ShoppingBag size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Merch Hub</span>
+            </button>
+
+            {/* Publisher Bounty Tracker */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBountyTrackerModal(true);
+              }}
+              className="btn-secondary"
+              title="Publisher Bounty Board & Sponsorships"
+            >
+              <Award size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Bounties</span>
+            </button>
+
+            {/* Sub-Only Book Club Lounge */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSubLoungeModal(true);
+              }}
+              className="btn-secondary"
+              title="Subscriber-Only VIP Book Club Salon"
+            >
+              <MessageSquare size={16} color="#ffd700" />
+              <span className="hide-mobile">Sub Salon</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2768,6 +2829,38 @@ export const StreamPage: React.FC = () => {
         <ChapterBookmarkStampModal
           streamerName={stream.streamerName}
           onClose={() => setShowBookmarkStampModal(false)}
+        />
+      )}
+
+      {/* Sub Tier 3 Scribe Grimoire Fonts */}
+      {showCustomFontModal && (
+        <CustomChannelFontModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowCustomFontModal(false)}
+        />
+      )}
+
+      {/* Print-on-Demand Merch Hub */}
+      {showMerchShopModal && (
+        <PrintOnDemandMerchModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowMerchShopModal(false)}
+        />
+      )}
+
+      {/* Publisher Bounty Tracker */}
+      {showBountyTrackerModal && (
+        <PublisherBountyTrackerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowBountyTrackerModal(false)}
+        />
+      )}
+
+      {/* Sub-Only Book Club Lounge */}
+      {showSubLoungeModal && (
+        <SubOnlyLoungeModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSubLoungeModal(false)}
         />
       )}
 

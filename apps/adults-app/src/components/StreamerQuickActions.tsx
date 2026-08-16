@@ -62,7 +62,8 @@ import {
   Gavel,
   TreePine,
   Music,
-  Lock
+  Lock,
+  Type
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -176,6 +177,10 @@ import { ReadingBossEncounterModal } from './ReadingBossEncounterModal';
 import { BookTournamentBracketModal } from './BookTournamentBracketModal';
 import { BookGiveawayRandomizerModal } from './BookGiveawayRandomizerModal';
 import { ChapterBookmarkStampModal } from './ChapterBookmarkStampModal';
+import { CustomChannelFontModal } from './CustomChannelFontModal';
+import { PrintOnDemandMerchModal } from './PrintOnDemandMerchModal';
+import { PublisherBountyTrackerModal } from './PublisherBountyTrackerModal';
+import { SubOnlyLoungeModal } from './SubOnlyLoungeModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -303,6 +308,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showTournamentModal, setShowTournamentModal] = useState(false);
   const [showGiveawayModal, setShowGiveawayModal] = useState(false);
   const [showBookmarkStampModal, setShowBookmarkStampModal] = useState(false);
+  const [showCustomFontModal, setShowCustomFontModal] = useState(false);
+  const [showMerchShopModal, setShowMerchShopModal] = useState(false);
+  const [showBountyTrackerModal, setShowBountyTrackerModal] = useState(false);
+  const [showSubLoungeModal, setShowSubLoungeModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -316,6 +325,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Sub Tier 3 Scribe Grimoire Fonts */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCustomFontModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Tier 3 Scribe Grimoire & Custom Fonts"
+        >
+          <Type size={18} />
+          <span>Grimoire</span>
+        </button>
+
+        {/* Print-on-Demand Merch Hub */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowMerchShopModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Print-on-Demand Merch Store & Shop"
+        >
+          <ShoppingBag size={18} />
+          <span>Merch Hub</span>
+        </button>
+
+        {/* Publisher Bounty Tracker */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBountyTrackerModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Publisher Bounty Board & Sponsorships"
+        >
+          <Award size={18} />
+          <span>Bounties</span>
+        </button>
+
+        {/* Sub-Only Book Club Lounge */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSubLoungeModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Subscriber-Only VIP Book Club Salon"
+        >
+          <MessageSquare size={18} />
+          <span>Sub Salon</span>
+        </button>
         {/* Community Reading Boss Raid */}
         <button
           onClick={() => {
@@ -2563,6 +2623,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <ChapterBookmarkStampModal
           streamerName={streamerName}
           onClose={() => setShowBookmarkStampModal(false)}
+        />
+      )}
+
+      {showCustomFontModal && (
+        <CustomChannelFontModal
+          streamerName={streamerName}
+          onClose={() => setShowCustomFontModal(false)}
+        />
+      )}
+
+      {showMerchShopModal && (
+        <PrintOnDemandMerchModal
+          streamerName={streamerName}
+          onClose={() => setShowMerchShopModal(false)}
+        />
+      )}
+
+      {showBountyTrackerModal && (
+        <PublisherBountyTrackerModal
+          streamerName={streamerName}
+          onClose={() => setShowBountyTrackerModal(false)}
+        />
+      )}
+
+      {showSubLoungeModal && (
+        <SubOnlyLoungeModal
+          streamerName={streamerName}
+          onClose={() => setShowSubLoungeModal(false)}
         />
       )}
     </div>
