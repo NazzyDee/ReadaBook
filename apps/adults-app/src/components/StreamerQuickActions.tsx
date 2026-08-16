@@ -32,7 +32,11 @@ import {
   Grid,
   Briefcase,
   Tv,
-  BookOpen
+  BookOpen,
+  Video,
+  Disc,
+  Palette,
+  CalendarDays
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -64,6 +68,10 @@ import { PublisherBountyBoardModal } from './PublisherBountyBoardModal';
 import { ChannelTrailerModal } from './ChannelTrailerModal';
 import { LoreGlossaryOverlay } from './LoreGlossaryOverlay';
 import { WatchPartyRoomModal } from './WatchPartyRoomModal';
+import { OBSOverlayStudioModal } from './OBSOverlayStudioModal';
+import { AudiobookStemsMarketplaceModal } from './AudiobookStemsMarketplaceModal';
+import { EmoteArtistAttributionModal } from './EmoteArtistAttributionModal';
+import { MarathonScheduleHubModal } from './MarathonScheduleHubModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -109,6 +117,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showTrailerModal, setShowTrailerModal] = useState(false);
   const [showLoreWikiModal, setShowLoreWikiModal] = useState(false);
   const [showWatchPartyModal, setShowWatchPartyModal] = useState(false);
+  const [showOBSOverlayModal, setShowOBSOverlayModal] = useState(false);
+  const [showStemsModal, setShowStemsModal] = useState(false);
+  const [showEmoteArtistModal, setShowEmoteArtistModal] = useState(false);
+  const [showMarathonModal, setShowMarathonModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -122,6 +134,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* OBS Stream Overlay Studio */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowOBSOverlayModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="OBS & Streamlabs Browser Source Studio"
+        >
+          <Video size={18} />
+          <span>OBS Overlay</span>
+        </button>
+
+        {/* Audiobook Stems Marketplace */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowStemsModal(true);
+          }}
+          className="btn-quick-action action-cyan"
+          title="Audiobook Multi-Stem Audio Marketplace"
+        >
+          <Disc size={18} />
+          <span>Audio Stems</span>
+        </button>
+
+        {/* Emote & Badge Artists */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowEmoteArtistModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Book Club Emote & Badge Artist Directory"
+        >
+          <Palette size={18} />
+          <span>Emote Artists</span>
+        </button>
+
+        {/* 24-Hour Marathon Hub */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowMarathonModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="24-Hour Read-A-Thon Marathon Hub"
+        >
+          <CalendarDays size={18} />
+          <span>Marathon Hub</span>
+        </button>
+
         {/* Publisher Bounty Board */}
         <button
           onClick={() => {
@@ -752,6 +816,31 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showWatchPartyModal && (
         <WatchPartyRoomModal
           onClose={() => setShowWatchPartyModal(false)}
+        />
+      )}
+
+      {showOBSOverlayModal && (
+        <OBSOverlayStudioModal
+          streamerName={streamerName}
+          onClose={() => setShowOBSOverlayModal(false)}
+        />
+      )}
+
+      {showStemsModal && (
+        <AudiobookStemsMarketplaceModal
+          onClose={() => setShowStemsModal(false)}
+        />
+      )}
+
+      {showEmoteArtistModal && (
+        <EmoteArtistAttributionModal
+          onClose={() => setShowEmoteArtistModal(false)}
+        />
+      )}
+
+      {showMarathonModal && (
+        <MarathonScheduleHubModal
+          onClose={() => setShowMarathonModal(false)}
         />
       )}
     </div>

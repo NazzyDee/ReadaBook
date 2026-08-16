@@ -22,6 +22,8 @@ import { VodTranscriptViewer } from '../components/VodTranscriptViewer';
 import { SquadMultiviewPlayer } from '../components/SquadMultiviewPlayer';
 import { LoreGlossaryOverlay } from '../components/LoreGlossaryOverlay';
 import { WatchPartyRoomModal } from '../components/WatchPartyRoomModal';
+import { MarathonScheduleHubModal } from '../components/MarathonScheduleHubModal';
+import { OBSOverlayStudioModal } from '../components/OBSOverlayStudioModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -49,7 +51,8 @@ import {
   BellRing,
   FileText,
   Grid,
-  BookOpen
+  BookOpen,
+  CalendarDays
 } from 'lucide-react';
 
 interface StreamData {
@@ -127,6 +130,8 @@ export const StreamPage: React.FC = () => {
   const [showSquadMulti, setShowSquadMulti] = useState(false);
   const [showLoreWikiModal, setShowLoreWikiModal] = useState(false);
   const [showWatchPartyModal, setShowWatchPartyModal] = useState(false);
+  const [showMarathonModal, setShowMarathonModal] = useState(false);
+  const [showOBSOverlayModal, setShowOBSOverlayModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -643,6 +648,19 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Watch Party</span>
             </button>
 
+            {/* 24-Hour Marathon Hub */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowMarathonModal(true);
+              }}
+              className="btn-secondary"
+              title="24-Hour Read-A-Thon Marathon & Shift Hub"
+            >
+              <CalendarDays size={16} color="var(--accent-success)" />
+              <span className="hide-mobile">Marathons</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -932,6 +950,21 @@ export const StreamPage: React.FC = () => {
       {showWatchPartyModal && (
         <WatchPartyRoomModal
           onClose={() => setShowWatchPartyModal(false)}
+        />
+      )}
+
+      {/* 24-Hour Read-A-Thon Marathon Hub */}
+      {showMarathonModal && (
+        <MarathonScheduleHubModal
+          onClose={() => setShowMarathonModal(false)}
+        />
+      )}
+
+      {/* OBS Browser Source Stream Overlay Studio */}
+      {showOBSOverlayModal && (
+        <OBSOverlayStudioModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowOBSOverlayModal(false)}
         />
       )}
 
