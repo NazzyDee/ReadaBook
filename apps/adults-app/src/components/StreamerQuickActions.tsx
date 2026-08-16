@@ -29,7 +29,10 @@ import {
   Flame,
   BellRing,
   FileText,
-  Grid
+  Grid,
+  Briefcase,
+  Tv,
+  BookOpen
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -57,6 +60,10 @@ import { ReaderMomentsModal } from './ReaderMomentsModal';
 import { ViewerSoundboardModal } from './ViewerSoundboardModal';
 import { VodTranscriptViewer } from './VodTranscriptViewer';
 import { SquadMultiviewPlayer } from './SquadMultiviewPlayer';
+import { PublisherBountyBoardModal } from './PublisherBountyBoardModal';
+import { ChannelTrailerModal } from './ChannelTrailerModal';
+import { LoreGlossaryOverlay } from './LoreGlossaryOverlay';
+import { WatchPartyRoomModal } from './WatchPartyRoomModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -98,6 +105,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showSoundboardModal, setShowSoundboardModal] = useState(false);
   const [showTranscriptModal, setShowTranscriptModal] = useState(false);
   const [showSquadMulti, setShowSquadMulti] = useState(false);
+  const [showBountyModal, setShowBountyModal] = useState(false);
+  const [showTrailerModal, setShowTrailerModal] = useState(false);
+  const [showLoreWikiModal, setShowLoreWikiModal] = useState(false);
+  const [showWatchPartyModal, setShowWatchPartyModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -111,6 +122,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Publisher Bounty Board */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBountyModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Publisher Bounty Board & Sponsored Reading Quests"
+        >
+          <Briefcase size={18} />
+          <span>Bounties</span>
+        </button>
+
+        {/* Channel Trailer Studio */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowTrailerModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Channel Trailer Studio & Offline Screen"
+        >
+          <Tv size={18} />
+          <span>Channel Trailer</span>
+        </button>
+
+        {/* Lore Codex Wiki */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowLoreWikiModal(true);
+          }}
+          className="btn-quick-action action-cyan"
+          title="Spoiler-Shielded Lore & Character Codex"
+        >
+          <BookOpen size={18} />
+          <span>Lore Codex</span>
+        </button>
+
+        {/* Community Watch Party */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowWatchPartyModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Community Watch Party & Co-Listening Lounge"
+        >
+          <Users size={18} />
+          <span>Watch Party</span>
+        </button>
+
         {/* Broadcast Moments */}
         <button
           onClick={() => {
@@ -662,6 +725,33 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showSquadMulti && (
         <SquadMultiviewPlayer
           onClose={() => setShowSquadMulti(false)}
+        />
+      )}
+
+      {showBountyModal && (
+        <PublisherBountyBoardModal
+          streamerName={streamerName}
+          onClose={() => setShowBountyModal(false)}
+        />
+      )}
+
+      {showTrailerModal && (
+        <ChannelTrailerModal
+          streamerName={streamerName}
+          isOwner={true}
+          onClose={() => setShowTrailerModal(false)}
+        />
+      )}
+
+      {showLoreWikiModal && (
+        <LoreGlossaryOverlay
+          onClose={() => setShowLoreWikiModal(false)}
+        />
+      )}
+
+      {showWatchPartyModal && (
+        <WatchPartyRoomModal
+          onClose={() => setShowWatchPartyModal(false)}
         />
       )}
     </div>

@@ -5,6 +5,7 @@ import { getLocalClips } from '../lib/clipsData';
 import { books } from '../lib/booksData';
 import { SubModal } from '../components/SubModal';
 import { OfflineChannelHero } from '../components/OfflineChannelHero';
+import { ChannelTrailerModal } from '../components/ChannelTrailerModal';
 import { soundFX } from '../lib/soundFx';
 import {
   Heart,
@@ -17,7 +18,8 @@ import {
   Edit3,
   Plus,
   Trash2,
-  Check
+  Check,
+  Film
 } from 'lucide-react';
 
 export const ChannelPage: React.FC = () => {
@@ -25,6 +27,7 @@ export const ChannelPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'home' | 'about' | 'schedule' | 'videos' | 'clips'>('home');
   const [isFollowing, setIsFollowing] = useState(false);
   const [showSubModal, setShowSubModal] = useState(false);
+  const [showTrailerModal, setShowTrailerModal] = useState(false);
 
   const streamer: StreamerProfile =
     (channelId && STREAMERS[channelId]) || STREAMERS['mock_lillyreads'];
@@ -103,6 +106,19 @@ export const ChannelPage: React.FC = () => {
         </div>
 
         <div className="channel-header-actions">
+          {/* Watch Channel Trailer Button */}
+          <button
+            onClick={() => {
+              soundFX.playPop();
+              setShowTrailerModal(true);
+            }}
+            className="btn-secondary"
+            title="Watch 60-Second Channel Trailer"
+          >
+            <Film size={16} color="var(--accent-secondary)" />
+            <span>Channel Trailer</span>
+          </button>
+
           {/* Follow Button */}
           <button
             onClick={() => {
@@ -475,6 +491,15 @@ export const ChannelPage: React.FC = () => {
             setTimeout(() => setToastMsg(null), 3000);
           }}
           onClose={() => setShowSubModal(false)}
+        />
+      )}
+
+      {/* Channel Trailer Modal */}
+      {showTrailerModal && (
+        <ChannelTrailerModal
+          streamerName={streamer.displayName}
+          isOwner={false}
+          onClose={() => setShowTrailerModal(false)}
         />
       )}
     </div>

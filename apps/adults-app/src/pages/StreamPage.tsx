@@ -20,6 +20,8 @@ import { ReaderMomentsModal } from '../components/ReaderMomentsModal';
 import { ViewerSoundboardModal } from '../components/ViewerSoundboardModal';
 import { VodTranscriptViewer } from '../components/VodTranscriptViewer';
 import { SquadMultiviewPlayer } from '../components/SquadMultiviewPlayer';
+import { LoreGlossaryOverlay } from '../components/LoreGlossaryOverlay';
+import { WatchPartyRoomModal } from '../components/WatchPartyRoomModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -46,7 +48,8 @@ import {
   Flame,
   BellRing,
   FileText,
-  Grid
+  Grid,
+  BookOpen
 } from 'lucide-react';
 
 interface StreamData {
@@ -122,6 +125,8 @@ export const StreamPage: React.FC = () => {
   const [showSoundboardModal, setShowSoundboardModal] = useState(false);
   const [showTranscriptModal, setShowTranscriptModal] = useState(false);
   const [showSquadMulti, setShowSquadMulti] = useState(false);
+  const [showLoreWikiModal, setShowLoreWikiModal] = useState(false);
+  const [showWatchPartyModal, setShowWatchPartyModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -612,6 +617,32 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Multiview</span>
             </button>
 
+            {/* Lore Codex Wiki Button */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowLoreWikiModal(true);
+              }}
+              className="btn-secondary"
+              title="Open Spoiler-Shielded Lore & Character Codex"
+            >
+              <BookOpen size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Lore Codex</span>
+            </button>
+
+            {/* Watch Party Button */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowWatchPartyModal(true);
+              }}
+              className="btn-secondary"
+              title="Join Community Synchronized Watch Party"
+            >
+              <Users size={16} color="#ffd700" />
+              <span className="hide-mobile">Watch Party</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -885,6 +916,22 @@ export const StreamPage: React.FC = () => {
       {showSquadMulti && (
         <SquadMultiviewPlayer
           onClose={() => setShowSquadMulti(false)}
+        />
+      )}
+
+      {/* Spoiler-Shielded Lore & Character Codex */}
+      {showLoreWikiModal && (
+        <LoreGlossaryOverlay
+          currentPage={stream.currentPage}
+          bookTitle={activeBook?.title || 'Current Book'}
+          onClose={() => setShowLoreWikiModal(false)}
+        />
+      )}
+
+      {/* Community Co-Reading Watch Party Lounge */}
+      {showWatchPartyModal && (
+        <WatchPartyRoomModal
+          onClose={() => setShowWatchPartyModal(false)}
         />
       )}
 
