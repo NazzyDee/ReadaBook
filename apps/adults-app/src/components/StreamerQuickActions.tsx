@@ -25,7 +25,11 @@ import {
   Crown,
   HeartHandshake,
   GitBranch,
-  Sliders
+  Sliders,
+  Flame,
+  BellRing,
+  FileText,
+  Grid
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -49,6 +53,10 @@ import { SubscriptionModal } from './SubscriptionModal';
 import { StoryBranchHUD } from './StoryBranchHUD';
 import { CharityMarathonWidget } from './CharityMarathonWidget';
 import { VoiceModulationRack } from './VoiceModulationRack';
+import { ReaderMomentsModal } from './ReaderMomentsModal';
+import { ViewerSoundboardModal } from './ViewerSoundboardModal';
+import { VodTranscriptViewer } from './VodTranscriptViewer';
+import { SquadMultiviewPlayer } from './SquadMultiviewPlayer';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -86,6 +94,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showBranchHUD, setShowBranchHUD] = useState(false);
   const [showCharityModal, setShowCharityModal] = useState(false);
   const [showVoiceRackModal, setShowVoiceRackModal] = useState(false);
+  const [showMomentsModal, setShowMomentsModal] = useState(false);
+  const [showSoundboardModal, setShowSoundboardModal] = useState(false);
+  const [showTranscriptModal, setShowTranscriptModal] = useState(false);
+  const [showSquadMulti, setShowSquadMulti] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -99,6 +111,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Broadcast Moments */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowMomentsModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Trigger 60s Live Moment & Climax Badge Claim"
+        >
+          <Flame size={18} />
+          <span>Moments</span>
+        </button>
+
+        {/* Channel Points Sound Alerts */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSoundboardModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Channel Points Sound Alerts Board"
+        >
+          <BellRing size={18} />
+          <span>Sound Alerts</span>
+        </button>
+
+        {/* VOD Transcript Timeline */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowTranscriptModal(true);
+          }}
+          className="btn-quick-action action-cyan"
+          title="VOD Chapters & Interactive Transcript Timeline"
+        >
+          <FileText size={18} />
+          <span>Transcripts</span>
+        </button>
+
+        {/* 4-Way Squad Co-Stream Multiview */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSquadMulti(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Launch 4-Way Squad Co-Stream Studio Grid"
+        >
+          <Grid size={18} />
+          <span>Squad Multiview</span>
+        </button>
+
         {/* Creator Subscriptions */}
         <button
           onClick={() => {
@@ -571,6 +635,33 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showVoiceRackModal && (
         <VoiceModulationRack
           onClose={() => setShowVoiceRackModal(false)}
+        />
+      )}
+
+      {showMomentsModal && (
+        <ReaderMomentsModal
+          isStreamer={true}
+          streamerName={streamerName}
+          onClose={() => setShowMomentsModal(false)}
+        />
+      )}
+
+      {showSoundboardModal && (
+        <ViewerSoundboardModal
+          streamerName={streamerName}
+          onClose={() => setShowSoundboardModal(false)}
+        />
+      )}
+
+      {showTranscriptModal && (
+        <VodTranscriptViewer
+          onClose={() => setShowTranscriptModal(false)}
+        />
+      )}
+
+      {showSquadMulti && (
+        <SquadMultiviewPlayer
+          onClose={() => setShowSquadMulti(false)}
         />
       )}
     </div>

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { SQUAD_STREAMS, type SquadStream } from '../lib/squadsData';
-import { Users, Volume2, VolumeX, Radio } from 'lucide-react';
+import { Users, Volume2, VolumeX, Radio, Grid } from 'lucide-react';
 import { LiveChat, type ChatMsg } from '../components/LiveChat';
+import { SquadMultiviewPlayer } from '../components/SquadMultiviewPlayer';
+import { soundFX } from '../lib/soundFx';
 
 export const SquadStreamPage: React.FC = () => {
   const [selectedSquad, setSelectedSquad] = useState<SquadStream>(SQUAD_STREAMS[0]);
+  const [showMultiviewModal, setShowMultiviewModal] = useState(false);
   const [activePrimaryStreamer, setActivePrimaryStreamer] = useState<string>(
     selectedSquad.members[0].streamerId
   );
@@ -59,6 +62,18 @@ export const SquadStreamPage: React.FC = () => {
         </div>
 
         <div className="squad-selector-dropdown">
+          <button
+            className="btn-primary btn-launch-multiview"
+            onClick={() => {
+              soundFX.playPop();
+              setShowMultiviewModal(true);
+            }}
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', marginRight: '12px', padding: '6px 14px', fontSize: '0.85rem' }}
+          >
+            <Grid size={15} />
+            <span>4-Way Multiview Grid</span>
+          </button>
+
           <label>Select Squad:</label>
           <select
             value={selectedSquad.id}
@@ -151,6 +166,12 @@ export const SquadStreamPage: React.FC = () => {
           />
         </div>
       </div>
+
+      {showMultiviewModal && (
+        <SquadMultiviewPlayer
+          onClose={() => setShowMultiviewModal(false)}
+        />
+      )}
     </div>
   );
 };

@@ -16,6 +16,10 @@ import { ClipCreator } from '../components/ClipCreator';
 import { SubscriptionModal } from '../components/SubscriptionModal';
 import { StoryBranchHUD } from '../components/StoryBranchHUD';
 import { CharityMarathonWidget } from '../components/CharityMarathonWidget';
+import { ReaderMomentsModal } from '../components/ReaderMomentsModal';
+import { ViewerSoundboardModal } from '../components/ViewerSoundboardModal';
+import { VodTranscriptViewer } from '../components/VodTranscriptViewer';
+import { SquadMultiviewPlayer } from '../components/SquadMultiviewPlayer';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -38,7 +42,11 @@ import {
   Bookmark,
   Users,
   GitBranch,
-  HeartHandshake
+  HeartHandshake,
+  Flame,
+  BellRing,
+  FileText,
+  Grid
 } from 'lucide-react';
 
 interface StreamData {
@@ -110,6 +118,10 @@ export const StreamPage: React.FC = () => {
   const [showAmbientMixer, setShowAmbientMixer] = useState(false);
   const [showBranchHUD, setShowBranchHUD] = useState(false);
   const [showCharityModal, setShowCharityModal] = useState(false);
+  const [showMomentsModal, setShowMomentsModal] = useState(false);
+  const [showSoundboardModal, setShowSoundboardModal] = useState(false);
+  const [showTranscriptModal, setShowTranscriptModal] = useState(false);
+  const [showSquadMulti, setShowSquadMulti] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -548,6 +560,58 @@ export const StreamPage: React.FC = () => {
               <span>Subscribe</span>
             </button>
 
+            {/* Moments Claim Button */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowMomentsModal(true);
+              }}
+              className="btn-secondary"
+              title="Claim Live Broadcast Moments & Badges"
+            >
+              <Flame size={16} color="#ffd700" />
+              <span className="hide-mobile">Moments</span>
+            </button>
+
+            {/* Sound Alerts Button */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSoundboardModal(true);
+              }}
+              className="btn-secondary"
+              title="Viewer Channel Points Sound Alerts Board"
+            >
+              <BellRing size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Sound FX</span>
+            </button>
+
+            {/* Transcript Timeline Button */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowTranscriptModal(true);
+              }}
+              className="btn-secondary"
+              title="Synchronized Reading Transcript & Chapters"
+            >
+              <FileText size={16} color="var(--text-muted)" />
+              <span className="hide-mobile">Transcript</span>
+            </button>
+
+            {/* Squad Multiview Launcher */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSquadMulti(true);
+              }}
+              className="btn-secondary"
+              title="Launch 4-Way Squad Co-Stream Multiview"
+            >
+              <Grid size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Multiview</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -781,6 +845,46 @@ export const StreamPage: React.FC = () => {
             handleSendMessage(`💖 ${donorName} donated $${amount.toFixed(2)} to charity! "${msg}"`);
           }}
           onClose={() => setShowCharityModal(false)}
+        />
+      )}
+
+      {/* Broadcast Moments & Climax Badges Modal */}
+      {showMomentsModal && (
+        <ReaderMomentsModal
+          isStreamer={user?.uid === stream.streamerId}
+          streamerName={stream.streamerName}
+          onMomentClaimed={(moment) => {
+            handleSendMessage(`🏆 Claimed the "${moment.momentTitle}" ${moment.badgeRarity} Moment Badge!`);
+          }}
+          onClose={() => setShowMomentsModal(false)}
+        />
+      )}
+
+      {/* Viewer Soundboard & Channel Points Sound Alerts */}
+      {showSoundboardModal && (
+        <ViewerSoundboardModal
+          streamerName={stream.streamerName}
+          onAlertTriggered={(alert) => {
+            handleSendMessage(`🔊 Played Sound Alert: ${alert.icon} ${alert.name} (-${alert.pointsCost} pts)`);
+          }}
+          onClose={() => setShowSoundboardModal(false)}
+        />
+      )}
+
+      {/* VOD Chapters & Interactive Transcript Timeline */}
+      {showTranscriptModal && (
+        <VodTranscriptViewer
+          onJumpToTimestamp={(secs, page) => {
+            handleSendMessage(`📖 Jumped transcript to ${Math.floor(secs / 60)}m (Page ${page})`);
+          }}
+          onClose={() => setShowTranscriptModal(false)}
+        />
+      )}
+
+      {/* 4-Way Squad Co-Stream Multiview */}
+      {showSquadMulti && (
+        <SquadMultiviewPlayer
+          onClose={() => setShowSquadMulti(false)}
         />
       )}
 
