@@ -53,6 +53,10 @@ import { ModActionAuditLogModal } from '../components/ModActionAuditLogModal';
 import { ContentClassificationModal } from '../components/ContentClassificationModal';
 import { StreamLatencySettingsModal } from '../components/StreamLatencySettingsModal';
 import { ChatEmoteComboWidget } from '../components/ChatEmoteComboWidget';
+import { MysteryBookBoxModal } from '../components/MysteryBookBoxModal';
+import { ReadingTelemetryModal } from '../components/ReadingTelemetryModal';
+import { BookTriviaArenaModal } from '../components/BookTriviaArenaModal';
+import { VocalWarmupStudioModal } from '../components/VocalWarmupStudioModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -104,7 +108,9 @@ import {
   TrendingUp,
   MessageSquare,
   Tag,
-  Radio
+  Radio,
+  Swords,
+  Mic
 } from 'lucide-react';
 
 interface StreamData {
@@ -213,6 +219,10 @@ export const StreamPage: React.FC = () => {
   const [showContentWarnModal, setShowContentWarnModal] = useState(false);
   const [showLatencyModal, setShowLatencyModal] = useState(false);
   const [showEmoteComboWidget, setShowEmoteComboWidget] = useState(false);
+  const [showMysteryBoxModal, setShowMysteryBoxModal] = useState(false);
+  const [showTelemetryModal, setShowTelemetryModal] = useState(false);
+  const [showTriviaArenaModal, setShowTriviaArenaModal] = useState(false);
+  const [showVocalWarmupModal, setShowVocalWarmupModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1119,6 +1129,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Combos</span>
             </button>
 
+            {/* Mystery Book Box Prize Wheel */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowMysteryBoxModal(true);
+              }}
+              className="btn-secondary"
+              title="Mystery Book Box & Community Prize Wheel Giveaway"
+            >
+              <Gift size={16} color="#ffd700" />
+              <span className="hide-mobile">Prize Wheel</span>
+            </button>
+
+            {/* Live Reading Telemetry */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowTelemetryModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Reading Velocity & Vocabulary Telemetry HUD"
+            >
+              <Activity size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Telemetry</span>
+            </button>
+
+            {/* Lore Master Trivia Gauntlet */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowTriviaArenaModal(true);
+              }}
+              className="btn-secondary"
+              title="Lore Master Chapter Trivia Gauntlet & Quiz Duel"
+            >
+              <Swords size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Trivia</span>
+            </button>
+
+            {/* Narrator Vocal Warmup */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVocalWarmupModal(true);
+              }}
+              className="btn-secondary"
+              title="Narrator Vocal Warmup & Breath Control Studio"
+            >
+              <Mic size={16} color="#ffd700" />
+              <span className="hide-mobile">Vocal Suite</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -1647,6 +1709,38 @@ export const StreamPage: React.FC = () => {
       {showEmoteComboWidget && (
         <ChatEmoteComboWidget
           onClose={() => setShowEmoteComboWidget(false)}
+        />
+      )}
+
+      {/* Mystery Book Box Prize Wheel */}
+      {showMysteryBoxModal && (
+        <MysteryBookBoxModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowMysteryBoxModal(false)}
+        />
+      )}
+
+      {/* Live Reading Telemetry */}
+      {showTelemetryModal && (
+        <ReadingTelemetryModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowTelemetryModal(false)}
+        />
+      )}
+
+      {/* Lore Master Trivia Gauntlet */}
+      {showTriviaArenaModal && (
+        <BookTriviaArenaModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowTriviaArenaModal(false)}
+        />
+      )}
+
+      {/* Narrator Vocal Warmup */}
+      {showVocalWarmupModal && (
+        <VocalWarmupStudioModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVocalWarmupModal(false)}
         />
       )}
 

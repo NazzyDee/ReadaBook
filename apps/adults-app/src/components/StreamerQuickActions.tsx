@@ -119,6 +119,10 @@ import { ModActionAuditLogModal } from './ModActionAuditLogModal';
 import { ContentClassificationModal } from './ContentClassificationModal';
 import { StreamLatencySettingsModal } from './StreamLatencySettingsModal';
 import { ChatEmoteComboWidget } from './ChatEmoteComboWidget';
+import { MysteryBookBoxModal } from './MysteryBookBoxModal';
+import { ReadingTelemetryModal } from './ReadingTelemetryModal';
+import { BookTriviaArenaModal } from './BookTriviaArenaModal';
+import { VocalWarmupStudioModal } from './VocalWarmupStudioModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -198,6 +202,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showContentWarnModal, setShowContentWarnModal] = useState(false);
   const [showLatencyModal, setShowLatencyModal] = useState(false);
   const [showEmoteComboWidget, setShowEmoteComboWidget] = useState(false);
+  const [showMysteryBoxModal, setShowMysteryBoxModal] = useState(false);
+  const [showTelemetryModal, setShowTelemetryModal] = useState(false);
+  const [showTriviaArenaModal, setShowTriviaArenaModal] = useState(false);
+  const [showVocalWarmupModal, setShowVocalWarmupModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -211,6 +219,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Mystery Book Box Prize Wheel */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowMysteryBoxModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Mystery Book Box & Community Prize Wheel Giveaway"
+        >
+          <Gift size={18} />
+          <span>Prize Wheel</span>
+        </button>
+
+        {/* Live Reading Telemetry */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowTelemetryModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Live Reading Velocity & Vocabulary Telemetry HUD"
+        >
+          <Activity size={18} />
+          <span>Telemetry</span>
+        </button>
+
+        {/* Lore Master Trivia Gauntlet */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowTriviaArenaModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Lore Master Chapter Trivia Gauntlet & Quiz Duel"
+        >
+          <Swords size={18} />
+          <span>Trivia Duel</span>
+        </button>
+
+        {/* Narrator Vocal Warmup Studio */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVocalWarmupModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Narrator Vocal Warmup & Breath Control Studio"
+        >
+          <Mic size={18} />
+          <span>Vocal Suite</span>
+        </button>
         {/* Mod Action Audit Trail */}
         <button
           onClick={() => {
@@ -1510,6 +1569,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showEmoteComboWidget && (
         <ChatEmoteComboWidget
           onClose={() => setShowEmoteComboWidget(false)}
+        />
+      )}
+
+      {showMysteryBoxModal && (
+        <MysteryBookBoxModal
+          streamerName={streamerName}
+          onClose={() => setShowMysteryBoxModal(false)}
+        />
+      )}
+
+      {showTelemetryModal && (
+        <ReadingTelemetryModal
+          streamerName={streamerName}
+          onClose={() => setShowTelemetryModal(false)}
+        />
+      )}
+
+      {showTriviaArenaModal && (
+        <BookTriviaArenaModal
+          streamerName={streamerName}
+          onClose={() => setShowTriviaArenaModal(false)}
+        />
+      )}
+
+      {showVocalWarmupModal && (
+        <VocalWarmupStudioModal
+          streamerName={streamerName}
+          onClose={() => setShowVocalWarmupModal(false)}
         />
       )}
     </div>
