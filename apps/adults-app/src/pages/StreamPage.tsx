@@ -69,6 +69,10 @@ import { SubGiftLeaderboardModal } from '../components/SubGiftLeaderboardModal';
 import { HighlightReelGeneratorModal } from '../components/HighlightReelGeneratorModal';
 import { ChatVerificationModal } from '../components/ChatVerificationModal';
 import { ReadingPacingPacerModal } from '../components/ReadingPacingPacerModal';
+import { SoundtrackIntegrationModal } from '../components/SoundtrackIntegrationModal';
+import { CliffhangerWagersModal } from '../components/CliffhangerWagersModal';
+import { EmoteSlotsManagerModal } from '../components/EmoteSlotsManagerModal';
+import { NarratorCheatSheetModal } from '../components/NarratorCheatSheetModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -128,7 +132,9 @@ import {
   Headphones,
   Volume2,
   Film,
-  Gauge
+  Gauge,
+  Dices,
+  Smile
 } from 'lucide-react';
 
 interface StreamData {
@@ -253,6 +259,10 @@ export const StreamPage: React.FC = () => {
   const [showHighlightReelModal, setShowHighlightReelModal] = useState(false);
   const [showChatVerifyModal, setShowChatVerifyModal] = useState(false);
   const [showPacingMetronomeModal, setShowPacingMetronomeModal] = useState(false);
+  const [showSoundtrackModal, setShowSoundtrackModal] = useState(false);
+  const [showCliffhangerWagerModal, setShowCliffhangerWagerModal] = useState(false);
+  const [showEmoteSlotsModal, setShowEmoteSlotsModal] = useState(false);
+  const [showCheatSheetModal, setShowCheatSheetModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1367,6 +1377,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Cadence</span>
             </button>
 
+            {/* Atmosphere Soundtrack & Spotify Deck */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSoundtrackModal(true);
+              }}
+              className="btn-secondary"
+              title="Narrator Atmosphere Soundtrack & Spotify Deck"
+            >
+              <Radio size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Soundtrack</span>
+            </button>
+
+            {/* Chapter Cliffhanger Predictions */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowCliffhangerWagerModal(true);
+              }}
+              className="btn-secondary"
+              title="Chapter Cliffhanger Prediction Wagers"
+            >
+              <Dices size={16} color="#ffd700" />
+              <span className="hide-mobile">Wagers</span>
+            </button>
+
+            {/* Custom Emote Slots Matrix */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowEmoteSlotsModal(true);
+              }}
+              className="btn-secondary"
+              title="Custom Emote Slots & Sub Rewards Matrix"
+            >
+              <Smile size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Emotes</span>
+            </button>
+
+            {/* Pronunciation Cheat Sheet */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowCheatSheetModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Pronunciation Lexicon & Voice Cheat Sheet"
+            >
+              <BookOpen size={16} color="#ffd700" />
+              <span className="hide-mobile">Cheat Sheet</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2023,6 +2085,38 @@ export const StreamPage: React.FC = () => {
         <ReadingPacingPacerModal
           streamerName={stream.streamerName}
           onClose={() => setShowPacingMetronomeModal(false)}
+        />
+      )}
+
+      {/* Atmosphere Soundtrack & Spotify Deck */}
+      {showSoundtrackModal && (
+        <SoundtrackIntegrationModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSoundtrackModal(false)}
+        />
+      )}
+
+      {/* Chapter Cliffhanger Predictions */}
+      {showCliffhangerWagerModal && (
+        <CliffhangerWagersModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowCliffhangerWagerModal(false)}
+        />
+      )}
+
+      {/* Custom Emote Slots Matrix */}
+      {showEmoteSlotsModal && (
+        <EmoteSlotsManagerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowEmoteSlotsModal(false)}
+        />
+      )}
+
+      {/* Pronunciation Cheat Sheet */}
+      {showCheatSheetModal && (
+        <NarratorCheatSheetModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowCheatSheetModal(false)}
         />
       )}
 

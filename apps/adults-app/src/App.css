@@ -33197,6 +33197,993 @@
   cursor: pointer;
 }
 
+/* ================= ATMOSPHERE SOUNDTRACK DECK ================= */
+.soundtrack-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.soundtrack-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.soundtrack-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-teal);
+  letter-spacing: 0.08em;
+}
+
+.soundtrack-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.now-playing-banner {
+  background: linear-gradient(135deg, rgba(0, 180, 216, 0.15) 0%, var(--bg-panel) 100%);
+  border: 2px solid var(--accent-teal);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.music-disc-icon {
+  background: var(--bg-surface);
+  border: 2px solid #ffd700;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.track-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.now-playing-pill {
+  font-size: 0.6rem;
+  font-weight: 900;
+  color: #00ff88;
+  letter-spacing: 0.06em;
+}
+
+.track-details h4 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.track-details p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.source-tag-pill {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.soundtrack-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ducking-controls-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ducking-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.duck-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.ducking-subtext {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.ducking-sliders-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 768px) {
+  .ducking-sliders-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ducking-slider-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ducking-slider-item label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ccc;
+}
+
+.curated-playlists-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.playlists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.playlist-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.playlist-card:hover {
+  transform: translateY(-2px);
+}
+
+.playlist-card.active {
+  border-color: var(--accent-teal);
+  background: rgba(0, 180, 216, 0.08);
+}
+
+.pl-icon {
+  font-size: 1.4rem;
+}
+
+.pl-info h4 {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 2px 0;
+}
+
+.pl-info span {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.soundtrack-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.btn-save-soundtrack {
+  padding: 8px 20px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* ================= CHAPTER CLIFFHANGER PREDICTIONS ================= */
+.wager-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.wager-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.wager-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.08em;
+}
+
+.wager-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.wager-question-banner {
+  background: var(--bg-panel);
+  border: 2px solid #ffd700;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wager-q-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.time-remaining-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ff3b3b;
+}
+
+.pool-size-pill {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #ffd700;
+}
+
+.wager-question-banner h4 {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+}
+
+.chapter-ctx {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.wager-odds-bar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.odds-labels-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.side-a-label {
+  color: #00b4d8;
+}
+
+.side-b-label {
+  color: #ff3b3b;
+}
+
+.odds-bar-track {
+  height: 8px;
+  background: var(--bg-panel);
+  border-radius: 4px;
+  display: flex;
+  overflow: hidden;
+}
+
+.odds-bar-fill-a {
+  background: #00b4d8;
+}
+
+.odds-bar-fill-b {
+  background: #ff3b3b;
+}
+
+.wager-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .wager-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wager-option-card {
+  background: var(--bg-panel);
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wager-option-card.side-a {
+  border-left-width: 5px;
+  border-left-color: #00b4d8;
+}
+
+.wager-option-card.side-b {
+  border-left-width: 5px;
+  border-left-color: #ff3b3b;
+}
+
+.wager-option-card.chosen {
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.opt-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.opt-letter {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.opt-top h4 {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.opt-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.payout-mult {
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.btn-place-wager {
+  padding: 8px 16px;
+  font-weight: 800;
+  font-size: 0.78rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-place-wager:hover {
+  transform: translateY(-2px);
+}
+
+.btn-wager-a {
+  background: #00b4d8;
+  color: #000;
+}
+
+.btn-wager-b {
+  background: #ff3b3b;
+  color: #fff;
+}
+
+.bet-amount-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.bet-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.bet-chips-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-bet-chip {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btn-bet-chip.active {
+  border-color: #ffd700;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.12);
+}
+
+.resolve-broadcaster-bar {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.resolve-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.resolve-buttons-row {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-resolve-opt {
+  padding: 6px 14px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-res-a {
+  background: rgba(0, 180, 216, 0.2);
+  border: 1px solid #00b4d8;
+  color: #00b4d8;
+}
+
+.btn-res-b {
+  background: rgba(255, 59, 59, 0.2);
+  border: 1px solid #ff3b3b;
+  color: #ff3b3b;
+}
+
+/* ================= CUSTOM EMOTE SLOTS MANAGER ================= */
+.emote-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.emote-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.emote-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  letter-spacing: 0.08em;
+}
+
+.emote-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.sub-points-banner {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.15) 0%, var(--bg-panel) 100%);
+  border: 1px solid var(--accent-secondary);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sub-pts-info h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 2px 0;
+}
+
+.sub-pts-info p {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.sub-pts-bar-bg {
+  height: 6px;
+  background: var(--bg-surface);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.sub-pts-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-secondary), #00ff88);
+  border-radius: 3px;
+}
+
+.emote-filter-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.emote-tab-btn {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.emote-tab-btn.active {
+  border-color: var(--accent-secondary);
+  color: #fff;
+  background: rgba(157, 78, 221, 0.2);
+}
+
+.upload-emote-form {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.upload-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.upload-input-group input {
+  flex: 1;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  outline: none;
+}
+
+.btn-upload-emote {
+  padding: 8px 16px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.emote-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.emote-slot-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.emote-slot-card.locked {
+  border-style: dashed;
+  opacity: 0.6;
+}
+
+.emote-img-preview {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.emote-code-tag {
+  font-size: 0.72rem;
+  color: #fff;
+}
+
+.emote-tier-pill {
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.btn-del-emote {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px;
+}
+
+.btn-del-emote:hover {
+  color: #ff3b3b;
+}
+
+.locked-slot-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 10px 0;
+}
+
+.emote-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.emote-resizer-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.btn-close-emote {
+  padding: 8px 20px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* ================= NARRATOR PRONUNCIATION CHEAT SHEET ================= */
+.cheatsheet-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.cheatsheet-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.cheatsheet-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.08em;
+}
+
+.cheatsheet-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.lexicon-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.lexicon-search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.lexicon-filter-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.lexicon-tab-btn {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lexicon-tab-btn.active {
+  border-color: #ffd700;
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.12);
+}
+
+.pronunciation-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.pronunciation-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pronounce-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.term-info h4 {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 2px 0;
+}
+
+.lang-tag {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.btn-play-audio-sample {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phonetic-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.phonetic-text {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--accent-teal);
+}
+
+.sample-note {
+  font-size: 0.68rem;
+  color: #ccc;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.character-voices-section {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.voices-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.voices-section-title h4 {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.character-voices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.voice-memo-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.voice-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.voice-card-top strong {
+  font-size: 0.82rem;
+  color: #fff;
+}
+
+.pitch-tag {
+  font-size: 0.6rem;
+  color: #ffd700;
+  font-weight: 800;
+}
+
+.accent-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  color: var(--accent-secondary);
+}
+
+.mannerisms-text {
+  font-size: 0.68rem;
+  color: #bbb;
+  margin: 0;
+  font-style: italic;
+}
+
+.cheatsheet-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.btn-close-cheat {
+  padding: 8px 20px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+
 
 
 

@@ -57,7 +57,8 @@ import {
   Gem,
   Headphones,
   Volume2,
-  Gauge
+  Gauge,
+  Dices
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -139,6 +140,10 @@ import { SubGiftLeaderboardModal } from './SubGiftLeaderboardModal';
 import { HighlightReelGeneratorModal } from './HighlightReelGeneratorModal';
 import { ChatVerificationModal } from './ChatVerificationModal';
 import { ReadingPacingPacerModal } from './ReadingPacingPacerModal';
+import { SoundtrackIntegrationModal } from './SoundtrackIntegrationModal';
+import { CliffhangerWagersModal } from './CliffhangerWagersModal';
+import { EmoteSlotsManagerModal } from './EmoteSlotsManagerModal';
+import { NarratorCheatSheetModal } from './NarratorCheatSheetModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -234,6 +239,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showHighlightReelModal, setShowHighlightReelModal] = useState(false);
   const [showChatVerifyModal, setShowChatVerifyModal] = useState(false);
   const [showPacingMetronomeModal, setShowPacingMetronomeModal] = useState(false);
+  const [showSoundtrackModal, setShowSoundtrackModal] = useState(false);
+  const [showCliffhangerWagerModal, setShowCliffhangerWagerModal] = useState(false);
+  const [showEmoteSlotsModal, setShowEmoteSlotsModal] = useState(false);
+  const [showCheatSheetModal, setShowCheatSheetModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -247,6 +256,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Atmosphere Soundtrack & Spotify Deck */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSoundtrackModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Narrator Atmosphere Soundtrack & Spotify Deck"
+        >
+          <Radio size={18} />
+          <span>Soundtrack</span>
+        </button>
+
+        {/* Chapter Cliffhanger Predictions */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCliffhangerWagerModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Chapter Cliffhanger Prediction Wagers"
+        >
+          <Dices size={18} />
+          <span>Wagers</span>
+        </button>
+
+        {/* Custom Emote Slots Matrix */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowEmoteSlotsModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Custom Emote Slots & Sub Rewards Matrix"
+        >
+          <Smile size={18} />
+          <span>Emote Slots</span>
+        </button>
+
+        {/* Pronunciation Cheat Sheet */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCheatSheetModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Live Pronunciation Lexicon & Voice Cheat Sheet"
+        >
+          <BookOpen size={18} />
+          <span>Cheat Sheet</span>
+        </button>
         {/* Sub Gifting Leaderboard */}
         <button
           onClick={() => {
@@ -1862,6 +1922,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <ReadingPacingPacerModal
           streamerName={streamerName}
           onClose={() => setShowPacingMetronomeModal(false)}
+        />
+      )}
+
+      {showSoundtrackModal && (
+        <SoundtrackIntegrationModal
+          streamerName={streamerName}
+          onClose={() => setShowSoundtrackModal(false)}
+        />
+      )}
+
+      {showCliffhangerWagerModal && (
+        <CliffhangerWagersModal
+          streamerName={streamerName}
+          onClose={() => setShowCliffhangerWagerModal(false)}
+        />
+      )}
+
+      {showEmoteSlotsModal && (
+        <EmoteSlotsManagerModal
+          streamerName={streamerName}
+          onClose={() => setShowEmoteSlotsModal(false)}
+        />
+      )}
+
+      {showCheatSheetModal && (
+        <NarratorCheatSheetModal
+          streamerName={streamerName}
+          onClose={() => setShowCheatSheetModal(false)}
         />
       )}
     </div>
