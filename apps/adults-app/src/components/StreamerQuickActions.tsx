@@ -61,7 +61,8 @@ import {
   Dices,
   Gavel,
   TreePine,
-  Music
+  Music,
+  Lock
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -155,6 +156,10 @@ import { StreamTagTaxonomyModal } from './StreamTagTaxonomyModal';
 import { NarratorFaceOffModal } from './NarratorFaceOffModal';
 import { SubscribersWallOfHonorModal } from './SubscribersWallOfHonorModal';
 import { VocalWarmupTrainerModal } from './VocalWarmupTrainerModal';
+import { ChatPacingThrottleModal } from './ChatPacingThrottleModal';
+import { ChapterProgressSyncModal } from './ChapterProgressSyncModal';
+import { CommunitySparksPinataModal } from './CommunitySparksPinataModal';
+import { WorldLoreAtlasModal } from './WorldLoreAtlasModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -262,6 +267,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showNarratorFaceOffModal, setShowNarratorFaceOffModal] = useState(false);
   const [showSubscribersWallModal, setShowSubscribersWallModal] = useState(false);
   const [showVocalWarmupTrainerModal, setShowVocalWarmupTrainerModal] = useState(false);
+  const [showChatThrottleModal, setShowChatThrottleModal] = useState(false);
+  const [showBookProgressModal, setShowBookProgressModal] = useState(false);
+  const [showSparksPinataModal, setShowSparksPinataModal] = useState(false);
+  const [showWorldAtlasModal, setShowWorldAtlasModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -275,6 +284,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Chat Throttle & Sub-Only Cockpit */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowChatThrottleModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Chat Flow Pacer & Sub-Only Moderation Cockpit"
+        >
+          <Lock size={18} />
+          <span>Chat Gate</span>
+        </button>
+
+        {/* Live Book Progress Tracker */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBookProgressModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Live Book Progress Tracker & E-Reader Sync"
+        >
+          <BookOpen size={18} />
+          <span>Progress Sync</span>
+        </button>
+
+        {/* Community Sparks Pinata */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSparksPinataModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="The Lore Dragon Sparks Piñata & Gold Leaf Shower"
+        >
+          <Flame size={18} />
+          <span>Sparks Piñata</span>
+        </button>
+
+        {/* World Lore Atlas */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowWorldAtlasModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="World Lore Atlas & Interactive Realm Map"
+        >
+          <Compass size={18} />
+          <span>Realm Atlas</span>
+        </button>
         {/* Stream Tag Taxonomy */}
         <button
           onClick={() => {
@@ -2127,6 +2187,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <VocalWarmupTrainerModal
           streamerName={streamerName}
           onClose={() => setShowVocalWarmupTrainerModal(false)}
+        />
+      )}
+
+      {showChatThrottleModal && (
+        <ChatPacingThrottleModal
+          streamerName={streamerName}
+          onClose={() => setShowChatThrottleModal(false)}
+        />
+      )}
+
+      {showBookProgressModal && (
+        <ChapterProgressSyncModal
+          streamerName={streamerName}
+          onClose={() => setShowBookProgressModal(false)}
+        />
+      )}
+
+      {showSparksPinataModal && (
+        <CommunitySparksPinataModal
+          streamerName={streamerName}
+          onClose={() => setShowSparksPinataModal(false)}
+        />
+      )}
+
+      {showWorldAtlasModal && (
+        <WorldLoreAtlasModal
+          streamerName={streamerName}
+          onClose={() => setShowWorldAtlasModal(false)}
         />
       )}
     </div>

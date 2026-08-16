@@ -36010,6 +36010,830 @@
   cursor: pointer;
 }
 
+/* ================= CHAT FLOW PACER & SUB-ONLY COCKPIT ================= */
+.throttle-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.throttle-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.throttle-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-danger);
+  letter-spacing: 0.08em;
+}
+
+.throttle-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.throttle-controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .throttle-controls-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.throttle-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.throttle-card.active {
+  border-color: var(--accent-teal);
+  background: rgba(0, 180, 216, 0.04);
+}
+
+.throttle-card-left {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+}
+
+.throttle-card-left h4 {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 2px 0;
+}
+
+.throttle-card-left p {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.duration-chips {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.chip-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.chip-btn.selected {
+  border-color: var(--accent-teal);
+  color: #fff;
+  background: var(--accent-teal);
+}
+
+.btn-toggle-switch {
+  border: none;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.68rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.btn-toggle-switch.on {
+  background: #00ff88;
+  color: #000;
+}
+
+.btn-toggle-switch.off {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.emergency-purge-bar {
+  background: rgba(255, 59, 59, 0.08);
+  border: 1px solid #ff3b3b;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.purge-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ff3b3b;
+}
+
+.btn-purge-chat {
+  background: #ff3b3b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.throttle-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.btn-save-throttle {
+  padding: 8px 24px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* ================= LIVE BOOK PROGRESS TRACKER ================= */
+.progress-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.progress-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.progress-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-teal);
+  letter-spacing: 0.08em;
+}
+
+.progress-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.progress-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid var(--accent-teal);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.book-meta-col h4 {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+}
+
+.author-line {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 2px 0 6px 0;
+}
+
+.chapter-title-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ffd700;
+}
+
+.pct-circle-wrap {
+  flex-shrink: 0;
+}
+
+.pct-circle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 3px solid var(--accent-teal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pct-num {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.pct-label {
+  font-size: 0.52rem;
+  color: var(--text-muted);
+}
+
+.progress-track-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progress-labels-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.time-estimate {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.progress-bar-track {
+  height: 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00b4d8, #0077b6);
+  transition: width 0.3s ease;
+}
+
+.page-adjuster-bar {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.adjuster-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.adjuster-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-page-step {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.current-page-display {
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #ffd700;
+  padding: 0 6px;
+}
+
+.reader-sync-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sync-qr-icon {
+  flex-shrink: 0;
+}
+
+.sync-info strong {
+  font-size: 0.85rem;
+  color: #fff;
+  display: block;
+}
+
+.sync-info p {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin: 2px 0 6px 0;
+}
+
+.sync-token-pill {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  background: var(--bg-surface);
+  border: 1px dashed #ffd700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.progress-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.btn-complete-chapter {
+  background: #ffd700;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* ================= COMMUNITY SPARKS PINATA ================= */
+.pinata-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.pinata-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.pinata-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.08em;
+}
+
+.pinata-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.dragon-hoard-banner {
+  background: var(--bg-panel);
+  border: 2px solid #ffd700;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dragon-visual {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.dragon-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dragon-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dragon-state-pill {
+  font-size: 0.62rem;
+  font-weight: 900;
+  color: #000;
+  background: #ffd700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.dragon-sparks-num {
+  font-size: 0.85rem;
+  color: #ffd700;
+}
+
+.hoard-bar-track {
+  height: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.hoard-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffd700, #ff8800);
+  transition: width 0.3s ease;
+}
+
+.hoard-reward-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.pinata-cheer-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cheer-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.cheer-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-cheer-pinata {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.btn-cheer-pinata:hover {
+  transform: translateY(-2px);
+  border-color: #ffd700;
+}
+
+.gold-leaf-shower-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gold-leaf-shower-box label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+}
+
+.leaves-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .leaves-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.leaf-item-btn {
+  background: var(--bg-surface);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  border-radius: 8px;
+  padding: 10px 4px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.leaf-item-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  background: rgba(255, 215, 0, 0.15);
+}
+
+.leaf-item-btn.claimed {
+  opacity: 0.5;
+  border-color: var(--border-color);
+  color: var(--text-muted);
+}
+
+.top-hoard-donors {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.top-hoard-donors label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.donors-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.donor-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 0.68rem;
+  color: #fff;
+}
+
+.donor-rank {
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.donor-pill img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.donor-pill strong {
+  color: #ffd700;
+}
+
+.pinata-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+/* ================= WORLD LORE ATLAS ================= */
+.atlas-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.atlas-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.atlas-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  letter-spacing: 0.08em;
+}
+
+.atlas-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.atlas-map-canvas {
+  position: relative;
+  height: 300px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 2px solid var(--accent-secondary);
+}
+
+.map-texture-bg {
+  position: absolute;
+  inset: 0;
+  background: #111420 url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1000&auto=format&fit=crop&q=80') center/cover no-repeat;
+  filter: brightness(0.65) sepia(0.3);
+}
+
+.map-poi-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.map-poi-marker:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.map-poi-marker.selected .poi-label {
+  color: #ffd700;
+  font-weight: 900;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.poi-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 1px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.live-narrator-radar {
+  font-size: 0.5rem;
+  font-weight: 900;
+  color: #00ff88;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 1px 4px;
+  border-radius: 2px;
+  animation: pulse 2s infinite;
+}
+
+.poi-lore-details-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.poi-details-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.poi-title-col h4 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.poi-region-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+}
+
+.distance-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  background: var(--bg-surface);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.poi-lore-summary {
+  font-size: 0.75rem;
+  color: #ccc;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.atlas-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.atlas-notice {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+
 
 
 

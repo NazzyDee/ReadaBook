@@ -81,6 +81,10 @@ import { StreamTagTaxonomyModal } from '../components/StreamTagTaxonomyModal';
 import { NarratorFaceOffModal } from '../components/NarratorFaceOffModal';
 import { SubscribersWallOfHonorModal } from '../components/SubscribersWallOfHonorModal';
 import { VocalWarmupTrainerModal } from '../components/VocalWarmupTrainerModal';
+import { ChatPacingThrottleModal } from '../components/ChatPacingThrottleModal';
+import { ChapterProgressSyncModal } from '../components/ChapterProgressSyncModal';
+import { CommunitySparksPinataModal } from '../components/CommunitySparksPinataModal';
+import { WorldLoreAtlasModal } from '../components/WorldLoreAtlasModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -145,7 +149,9 @@ import {
   Smile,
   Gavel,
   TreePine,
-  Music
+  Music,
+  Lock,
+  Compass
 } from 'lucide-react';
 
 interface StreamData {
@@ -282,6 +288,10 @@ export const StreamPage: React.FC = () => {
   const [showNarratorFaceOffModal, setShowNarratorFaceOffModal] = useState(false);
   const [showSubscribersWallModal, setShowSubscribersWallModal] = useState(false);
   const [showVocalWarmupTrainerModal, setShowVocalWarmupTrainerModal] = useState(false);
+  const [showChatThrottleModal, setShowChatThrottleModal] = useState(false);
+  const [showBookProgressModal, setShowBookProgressModal] = useState(false);
+  const [showSparksPinataModal, setShowSparksPinataModal] = useState(false);
+  const [showWorldAtlasModal, setShowWorldAtlasModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1552,6 +1562,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Vocal Warmup</span>
             </button>
 
+            {/* Chat Throttle & Sub-Only Cockpit */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowChatThrottleModal(true);
+              }}
+              className="btn-secondary"
+              title="Chat Flow Pacer & Sub-Only Moderation Cockpit"
+            >
+              <Lock size={16} color="var(--accent-danger)" />
+              <span className="hide-mobile">Chat Gate</span>
+            </button>
+
+            {/* Live Book Progress Tracker */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBookProgressModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Book Progress Tracker & E-Reader Sync"
+            >
+              <BookOpen size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Progress</span>
+            </button>
+
+            {/* Community Sparks Pinata */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSparksPinataModal(true);
+              }}
+              className="btn-secondary"
+              title="The Lore Dragon Sparks Piñata & Gold Leaf Shower"
+            >
+              <Flame size={16} color="#ffd700" />
+              <span className="hide-mobile">Piñata</span>
+            </button>
+
+            {/* World Lore Atlas */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowWorldAtlasModal(true);
+              }}
+              className="btn-secondary"
+              title="World Lore Atlas & Interactive Realm Map"
+            >
+              <Compass size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Atlas</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2304,6 +2366,38 @@ export const StreamPage: React.FC = () => {
         <VocalWarmupTrainerModal
           streamerName={stream.streamerName}
           onClose={() => setShowVocalWarmupTrainerModal(false)}
+        />
+      )}
+
+      {/* Chat Throttle & Sub-Only Cockpit */}
+      {showChatThrottleModal && (
+        <ChatPacingThrottleModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowChatThrottleModal(false)}
+        />
+      )}
+
+      {/* Live Book Progress Tracker */}
+      {showBookProgressModal && (
+        <ChapterProgressSyncModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowBookProgressModal(false)}
+        />
+      )}
+
+      {/* Community Sparks Pinata */}
+      {showSparksPinataModal && (
+        <CommunitySparksPinataModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSparksPinataModal(false)}
+        />
+      )}
+
+      {/* World Lore Atlas */}
+      {showWorldAtlasModal && (
+        <WorldLoreAtlasModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowWorldAtlasModal(false)}
         />
       )}
 
