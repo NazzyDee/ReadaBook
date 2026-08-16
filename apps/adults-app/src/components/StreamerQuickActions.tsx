@@ -36,7 +36,10 @@ import {
   Video,
   Disc,
   Palette,
-  CalendarDays
+  CalendarDays,
+  ShieldAlert,
+  CreditCard,
+  Theater
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -72,6 +75,10 @@ import { OBSOverlayStudioModal } from './OBSOverlayStudioModal';
 import { AudiobookStemsMarketplaceModal } from './AudiobookStemsMarketplaceModal';
 import { EmoteArtistAttributionModal } from './EmoteArtistAttributionModal';
 import { MarathonScheduleHubModal } from './MarathonScheduleHubModal';
+import { ShieldModeModal } from './ShieldModeModal';
+import { CreatorPayoutsModal } from './CreatorPayoutsModal';
+import { MerchStorefrontModal } from './MerchStorefrontModal';
+import { CharacterCastMatrixModal } from './CharacterCastMatrixModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -121,6 +128,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showStemsModal, setShowStemsModal] = useState(false);
   const [showEmoteArtistModal, setShowEmoteArtistModal] = useState(false);
   const [showMarathonModal, setShowMarathonModal] = useState(false);
+  const [showShieldModal, setShowShieldModal] = useState(false);
+  const [showPayoutsModal, setShowPayoutsModal] = useState(false);
+  const [showMerchModal, setShowMerchModal] = useState(false);
+  const [showCastMatrixModal, setShowCastMatrixModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -134,6 +145,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Streamer Shield Mode */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowShieldModal(true);
+          }}
+          className="btn-quick-action action-red"
+          title="Emergency Shield Mode & Anti-Raid/Spoiler Defense"
+        >
+          <ShieldAlert size={18} />
+          <span>Shield Mode</span>
+        </button>
+
+        {/* Creator Revenue & Payouts */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowPayoutsModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Creator Revenue & Stripe Payouts Hub"
+        >
+          <CreditCard size={18} />
+          <span>Payouts</span>
+        </button>
+
+        {/* Streamer Merch Storefront */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowMerchModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Streamer Official Merchandise & Book Box Store"
+        >
+          <ShoppingBag size={18} />
+          <span>Merch Store</span>
+        </button>
+
+        {/* Multi-Voice Character Cast Matrix */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCastMatrixModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Live Multi-Voice Character Cast Roster"
+        >
+          <Theater size={18} />
+          <span>Cast Matrix</span>
+        </button>
+
         {/* OBS Stream Overlay Studio */}
         <button
           onClick={() => {
@@ -841,6 +904,33 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showMarathonModal && (
         <MarathonScheduleHubModal
           onClose={() => setShowMarathonModal(false)}
+        />
+      )}
+
+      {showShieldModal && (
+        <ShieldModeModal
+          streamerName={streamerName}
+          onClose={() => setShowShieldModal(false)}
+        />
+      )}
+
+      {showPayoutsModal && (
+        <CreatorPayoutsModal
+          streamerName={streamerName}
+          onClose={() => setShowPayoutsModal(false)}
+        />
+      )}
+
+      {showMerchModal && (
+        <MerchStorefrontModal
+          streamerName={streamerName}
+          onClose={() => setShowMerchModal(false)}
+        />
+      )}
+
+      {showCastMatrixModal && (
+        <CharacterCastMatrixModal
+          onClose={() => setShowCastMatrixModal(false)}
         />
       )}
     </div>

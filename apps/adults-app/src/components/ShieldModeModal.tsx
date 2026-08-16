@@ -1,154 +1,186 @@
 import React, { useState } from 'react';
-import { Shield, ShieldAlert, X } from 'lucide-react';
+import { X, ShieldAlert, ShieldCheck, Lock, Trash2, Ban, EyeOff, Radio } from 'lucide-react';
+import { DEFAULT_SHIELD_SETTINGS, type ShieldModeSettings } from '../lib/shieldModeData';
 import { soundFX } from '../lib/soundFx';
 
 interface ShieldModeModalProps {
-  isOpen: boolean;
-  isShieldActive: boolean;
-  onToggleShield: (active: boolean) => void;
+  streamerName?: string;
+  isOpen?: boolean;
+  isShieldActive?: boolean;
+  onToggleShield?: (active: boolean) => void;
+  onShieldStatusChange?: (isActive: boolean) => void;
   onClose: () => void;
 }
 
 export const ShieldModeModal: React.FC<ShieldModeModalProps> = ({
-  isShieldActive,
+  streamerName: _streamerName,
+  isOpen = true,
+  isShieldActive: initialShieldActive = false,
   onToggleShield,
+  onShieldStatusChange,
   onClose
 }) => {
-  const [chatRestriction, setChatRestriction] = useState<'subs' | 'followers' | 'emoteOnly'>('subs');
-  const [clearChatOnActivate, setClearChatOnActivate] = useState(true);
-  const [elevateAutoMod, setElevateAutoMod] = useState(true);
-  const [hideSpoilers, setHideSpoilers] = useState(true);
+  const [settings, setSettings] = useState<ShieldModeSettings>({
+    ...DEFAULT_SHIELD_SETTINGS,
+    isShieldActive: initialShieldActive || DEFAULT_SHIELD_SETTINGS.isShieldActive
+  });
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const handleActivateShield = () => {
-    soundFX.playCheer();
-    onToggleShield(true);
-    onClose();
+  if (!isOpen) return null;
+
+  const toggleShield = () => {
+    const nextState = !settings.isShieldActive;
+    if (nextState) {
+      soundFX.playThunder();
+    } else {
+      soundFX.playPop();
+    }
+
+    setSettings(prev => ({
+      ...prev,
+      isShieldActive: nextState
+    }));
+
+    setToastMessage(nextState ? '🛡️ SHIELD MODE ACTIVATED: Chat locked to Subscribers & Spoilers Blocked!' : '🛡️ Shield Mode deactivated. Normal broadcast rules restored.');
+    if (onToggleShield) {
+      onToggleShield(nextState);
+    }
+    if (onShieldStatusChange) {
+      onShieldStatusChange(nextState);
+    }
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
-  const handleDeactivateShield = () => {
+  const handleMassPurge = () => {
     soundFX.playPop();
-    onToggleShield(false);
-    onClose();
+    setSettings(prev => ({ ...prev, massPurgeTriggered: true }));
+    setToastMessage('🧹 Purged all chat messages from the last 15 minutes.');
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
   return (
-    <div className="modal-backdrop">
-      <div className="shield-mode-modal-card">
-        <div className="modal-header">
-          <div className="modal-title-row">
-            {isShieldActive ? (
-              <ShieldAlert size={20} color="#ff3b3b" className="pulse-fast" />
-            ) : (
-              <Shield size={20} color="var(--accent-secondary)" />
-            )}
-            <h3>Twitch Shield Mode (Emergency Lockdown)</h3>
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="shield-modal-card" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="shield-modal-header">
+          <div className="shield-title-group">
+            <div className={`shield-status-badge ${settings.isShieldActive ? 'active' : 'idle'}`}>
+              {settings.isShieldActive ? <ShieldAlert size={16} /> : <ShieldCheck size={16} />}
+              <span>{settings.isShieldActive ? 'SHIELD MODE IS ACTIVE' : 'SHIELD MODE IS READY'}</span>
+            </div>
+            <h3>Streamer Emergency Shield Mode</h3>
           </div>
-          <button onClick={onClose} className="modal-close-btn">
-            <X size={18} />
+
+          <button onClick={onClose} className="modal-close-btn" title="Close">
+            <X size={20} />
           </button>
         </div>
 
-        {/* Current Status Pill */}
-        <div className={`shield-status-box ${isShieldActive ? 'active' : 'inactive'}`}>
-          <div className="status-left">
-            <span className="status-dot"></span>
-            <div>
-              <strong>{isShieldActive ? 'SHIELD MODE IS ACTIVE' : 'Shield Mode Inactive'}</strong>
-              <p>{isShieldActive ? 'Maximum chat protection and safety filters are deployed.' : 'Ready to deploy emergency safety protocols in 1-click.'}</p>
-            </div>
+        {/* Success Toast */}
+        {toastMessage && (
+          <div className={`sub-celebration-toast ${settings.isShieldActive ? 'danger-toast' : ''}`}>
+            <span>{toastMessage}</span>
           </div>
-          {isShieldActive ? (
-            <button type="button" onClick={handleDeactivateShield} className="btn-deactivate-shield">
-              Deactivate
-            </button>
-          ) : (
-            <button type="button" onClick={handleActivateShield} className="btn-activate-shield">
-              <ShieldAlert size={15} />
-              <span>Activate Shield</span>
-            </button>
-          )}
-        </div>
+        )}
 
-        {/* Preset Settings when Shield Mode is triggered */}
-        <div className="shield-config-section">
-          <label className="section-label">Automated Safety Actions on Activation:</label>
+        <p className="shield-intro-text">
+          Instantly protect your live reading from hate raids, harassment, and plot spoilers with a single click. Pre-configured presets lock down chat, filter leaks, and block incoming raids immediately.
+        </p>
 
-          <div className="shield-option-group">
-            <label className="shield-checkbox-label">
-              <input
-                type="checkbox"
-                checked={clearChatOnActivate}
-                onChange={(e) => setClearChatOnActivate(e.target.checked)}
-              />
-              <div>
-                <strong>Clear Recent Chat Spam</strong>
-                <span>Instantly wipes recent messages to stop coordinated raid text.</span>
-              </div>
-            </label>
-
-            <label className="shield-checkbox-label">
-              <input
-                type="checkbox"
-                checked={elevateAutoMod}
-                onChange={(e) => setElevateAutoMod(e.target.checked)}
-              />
-              <div>
-                <strong>Elevate AutoMod to Level 4 (Maximum)</strong>
-                <span>Holds all flagged, suspicious, and aggressive messages for mod review.</span>
-              </div>
-            </label>
-
-            <label className="shield-checkbox-label">
-              <input
-                type="checkbox"
-                checked={hideSpoilers}
-                onChange={(e) => setHideSpoilers(e.target.checked)}
-              />
-              <div>
-                <strong>Aggressive Book Spoiler Shield</strong>
-                <span>Hides any character death, ending, or plot twist keyword automatically.</span>
-              </div>
-            </label>
+        {/* Master Panic Button */}
+        <div className="shield-panic-banner">
+          <div className="panic-info">
+            <h4>{settings.isShieldActive ? '🚨 Emergency Defense Active' : '🛡️ Activate Shield Mode'}</h4>
+            <p>
+              {settings.isShieldActive
+                ? 'Your broadcast is currently safeguarded against spoilers and unauthorized raids.'
+                : 'Click to immediately apply all defensive restrictions below.'}
+            </p>
           </div>
 
-          <div className="shield-chat-restriction">
-            <label className="section-label">Chat Access Mode:</label>
-            <div className="restriction-buttons-row">
-              <button
-                type="button"
-                className={`btn-restriction ${chatRestriction === 'subs' ? 'active' : ''}`}
-                onClick={() => setChatRestriction('subs')}
-              >
-                Subscribers Only
-              </button>
-              <button
-                type="button"
-                className={`btn-restriction ${chatRestriction === 'followers' ? 'active' : ''}`}
-                onClick={() => setChatRestriction('followers')}
-              >
-                Followers (10m+ tenure)
-              </button>
-              <button
-                type="button"
-                className={`btn-restriction ${chatRestriction === 'emoteOnly' ? 'active' : ''}`}
-                onClick={() => setChatRestriction('emoteOnly')}
-              >
-                Emotes Only
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="modal-actions">
-          <button type="button" onClick={onClose} className="btn-secondary">
-            Close
+          <button
+            type="button"
+            className={`btn-master-shield ${settings.isShieldActive ? 'active' : ''}`}
+            onClick={toggleShield}
+          >
+            {settings.isShieldActive ? <ShieldAlert size={20} /> : <ShieldCheck size={20} />}
+            <span>{settings.isShieldActive ? 'DEACTIVATE SHIELD' : 'ACTIVATE SHIELD MODE'}</span>
           </button>
-          {!isShieldActive && (
-            <button type="button" onClick={handleActivateShield} className="btn-primary btn-danger-glow">
-              <ShieldAlert size={15} />
-              <span>Engage Shield Mode</span>
+        </div>
+
+        {/* Shield Rules Configuration */}
+        <div className="shield-settings-grid">
+          <div className="shield-setting-card">
+            <div className="setting-header">
+              <Lock size={16} color="var(--accent-primary)" />
+              <strong>Chat Restriction Mode</strong>
+            </div>
+            <p>Set who is allowed to send messages during active shield.</p>
+
+            <div className="shield-options-row">
+              {(['sub_only', 'verified_only', 'emote_only', 'normal'] as const).map(mode => (
+                <button
+                  key={mode}
+                  type="button"
+                  className={`shield-chip-btn ${settings.chatMode === mode ? 'selected' : ''}`}
+                  onClick={() => {
+                    soundFX.playPop();
+                    setSettings({ ...settings, chatMode: mode });
+                  }}
+                >
+                  {mode.replace('_', ' ').toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="shield-setting-card">
+            <div className="setting-header">
+              <EyeOff size={16} color="var(--accent-secondary)" />
+              <strong>Aggressive Spoiler Censor</strong>
+            </div>
+            <p>Automatically detects and redacts character deaths, twist endings, and future book plot lines.</p>
+            <label className="shield-toggle-label">
+              <input
+                type="checkbox"
+                checked={settings.aggressiveSpoilerCensor}
+                onChange={e => setSettings({ ...settings, aggressiveSpoilerCensor: e.target.checked })}
+              />
+              <span>Block future page spoilers ({settings.blockedPhrasesCount} filters active)</span>
+            </label>
+          </div>
+
+          <div className="shield-setting-card">
+            <div className="setting-header">
+              <Ban size={16} color="var(--accent-danger)" />
+              <strong>Incoming Raids</strong>
+            </div>
+            <p>Prevent rogue or unauthorized channel raids from hijacking the broadcast.</p>
+            <label className="shield-toggle-label">
+              <input
+                type="checkbox"
+                checked={settings.blockIncomingRaids}
+                onChange={e => setSettings({ ...settings, blockIncomingRaids: e.target.checked })}
+              />
+              <span>Reject all incoming raids while shield is active</span>
+            </label>
+          </div>
+
+          <div className="shield-setting-card">
+            <div className="setting-header">
+              <Trash2 size={16} color="#ffd700" />
+              <strong>Mass Chat Purge</strong>
+            </div>
+            <p>Clear all messages from the live chat feed instantly if spam occurred.</p>
+            <button
+              type="button"
+              className="btn-secondary btn-mass-purge"
+              onClick={handleMassPurge}
+            >
+              <Radio size={14} />
+              <span>Purge Last 15m of Chat</span>
             </button>
-          )}
+          </div>
         </div>
       </div>
     </div>

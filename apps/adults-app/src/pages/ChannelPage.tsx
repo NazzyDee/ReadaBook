@@ -6,6 +6,7 @@ import { books } from '../lib/booksData';
 import { SubModal } from '../components/SubModal';
 import { OfflineChannelHero } from '../components/OfflineChannelHero';
 import { ChannelTrailerModal } from '../components/ChannelTrailerModal';
+import { MerchStorefrontModal } from '../components/MerchStorefrontModal';
 import { soundFX } from '../lib/soundFx';
 import {
   Heart,
@@ -19,7 +20,8 @@ import {
   Plus,
   Trash2,
   Check,
-  Film
+  Film,
+  ShoppingBag
 } from 'lucide-react';
 
 export const ChannelPage: React.FC = () => {
@@ -28,6 +30,7 @@ export const ChannelPage: React.FC = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [showSubModal, setShowSubModal] = useState(false);
   const [showTrailerModal, setShowTrailerModal] = useState(false);
+  const [showMerchModal, setShowMerchModal] = useState(false);
 
   const streamer: StreamerProfile =
     (channelId && STREAMERS[channelId]) || STREAMERS['mock_lillyreads'];
@@ -117,6 +120,19 @@ export const ChannelPage: React.FC = () => {
           >
             <Film size={16} color="var(--accent-secondary)" />
             <span>Channel Trailer</span>
+          </button>
+
+          {/* Merch Storefront Button */}
+          <button
+            onClick={() => {
+              soundFX.playPop();
+              setShowMerchModal(true);
+            }}
+            className="btn-secondary"
+            title="Shop Official Channel Merchandise & Book Box"
+          >
+            <ShoppingBag size={16} color="#ffd700" />
+            <span>Merch Store</span>
           </button>
 
           {/* Follow Button */}
@@ -500,6 +516,14 @@ export const ChannelPage: React.FC = () => {
           streamerName={streamer.displayName}
           isOwner={false}
           onClose={() => setShowTrailerModal(false)}
+        />
+      )}
+
+      {/* Merch Storefront Modal */}
+      {showMerchModal && (
+        <MerchStorefrontModal
+          streamerName={streamer.displayName}
+          onClose={() => setShowMerchModal(false)}
         />
       )}
     </div>

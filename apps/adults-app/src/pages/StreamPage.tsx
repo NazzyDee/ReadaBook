@@ -24,6 +24,9 @@ import { LoreGlossaryOverlay } from '../components/LoreGlossaryOverlay';
 import { WatchPartyRoomModal } from '../components/WatchPartyRoomModal';
 import { MarathonScheduleHubModal } from '../components/MarathonScheduleHubModal';
 import { OBSOverlayStudioModal } from '../components/OBSOverlayStudioModal';
+import { ShieldModeModal } from '../components/ShieldModeModal';
+import { MerchStorefrontModal } from '../components/MerchStorefrontModal';
+import { CharacterCastMatrixModal } from '../components/CharacterCastMatrixModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -52,7 +55,10 @@ import {
   FileText,
   Grid,
   BookOpen,
-  CalendarDays
+  CalendarDays,
+  ShieldAlert,
+  ShoppingBag,
+  Theater
 } from 'lucide-react';
 
 interface StreamData {
@@ -132,6 +138,9 @@ export const StreamPage: React.FC = () => {
   const [showWatchPartyModal, setShowWatchPartyModal] = useState(false);
   const [showMarathonModal, setShowMarathonModal] = useState(false);
   const [showOBSOverlayModal, setShowOBSOverlayModal] = useState(false);
+  const [showShieldModal, setShowShieldModal] = useState(false);
+  const [showMerchModal, setShowMerchModal] = useState(false);
+  const [showCastMatrixModal, setShowCastMatrixModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -661,6 +670,45 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Marathons</span>
             </button>
 
+            {/* Streamer Merch Store */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowMerchModal(true);
+              }}
+              className="btn-secondary"
+              title="Streamer Official Merch & Book Box Store"
+            >
+              <ShoppingBag size={16} color="#ffd700" />
+              <span className="hide-mobile">Merch</span>
+            </button>
+
+            {/* Multi-Voice Character Cast Matrix */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowCastMatrixModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Multi-Voice Character Cast Roster"
+            >
+              <Theater size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Cast Roster</span>
+            </button>
+
+            {/* Shield Mode Panic Button */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowShieldModal(true);
+              }}
+              className="btn-secondary"
+              title="Streamer Emergency Shield Mode"
+            >
+              <ShieldAlert size={16} color="var(--accent-danger)" />
+              <span className="hide-mobile">Shield</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -965,6 +1013,29 @@ export const StreamPage: React.FC = () => {
         <OBSOverlayStudioModal
           streamerName={stream.streamerName}
           onClose={() => setShowOBSOverlayModal(false)}
+        />
+      )}
+
+      {/* Streamer Shield Mode */}
+      {showShieldModal && (
+        <ShieldModeModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowShieldModal(false)}
+        />
+      )}
+
+      {/* Streamer Merch Storefront */}
+      {showMerchModal && (
+        <MerchStorefrontModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowMerchModal(false)}
+        />
+      )}
+
+      {/* Multi-Voice Character Cast Matrix */}
+      {showCastMatrixModal && (
+        <CharacterCastMatrixModal
+          onClose={() => setShowCastMatrixModal(false)}
         />
       )}
 
