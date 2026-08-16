@@ -168,6 +168,10 @@ import { StreamDirectorMultiCamModal } from './StreamDirectorMultiCamModal';
 import { OverlayThemesStudioModal } from './OverlayThemesStudioModal';
 import { ScreenFxEmoteCannonModal } from './ScreenFxEmoteCannonModal';
 import { MobileTeleprompterRemoteModal } from './MobileTeleprompterRemoteModal';
+import { RoomAcousticOptimizerModal } from './RoomAcousticOptimizerModal';
+import { VoiceMorphPresetPadModal } from './VoiceMorphPresetPadModal';
+import { BackstageAudioRoutingModal } from './BackstageAudioRoutingModal';
+import { WpmTachometerModal } from './WpmTachometerModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -287,6 +291,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showOverlayThemesModal, setShowOverlayThemesModal] = useState(false);
   const [showScreenFxModal, setShowScreenFxModal] = useState(false);
   const [showTeleprompterModal, setShowTeleprompterModal] = useState(false);
+  const [showAcousticModal, setShowAcousticModal] = useState(false);
+  const [showVoicePadModal, setShowVoicePadModal] = useState(false);
+  const [showAudioRoutingModal, setShowAudioRoutingModal] = useState(false);
+  const [showWpmModal, setShowWpmModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -300,6 +308,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Studio Acoustic Room Optimizer */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowAcousticModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Studio Noise Gate & Room Acoustic Optimizer"
+        >
+          <Mic size={18} />
+          <span>Acoustics</span>
+        </button>
+
+        {/* Character Voice Morph Preset Pad */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVoicePadModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Voice Morph Preset Soundboard Pad"
+        >
+          <Volume2 size={18} />
+          <span>Voice Pad</span>
+        </button>
+
+        {/* Dual Monitor Audio Routing */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowAudioRoutingModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Dual Monitor & Split Audio Routing Matrix"
+        >
+          <Headphones size={18} />
+          <span>Routing</span>
+        </button>
+
+        {/* Reading Speed Tachometer */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowWpmModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Reading Speed & Cadence Tachometer"
+        >
+          <Gauge size={18} />
+          <span>WPM Meter</span>
+        </button>
         {/* Multi-Cam Stage Director */}
         <button
           onClick={() => {
@@ -2389,6 +2448,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <MobileTeleprompterRemoteModal
           streamerName={streamerName}
           onClose={() => setShowTeleprompterModal(false)}
+        />
+      )}
+
+      {showAcousticModal && (
+        <RoomAcousticOptimizerModal
+          streamerName={streamerName}
+          onClose={() => setShowAcousticModal(false)}
+        />
+      )}
+
+      {showVoicePadModal && (
+        <VoiceMorphPresetPadModal
+          streamerName={streamerName}
+          onClose={() => setShowVoicePadModal(false)}
+        />
+      )}
+
+      {showAudioRoutingModal && (
+        <BackstageAudioRoutingModal
+          streamerName={streamerName}
+          onClose={() => setShowAudioRoutingModal(false)}
+        />
+      )}
+
+      {showWpmModal && (
+        <WpmTachometerModal
+          streamerName={streamerName}
+          onClose={() => setShowWpmModal(false)}
         />
       )}
     </div>

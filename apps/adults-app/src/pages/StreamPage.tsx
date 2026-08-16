@@ -93,6 +93,10 @@ import { StreamDirectorMultiCamModal } from '../components/StreamDirectorMultiCa
 import { OverlayThemesStudioModal } from '../components/OverlayThemesStudioModal';
 import { ScreenFxEmoteCannonModal } from '../components/ScreenFxEmoteCannonModal';
 import { MobileTeleprompterRemoteModal } from '../components/MobileTeleprompterRemoteModal';
+import { RoomAcousticOptimizerModal } from '../components/RoomAcousticOptimizerModal';
+import { VoiceMorphPresetPadModal } from '../components/VoiceMorphPresetPadModal';
+import { BackstageAudioRoutingModal } from '../components/BackstageAudioRoutingModal';
+import { WpmTachometerModal } from '../components/WpmTachometerModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -310,6 +314,10 @@ export const StreamPage: React.FC = () => {
   const [showOverlayThemesModal, setShowOverlayThemesModal] = useState(false);
   const [showScreenFxModal, setShowScreenFxModal] = useState(false);
   const [showTeleprompterModal, setShowTeleprompterModal] = useState(false);
+  const [showAcousticModal, setShowAcousticModal] = useState(false);
+  const [showVoicePadModal, setShowVoicePadModal] = useState(false);
+  const [showAudioRoutingModal, setShowAudioRoutingModal] = useState(false);
+  const [showWpmModal, setShowWpmModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1736,6 +1744,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Prompter</span>
             </button>
 
+            {/* Studio Acoustic Room Optimizer */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowAcousticModal(true);
+              }}
+              className="btn-secondary"
+              title="Studio Noise Gate & Room Acoustic Optimizer"
+            >
+              <Mic size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Acoustics</span>
+            </button>
+
+            {/* Character Voice Morph Preset Pad */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVoicePadModal(true);
+              }}
+              className="btn-secondary"
+              title="Voice Morph Preset Soundboard Pad"
+            >
+              <Volume2 size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Voice Pad</span>
+            </button>
+
+            {/* Dual Monitor Audio Routing */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowAudioRoutingModal(true);
+              }}
+              className="btn-secondary"
+              title="Dual Monitor & Split Audio Routing Matrix"
+            >
+              <Headphones size={16} color="#ffd700" />
+              <span className="hide-mobile">Routing</span>
+            </button>
+
+            {/* Reading Speed Tachometer */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowWpmModal(true);
+              }}
+              className="btn-secondary"
+              title="Reading Speed & Cadence Tachometer"
+            >
+              <Gauge size={16} color="var(--accent-danger)" />
+              <span className="hide-mobile">WPM Meter</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -2584,6 +2644,38 @@ export const StreamPage: React.FC = () => {
         <MobileTeleprompterRemoteModal
           streamerName={stream.streamerName}
           onClose={() => setShowTeleprompterModal(false)}
+        />
+      )}
+
+      {/* Studio Acoustic Room Optimizer */}
+      {showAcousticModal && (
+        <RoomAcousticOptimizerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowAcousticModal(false)}
+        />
+      )}
+
+      {/* Character Voice Morph Preset Pad */}
+      {showVoicePadModal && (
+        <VoiceMorphPresetPadModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVoicePadModal(false)}
+        />
+      )}
+
+      {/* Dual Monitor Audio Routing */}
+      {showAudioRoutingModal && (
+        <BackstageAudioRoutingModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowAudioRoutingModal(false)}
+        />
+      )}
+
+      {/* Reading Speed Tachometer */}
+      {showWpmModal && (
+        <WpmTachometerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowWpmModal(false)}
         />
       )}
 
