@@ -20,6 +20,7 @@ import { UserChatCardModal } from './UserChatCardModal';
 import { ChatIdentityModal, type UserChatIdentity } from './ChatIdentityModal';
 import { SpoilerFirewallModal } from './SpoilerFirewallModal';
 import { filterSpoilers } from '../lib/spoilerFilter';
+import { queryChroniclerAI } from '../lib/chroniclerAI';
 import { EMOTES } from '../lib/emotesData';
 import {
   Send,
@@ -276,6 +277,16 @@ export const LiveChat: React.FC<LiveChatProps> = ({
     onSendMessage(trimmed);
     setInputText('');
     setShowEmotePicker(false);
+
+    // AI Co-Host Chronicler Auto-Response
+    if (trimmed.toLowerCase().includes('@chronicler')) {
+      const query = trimmed.replace(/@chronicler/gi, '').trim() || 'recap';
+      setTimeout(() => {
+        soundFX.playChestClaim();
+        const resp = queryChroniclerAI(query);
+        onSendMessage(`🤖 [Chronicler AI]: ${resp.responseTitle} — ${resp.body}`);
+      }, 700);
+    }
 
     if (slowModeSeconds > 0) {
       setSlowModeCooldown(slowModeSeconds);

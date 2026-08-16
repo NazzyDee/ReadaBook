@@ -15,7 +15,11 @@ import {
   Hand,
   Zap,
   Trophy,
-  Mic
+  Mic,
+  Compass,
+  Bot,
+  Swords,
+  Smartphone
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -29,6 +33,10 @@ import { SmartFoleyStudioModal } from './SmartFoleyStudioModal';
 import { BookBattleArena } from './BookBattleArena';
 import { VoiceMorphStudioModal } from './VoiceMorphStudioModal';
 import { CreatorAnalyticsModal } from './CreatorAnalyticsModal';
+import { InteractiveMapHUD } from './InteractiveMapHUD';
+import { ChroniclerOracleModal } from './ChroniclerOracleModal';
+import { NarratorDuelModal } from './NarratorDuelModal';
+import { CompanionModeModal } from './CompanionModeModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -56,6 +64,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showBattleArena, setShowBattleArena] = useState(false);
   const [showVoiceMorphModal, setShowVoiceMorphModal] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  const [showMapHUD, setShowMapHUD] = useState(false);
+  const [showChroniclerModal, setShowChroniclerModal] = useState(false);
+  const [showDuelModal, setShowDuelModal] = useState(false);
+  const [showCompanionModal, setShowCompanionModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -69,6 +81,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Narrator Duel Face-Off */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowDuelModal(true);
+          }}
+          className="btn-quick-action action-red"
+          title="Live Voice Acting Face-Off Showdown"
+        >
+          <Swords size={18} />
+          <span>Narrator Duel</span>
+        </button>
+
+        {/* Second-Screen Companion Mode */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCompanionModal(true);
+          }}
+          className="btn-quick-action action-cyan"
+          title="Second-Screen Mobile Reader & Gamepad"
+        >
+          <Smartphone size={18} />
+          <span>Companion HUD</span>
+        </button>
+
+        {/* Interactive World Map */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowMapHUD(true);
+          }}
+          className="btn-quick-action action-cyan"
+          title="Interactive World Map & Journey Tracker"
+        >
+          <Compass size={18} />
+          <span>World Map</span>
+        </button>
+
+        {/* Chronicler AI Co-Host */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowChroniclerModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="The Chronicler AI (Live Literary Co-Host)"
+        >
+          <Bot size={18} />
+          <span>Chronicler AI</span>
+        </button>
+
         {/* Creator & Publisher Insights */}
         <button
           onClick={() => {
@@ -349,6 +413,30 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showAnalyticsModal && (
         <CreatorAnalyticsModal
           onClose={() => setShowAnalyticsModal(false)}
+        />
+      )}
+
+      {showMapHUD && (
+        <InteractiveMapHUD
+          onClose={() => setShowMapHUD(false)}
+        />
+      )}
+
+      {showChroniclerModal && (
+        <ChroniclerOracleModal
+          onClose={() => setShowChroniclerModal(false)}
+        />
+      )}
+
+      {showDuelModal && (
+        <NarratorDuelModal
+          onClose={() => setShowDuelModal(false)}
+        />
+      )}
+
+      {showCompanionModal && (
+        <CompanionModeModal
+          onClose={() => setShowCompanionModal(false)}
         />
       )}
     </div>

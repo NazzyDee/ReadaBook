@@ -20,11 +20,15 @@ import {
   HelpCircle,
   Gift,
   Settings,
-  Award
+  Award,
+  Headphones,
+  BookMarked
 } from 'lucide-react';
 import { ShortcutsModal } from './ShortcutsModal';
 import { UserSettingsModal } from './UserSettingsModal';
 import { BookwormBattlePassModal } from './BookwormBattlePassModal';
+import { CoListeningRoomModal } from './CoListeningRoomModal';
+import { ReaderPassportModal } from './ReaderPassportModal';
 
 export const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -40,6 +44,8 @@ export const Header: React.FC = () => {
   const [showShortcutsModal, setShowShortcutsModal] = useState(false);
   const [showUserSettingsModal, setShowUserSettingsModal] = useState(false);
   const [showBattlePassModal, setShowBattlePassModal] = useState(false);
+  const [showCoListeningModal, setShowCoListeningModal] = useState(false);
+  const [showPassportModal, setShowPassportModal] = useState(false);
   const [userStatus, setUserStatus] = useState<'Online' | 'Reading' | 'Away'>('Online');
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
@@ -196,6 +202,28 @@ export const Header: React.FC = () => {
       <div className="header-right" ref={userMenuRef}>
         {user ? (
           <div className="header-user-menu">
+            {/* Reader Passport Button */}
+            <button
+              onClick={() => setShowPassportModal(true)}
+              className="btn-battlepass-nav-chip"
+              style={{ color: '#ffd700', borderColor: 'rgba(255, 215, 0, 0.4)' }}
+              title="Reader Passport & Virtual Bookshelf"
+            >
+              <BookMarked size={14} color="#ffd700" />
+              <span>Passport</span>
+            </button>
+
+            {/* Co-Listening Lounges Button */}
+            <button
+              onClick={() => setShowCoListeningModal(true)}
+              className="btn-battlepass-nav-chip"
+              style={{ color: '#00e5ff', borderColor: 'rgba(0, 229, 255, 0.4)' }}
+              title="Community Co-Listening Lounges"
+            >
+              <Headphones size={14} color="#00e5ff" />
+              <span>Lounges</span>
+            </button>
+
             {/* Odyssey Battle Pass Button */}
             <button
               onClick={() => setShowBattlePassModal(true)}
@@ -431,6 +459,14 @@ export const Header: React.FC = () => {
 
       {showBattlePassModal && (
         <BookwormBattlePassModal onClose={() => setShowBattlePassModal(false)} />
+      )}
+
+      {showCoListeningModal && (
+        <CoListeningRoomModal onClose={() => setShowCoListeningModal(false)} />
+      )}
+
+      {showPassportModal && (
+        <ReaderPassportModal onClose={() => setShowPassportModal(false)} />
       )}
     </header>
   );
