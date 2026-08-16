@@ -56,7 +56,8 @@ import {
   Tag,
   Gem,
   Headphones,
-  Volume2
+  Volume2,
+  Gauge
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -134,6 +135,10 @@ import { VocalDynamicsRackModal } from './VocalDynamicsRackModal';
 import { SquadSpatialAudioModal } from './SquadSpatialAudioModal';
 import { ReadingHabitsHubModal } from './ReadingHabitsHubModal';
 import { DonationTtsStudioModal } from './DonationTtsStudioModal';
+import { SubGiftLeaderboardModal } from './SubGiftLeaderboardModal';
+import { HighlightReelGeneratorModal } from './HighlightReelGeneratorModal';
+import { ChatVerificationModal } from './ChatVerificationModal';
+import { ReadingPacingPacerModal } from './ReadingPacingPacerModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -225,6 +230,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showSpatialAudioModal, setShowSpatialAudioModal] = useState(false);
   const [showHabitsHubModal, setShowHabitsHubModal] = useState(false);
   const [showDonationTtsModal, setShowDonationTtsModal] = useState(false);
+  const [showSubGiftModal, setShowSubGiftModal] = useState(false);
+  const [showHighlightReelModal, setShowHighlightReelModal] = useState(false);
+  const [showChatVerifyModal, setShowChatVerifyModal] = useState(false);
+  const [showPacingMetronomeModal, setShowPacingMetronomeModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -238,6 +247,57 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Sub Gifting Leaderboard */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSubGiftModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Grand Patron Sub Gifting Leaderboard"
+        >
+          <Crown size={18} />
+          <span>Top Gifters</span>
+        </button>
+
+        {/* Highlight Reel Generator */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowHighlightReelModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Narrator Highlight Reel & Shorts Generator"
+        >
+          <Film size={18} />
+          <span>Shorts Maker</span>
+        </button>
+
+        {/* Chat Verification Gate */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowChatVerifyModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Arcane Scribe Gate & Chat Verification Citadel"
+        >
+          <ShieldCheck size={18} />
+          <span>Verify Gate</span>
+        </button>
+
+        {/* Reading Pacing Metronome */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowPacingMetronomeModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Live Reading Speedometer & Syllable Metronome"
+        >
+          <Gauge size={18} />
+          <span>Cadence HUD</span>
+        </button>
         {/* Vocal Dynamics Master Rack */}
         <button
           onClick={() => {
@@ -1774,6 +1834,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <DonationTtsStudioModal
           streamerName={streamerName}
           onClose={() => setShowDonationTtsModal(false)}
+        />
+      )}
+
+      {showSubGiftModal && (
+        <SubGiftLeaderboardModal
+          streamerName={streamerName}
+          onClose={() => setShowSubGiftModal(false)}
+        />
+      )}
+
+      {showHighlightReelModal && (
+        <HighlightReelGeneratorModal
+          streamerName={streamerName}
+          onClose={() => setShowHighlightReelModal(false)}
+        />
+      )}
+
+      {showChatVerifyModal && (
+        <ChatVerificationModal
+          streamerName={streamerName}
+          onClose={() => setShowChatVerifyModal(false)}
+        />
+      )}
+
+      {showPacingMetronomeModal && (
+        <ReadingPacingPacerModal
+          streamerName={streamerName}
+          onClose={() => setShowPacingMetronomeModal(false)}
         />
       )}
     </div>

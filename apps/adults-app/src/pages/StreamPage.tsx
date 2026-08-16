@@ -65,6 +65,10 @@ import { VocalDynamicsRackModal } from '../components/VocalDynamicsRackModal';
 import { SquadSpatialAudioModal } from '../components/SquadSpatialAudioModal';
 import { ReadingHabitsHubModal } from '../components/ReadingHabitsHubModal';
 import { DonationTtsStudioModal } from '../components/DonationTtsStudioModal';
+import { SubGiftLeaderboardModal } from '../components/SubGiftLeaderboardModal';
+import { HighlightReelGeneratorModal } from '../components/HighlightReelGeneratorModal';
+import { ChatVerificationModal } from '../components/ChatVerificationModal';
+import { ReadingPacingPacerModal } from '../components/ReadingPacingPacerModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -122,7 +126,9 @@ import {
   Gem,
   Trophy,
   Headphones,
-  Volume2
+  Volume2,
+  Film,
+  Gauge
 } from 'lucide-react';
 
 interface StreamData {
@@ -243,6 +249,10 @@ export const StreamPage: React.FC = () => {
   const [showSpatialAudioModal, setShowSpatialAudioModal] = useState(false);
   const [showHabitsHubModal, setShowHabitsHubModal] = useState(false);
   const [showDonationTtsModal, setShowDonationTtsModal] = useState(false);
+  const [showSubGiftModal, setShowSubGiftModal] = useState(false);
+  const [showHighlightReelModal, setShowHighlightReelModal] = useState(false);
+  const [showChatVerifyModal, setShowChatVerifyModal] = useState(false);
+  const [showPacingMetronomeModal, setShowPacingMetronomeModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -1305,6 +1315,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Dono TTS</span>
             </button>
 
+            {/* Sub Gifting Leaderboard */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSubGiftModal(true);
+              }}
+              className="btn-secondary"
+              title="Grand Patron Sub Gifting Leaderboard"
+            >
+              <Crown size={16} color="#ffd700" />
+              <span className="hide-mobile">Top Gifters</span>
+            </button>
+
+            {/* Highlight Reel Generator */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowHighlightReelModal(true);
+              }}
+              className="btn-secondary"
+              title="Narrator Highlight Reel & Shorts Generator"
+            >
+              <Film size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Shorts</span>
+            </button>
+
+            {/* Chat Verification Gate */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowChatVerifyModal(true);
+              }}
+              className="btn-secondary"
+              title="Arcane Scribe Gate & Chat Verification Citadel"
+            >
+              <ShieldCheck size={16} color="#00ff88" />
+              <span className="hide-mobile">Verify</span>
+            </button>
+
+            {/* Reading Pacing Metronome */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowPacingMetronomeModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Reading Speedometer & Syllable Metronome"
+            >
+              <Gauge size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Cadence</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -1929,6 +1991,38 @@ export const StreamPage: React.FC = () => {
         <DonationTtsStudioModal
           streamerName={stream.streamerName}
           onClose={() => setShowDonationTtsModal(false)}
+        />
+      )}
+
+      {/* Sub Gifting Leaderboard */}
+      {showSubGiftModal && (
+        <SubGiftLeaderboardModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSubGiftModal(false)}
+        />
+      )}
+
+      {/* Highlight Reel Generator */}
+      {showHighlightReelModal && (
+        <HighlightReelGeneratorModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowHighlightReelModal(false)}
+        />
+      )}
+
+      {/* Chat Verification Gate */}
+      {showChatVerifyModal && (
+        <ChatVerificationModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowChatVerifyModal(false)}
+        />
+      )}
+
+      {/* Reading Pacing Metronome */}
+      {showPacingMetronomeModal && (
+        <ReadingPacingPacerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowPacingMetronomeModal(false)}
         />
       )}
 
