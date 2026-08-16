@@ -31,6 +31,12 @@ import { RaidStationModal } from '../components/RaidStationModal';
 import { ChannelRolesModal } from '../components/ChannelRolesModal';
 import { StreamHealthModal } from '../components/StreamHealthModal';
 import { CommunityGoalHubModal } from '../components/CommunityGoalHubModal';
+import { HypeTrainEngineModal } from '../components/HypeTrainEngineModal';
+import { StreamLeaderboardsModal } from '../components/StreamLeaderboardsModal';
+import { ChatSettingsStudioModal } from '../components/ChatSettingsStudioModal';
+import { DiscordRoleSyncModal } from '../components/DiscordRoleSyncModal';
+import { ViewerDropsModal } from '../components/ViewerDropsModal';
+import { StreamDeckShortcutsModal } from '../components/StreamDeckShortcutsModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -65,7 +71,13 @@ import {
   Theater,
   Activity,
   Target,
-  Shield
+  Shield,
+  MessageCircle,
+  Keyboard,
+  Award,
+  Zap,
+  Palette,
+  Gift
 } from 'lucide-react';
 
 interface StreamData {
@@ -152,6 +164,12 @@ export const StreamPage: React.FC = () => {
   const [showRolesModal, setShowRolesModal] = useState(false);
   const [showStreamHealthModal, setShowStreamHealthModal] = useState(false);
   const [showGoalHubModal, setShowGoalHubModal] = useState(false);
+  const [showHypeTrainModal, setShowHypeTrainModal] = useState(false);
+  const [showLeaderboardsModal, setShowLeaderboardsModal] = useState(false);
+  const [showChatStudioModal, setShowChatStudioModal] = useState(false);
+  const [showDiscordSyncModal, setShowDiscordSyncModal] = useState(false);
+  const [showDropsModal, setShowDropsModal] = useState(false);
+  const [showStreamDeckModal, setShowStreamDeckModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -772,6 +790,84 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Goals</span>
             </button>
 
+            {/* Hype Train 2.0 */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowHypeTrainModal(true);
+              }}
+              className="btn-secondary"
+              title="The Lore Hype Train & Guild Surge Engine"
+            >
+              <Zap size={16} color="#ffd700" />
+              <span className="hide-mobile">Hype Train</span>
+            </button>
+
+            {/* Channel Leaderboards */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowLeaderboardsModal(true);
+              }}
+              className="btn-secondary"
+              title="Channel Patron & Reading Leaderboard Podium"
+            >
+              <Award size={16} color="#ffd700" />
+              <span className="hide-mobile">Leaderboard</span>
+            </button>
+
+            {/* Literary Chat Studio */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowChatStudioModal(true);
+              }}
+              className="btn-secondary"
+              title="Chat Appearance Customizer & Name Glow Studio"
+            >
+              <Palette size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Chat Studio</span>
+            </button>
+
+            {/* Discord Sync */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowDiscordSyncModal(true);
+              }}
+              className="btn-secondary"
+              title="Discord Server & Subscriber Role Sync"
+            >
+              <MessageCircle size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Discord</span>
+            </button>
+
+            {/* Viewer Drops & Loot Vault */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowDropsModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Broadcast Drops & Loot Vault"
+            >
+              <Gift size={16} color="var(--accent-success)" />
+              <span className="hide-mobile">Drops</span>
+            </button>
+
+            {/* Stream Deck Shortcuts */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowStreamDeckModal(true);
+              }}
+              className="btn-secondary"
+              title="Elgato Stream Deck & Broadcaster Hotkeys Matrix"
+            >
+              <Keyboard size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Stream Deck</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -1130,6 +1226,51 @@ export const StreamPage: React.FC = () => {
         <CommunityGoalHubModal
           streamerName={stream.streamerName}
           onClose={() => setShowGoalHubModal(false)}
+        />
+      )}
+
+      {/* The Lore Hype Train 2.0 */}
+      {showHypeTrainModal && (
+        <HypeTrainEngineModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowHypeTrainModal(false)}
+        />
+      )}
+
+      {/* Channel Leaderboards */}
+      {showLeaderboardsModal && (
+        <StreamLeaderboardsModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowLeaderboardsModal(false)}
+        />
+      )}
+
+      {/* Literary Chat Studio */}
+      {showChatStudioModal && (
+        <ChatSettingsStudioModal
+          onClose={() => setShowChatStudioModal(false)}
+        />
+      )}
+
+      {/* Discord Role Sync */}
+      {showDiscordSyncModal && (
+        <DiscordRoleSyncModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowDiscordSyncModal(false)}
+        />
+      )}
+
+      {/* Viewer Drops & Loot Vault */}
+      {showDropsModal && (
+        <ViewerDropsModal
+          onClose={() => setShowDropsModal(false)}
+        />
+      )}
+
+      {/* Stream Deck Shortcuts */}
+      {showStreamDeckModal && (
+        <StreamDeckShortcutsModal
+          onClose={() => setShowStreamDeckModal(false)}
         />
       )}
 

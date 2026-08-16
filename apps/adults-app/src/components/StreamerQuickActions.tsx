@@ -41,7 +41,10 @@ import {
   CreditCard,
   Theater,
   Activity,
-  Target
+  Target,
+  MessageCircle,
+  Keyboard,
+  Award
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -85,6 +88,12 @@ import { RaidStationModal } from './RaidStationModal';
 import { ChannelRolesModal } from './ChannelRolesModal';
 import { StreamHealthModal } from './StreamHealthModal';
 import { CommunityGoalHubModal } from './CommunityGoalHubModal';
+import { HypeTrainEngineModal } from './HypeTrainEngineModal';
+import { StreamLeaderboardsModal } from './StreamLeaderboardsModal';
+import { ChatSettingsStudioModal } from './ChatSettingsStudioModal';
+import { DiscordRoleSyncModal } from './DiscordRoleSyncModal';
+import { ViewerDropsModal } from './ViewerDropsModal';
+import { StreamDeckShortcutsModal } from './StreamDeckShortcutsModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -142,6 +151,12 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showRolesModal, setShowRolesModal] = useState(false);
   const [showStreamHealthModal, setShowStreamHealthModal] = useState(false);
   const [showGoalHubModal, setShowGoalHubModal] = useState(false);
+  const [showHypeTrainModal, setShowHypeTrainModal] = useState(false);
+  const [showLeaderboardsModal, setShowLeaderboardsModal] = useState(false);
+  const [showChatStudioModal, setShowChatStudioModal] = useState(false);
+  const [showDiscordSyncModal, setShowDiscordSyncModal] = useState(false);
+  const [showDropsModal, setShowDropsModal] = useState(false);
+  const [showStreamDeckModal, setShowStreamDeckModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -155,6 +170,84 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Lore Hype Train 2.0 */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowHypeTrainModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="The Lore Hype Train & Guild Surge Engine"
+        >
+          <Zap size={18} />
+          <span>Hype Train</span>
+        </button>
+
+        {/* Channel Leaderboards */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowLeaderboardsModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Channel Patron & Reading Leaderboard Podium"
+        >
+          <Award size={18} />
+          <span>Leaderboard</span>
+        </button>
+
+        {/* Literary Chat Studio */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowChatStudioModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Chat Appearance Customizer & Name Glow Studio"
+        >
+          <Palette size={18} />
+          <span>Chat Studio</span>
+        </button>
+
+        {/* Discord Book Club Role Sync */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowDiscordSyncModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Discord Server & Subscriber Role Sync"
+        >
+          <MessageCircle size={18} />
+          <span>Discord Sync</span>
+        </button>
+
+        {/* Viewer Watch Drops & Loot */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowDropsModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Live Broadcast Drops & Loot Vault"
+        >
+          <Trophy size={18} />
+          <span>Loot Drops</span>
+        </button>
+
+        {/* Stream Deck Shortcuts */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowStreamDeckModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Elgato Stream Deck & Broadcaster Hotkeys Matrix"
+        >
+          <Keyboard size={18} />
+          <span>Stream Deck</span>
+        </button>
+
         {/* End-of-Stream Raid Station */}
         <button
           onClick={() => {
@@ -1020,6 +1113,45 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <CommunityGoalHubModal
           streamerName={streamerName}
           onClose={() => setShowGoalHubModal(false)}
+        />
+      )}
+
+      {showHypeTrainModal && (
+        <HypeTrainEngineModal
+          streamerName={streamerName}
+          onClose={() => setShowHypeTrainModal(false)}
+        />
+      )}
+
+      {showLeaderboardsModal && (
+        <StreamLeaderboardsModal
+          streamerName={streamerName}
+          onClose={() => setShowLeaderboardsModal(false)}
+        />
+      )}
+
+      {showChatStudioModal && (
+        <ChatSettingsStudioModal
+          onClose={() => setShowChatStudioModal(false)}
+        />
+      )}
+
+      {showDiscordSyncModal && (
+        <DiscordRoleSyncModal
+          streamerName={streamerName}
+          onClose={() => setShowDiscordSyncModal(false)}
+        />
+      )}
+
+      {showDropsModal && (
+        <ViewerDropsModal
+          onClose={() => setShowDropsModal(false)}
+        />
+      )}
+
+      {showStreamDeckModal && (
+        <StreamDeckShortcutsModal
+          onClose={() => setShowStreamDeckModal(false)}
         />
       )}
     </div>
