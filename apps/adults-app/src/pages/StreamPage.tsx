@@ -45,6 +45,10 @@ import { CommunityGiftBombModal } from '../components/CommunityGiftBombModal';
 import { ChannelPointsStudioModal } from '../components/ChannelPointsStudioModal';
 import { CommercialBreakModal } from '../components/CommercialBreakModal';
 import { DualAudioMixerModal } from '../components/DualAudioMixerModal';
+import { PinnedMessageStudioModal } from '../components/PinnedMessageStudioModal';
+import { VodChapterMarkersModal } from '../components/VodChapterMarkersModal';
+import { CommunityPredictionsModal } from '../components/CommunityPredictionsModal';
+import { WhisperMessagesModal } from '../components/WhisperMessagesModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -91,7 +95,10 @@ import {
   Crown,
   Coffee,
   Sliders,
-  Sparkles
+  Sparkles,
+  Megaphone,
+  TrendingUp,
+  MessageSquare
 } from 'lucide-react';
 
 interface StreamData {
@@ -192,6 +199,10 @@ export const StreamPage: React.FC = () => {
   const [showPointsStudioModal, setShowPointsStudioModal] = useState(false);
   const [showCommercialModal, setShowCommercialModal] = useState(false);
   const [showDualAudioModal, setShowDualAudioModal] = useState(false);
+  const [showPinnedModal, setShowPinnedModal] = useState(false);
+  const [showVodMarkersModal, setShowVodMarkersModal] = useState(false);
+  const [showPredictionsModal, setShowPredictionsModal] = useState(false);
+  const [showWhispersModal, setShowWhispersModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -994,6 +1005,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Mixer</span>
             </button>
 
+            {/* Pinned Announcements */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowPinnedModal(true);
+              }}
+              className="btn-secondary"
+              title="Pinned Chat Announcements & Megaphone Banner Studio"
+            >
+              <Megaphone size={16} color="#ffd700" />
+              <span className="hide-mobile">Pin</span>
+            </button>
+
+            {/* VOD Chapters */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVodMarkersModal(true);
+              }}
+              className="btn-secondary"
+              title="Timestamped Chapter VOD Markers & Story Index"
+            >
+              <BookOpen size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Chapters</span>
+            </button>
+
+            {/* Predictions Pool */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowPredictionsModal(true);
+              }}
+              className="btn-secondary"
+              title="Literary Plot Predictions & Sparks Staking Pool"
+            >
+              <TrendingUp size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Predict</span>
+            </button>
+
+            {/* Quiet Library Whispers */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowWhispersModal(true);
+              }}
+              className="btn-secondary"
+              title="Quiet Library Whispers & Co-Reader Direct Messages"
+            >
+              <MessageSquare size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Whispers</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -1461,6 +1524,37 @@ export const StreamPage: React.FC = () => {
         <DualAudioMixerModal
           streamerName={stream.streamerName}
           onClose={() => setShowDualAudioModal(false)}
+        />
+      )}
+
+      {/* Pinned Chat Announcements */}
+      {showPinnedModal && (
+        <PinnedMessageStudioModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowPinnedModal(false)}
+        />
+      )}
+
+      {/* Timestamped VOD Chapter Index */}
+      {showVodMarkersModal && (
+        <VodChapterMarkersModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVodMarkersModal(false)}
+        />
+      )}
+
+      {/* Literary Predictions Pool */}
+      {showPredictionsModal && (
+        <CommunityPredictionsModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowPredictionsModal(false)}
+        />
+      )}
+
+      {/* Quiet Library Whispers */}
+      {showWhispersModal && (
+        <WhisperMessagesModal
+          onClose={() => setShowWhispersModal(false)}
         />
       )}
 

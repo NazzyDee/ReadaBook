@@ -49,7 +49,10 @@ import {
   Scissors,
   ShieldCheck,
   Coffee,
-  Gift
+  Gift,
+  Megaphone,
+  TrendingUp,
+  MessageSquare
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -107,6 +110,10 @@ import { CommunityGiftBombModal } from './CommunityGiftBombModal';
 import { ChannelPointsStudioModal } from './ChannelPointsStudioModal';
 import { CommercialBreakModal } from './CommercialBreakModal';
 import { DualAudioMixerModal } from './DualAudioMixerModal';
+import { PinnedMessageStudioModal } from './PinnedMessageStudioModal';
+import { VodChapterMarkersModal } from './VodChapterMarkersModal';
+import { CommunityPredictionsModal } from './CommunityPredictionsModal';
+import { WhisperMessagesModal } from './WhisperMessagesModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -178,6 +185,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showPointsStudioModal, setShowPointsStudioModal] = useState(false);
   const [showCommercialModal, setShowCommercialModal] = useState(false);
   const [showDualAudioModal, setShowDualAudioModal] = useState(false);
+  const [showPinnedModal, setShowPinnedModal] = useState(false);
+  const [showVodMarkersModal, setShowVodMarkersModal] = useState(false);
+  const [showPredictionsModal, setShowPredictionsModal] = useState(false);
+  const [showWhispersModal, setShowWhispersModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -191,6 +202,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Pinned Announcements */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowPinnedModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Pinned Chat Announcements & Megaphone Banner Studio"
+        >
+          <Megaphone size={18} />
+          <span>Pin Banner</span>
+        </button>
+
+        {/* Timestamped VOD Chapter Index */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVodMarkersModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Timestamped Chapter VOD Markers & Story Index"
+        >
+          <BookOpen size={18} />
+          <span>Chapters</span>
+        </button>
+
+        {/* Community Predictions Pool */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowPredictionsModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Literary Plot Predictions & Sparks Staking Pool"
+        >
+          <TrendingUp size={18} />
+          <span>Prediction</span>
+        </button>
+
+        {/* Quiet Library Whispers */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowWhispersModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Quiet Library Whispers & Co-Reader Direct Messages"
+        >
+          <MessageSquare size={18} />
+          <span>Whispers</span>
+        </button>
+
         {/* Community Gift Bomb */}
         <button
           onClick={() => {
@@ -1333,6 +1396,33 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <DualAudioMixerModal
           streamerName={streamerName}
           onClose={() => setShowDualAudioModal(false)}
+        />
+      )}
+
+      {showPinnedModal && (
+        <PinnedMessageStudioModal
+          streamerName={streamerName}
+          onClose={() => setShowPinnedModal(false)}
+        />
+      )}
+
+      {showVodMarkersModal && (
+        <VodChapterMarkersModal
+          streamerName={streamerName}
+          onClose={() => setShowVodMarkersModal(false)}
+        />
+      )}
+
+      {showPredictionsModal && (
+        <CommunityPredictionsModal
+          streamerName={streamerName}
+          onClose={() => setShowPredictionsModal(false)}
+        />
+      )}
+
+      {showWhispersModal && (
+        <WhisperMessagesModal
+          onClose={() => setShowWhispersModal(false)}
         />
       )}
     </div>
