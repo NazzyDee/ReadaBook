@@ -44,7 +44,10 @@ import {
   Target,
   MessageCircle,
   Keyboard,
-  Award
+  Award,
+  Library,
+  Scissors,
+  ShieldCheck
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -94,6 +97,10 @@ import { ChatSettingsStudioModal } from './ChatSettingsStudioModal';
 import { DiscordRoleSyncModal } from './DiscordRoleSyncModal';
 import { ViewerDropsModal } from './ViewerDropsModal';
 import { StreamDeckShortcutsModal } from './StreamDeckShortcutsModal';
+import { ClipEditorStudioModal } from './ClipEditorStudioModal';
+import { ChannelRulesGateModal } from './ChannelRulesGateModal';
+import { BookshelfCustomizerModal } from './BookshelfCustomizerModal';
+import { SubMilestonesModal } from './SubMilestonesModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -157,6 +164,10 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showDiscordSyncModal, setShowDiscordSyncModal] = useState(false);
   const [showDropsModal, setShowDropsModal] = useState(false);
   const [showStreamDeckModal, setShowStreamDeckModal] = useState(false);
+  const [showClipEditorModal, setShowClipEditorModal] = useState(false);
+  const [showChannelRulesModal, setShowChannelRulesModal] = useState(false);
+  const [showBookshelfModal, setShowBookshelfModal] = useState(false);
+  const [showSubMilestonesModal, setShowSubMilestonesModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -170,6 +181,58 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* VOD Highlights & Shorts Trimmer */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowClipEditorModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="VOD Chapter Highlights & TikTok/Shorts Trimmer"
+        >
+          <Scissors size={18} />
+          <span>Clip Studio</span>
+        </button>
+
+        {/* Channel Rules & Spoiler Pact */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowChannelRulesModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Channel Rules & Spoiler Agreement Gate"
+        >
+          <ShieldCheck size={18} />
+          <span>Channel Rules</span>
+        </button>
+
+        {/* 3D Stream Bookshelf Studio */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBookshelfModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="3D Stream Bookshelf & Trophy Showcase Studio"
+        >
+          <Library size={18} />
+          <span>Bookshelf</span>
+        </button>
+
+        {/* Subscriber Tenure & Streaks */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSubMilestonesModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Subscriber Loyalty Tenure & Reading Streaks"
+        >
+          <Crown size={18} />
+          <span>Sub Streaks</span>
+        </button>
+
         {/* Lore Hype Train 2.0 */}
         <button
           onClick={() => {
@@ -1152,6 +1215,34 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       {showStreamDeckModal && (
         <StreamDeckShortcutsModal
           onClose={() => setShowStreamDeckModal(false)}
+        />
+      )}
+
+      {showClipEditorModal && (
+        <ClipEditorStudioModal
+          streamerName={streamerName}
+          onClose={() => setShowClipEditorModal(false)}
+        />
+      )}
+
+      {showChannelRulesModal && (
+        <ChannelRulesGateModal
+          streamerName={streamerName}
+          onClose={() => setShowChannelRulesModal(false)}
+        />
+      )}
+
+      {showBookshelfModal && (
+        <BookshelfCustomizerModal
+          streamerName={streamerName}
+          onClose={() => setShowBookshelfModal(false)}
+        />
+      )}
+
+      {showSubMilestonesModal && (
+        <SubMilestonesModal
+          streamerName={streamerName}
+          onClose={() => setShowSubMilestonesModal(false)}
         />
       )}
     </div>

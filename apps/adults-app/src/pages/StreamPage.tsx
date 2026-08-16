@@ -37,6 +37,10 @@ import { ChatSettingsStudioModal } from '../components/ChatSettingsStudioModal';
 import { DiscordRoleSyncModal } from '../components/DiscordRoleSyncModal';
 import { ViewerDropsModal } from '../components/ViewerDropsModal';
 import { StreamDeckShortcutsModal } from '../components/StreamDeckShortcutsModal';
+import { ClipEditorStudioModal } from '../components/ClipEditorStudioModal';
+import { ChannelRulesGateModal } from '../components/ChannelRulesGateModal';
+import { BookshelfCustomizerModal } from '../components/BookshelfCustomizerModal';
+import { SubMilestonesModal } from '../components/SubMilestonesModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -77,7 +81,10 @@ import {
   Award,
   Zap,
   Palette,
-  Gift
+  Gift,
+  Library,
+  ShieldCheck,
+  Crown
 } from 'lucide-react';
 
 interface StreamData {
@@ -170,6 +177,10 @@ export const StreamPage: React.FC = () => {
   const [showDiscordSyncModal, setShowDiscordSyncModal] = useState(false);
   const [showDropsModal, setShowDropsModal] = useState(false);
   const [showStreamDeckModal, setShowStreamDeckModal] = useState(false);
+  const [showClipEditorModal, setShowClipEditorModal] = useState(false);
+  const [showChannelRulesModal, setShowChannelRulesModal] = useState(false);
+  const [showBookshelfModal, setShowBookshelfModal] = useState(false);
+  const [showSubMilestonesModal, setShowSubMilestonesModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -868,6 +879,58 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Stream Deck</span>
             </button>
 
+            {/* VOD Clip Editor */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowClipEditorModal(true);
+              }}
+              className="btn-secondary"
+              title="VOD Chapter Highlights & TikTok/Shorts Trimmer"
+            >
+              <Scissors size={16} color="#ffd700" />
+              <span className="hide-mobile">Clips</span>
+            </button>
+
+            {/* Channel Rules Gate */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowChannelRulesModal(true);
+              }}
+              className="btn-secondary"
+              title="Channel Rules & Spoiler Agreement Gate"
+            >
+              <ShieldCheck size={16} color="var(--accent-success)" />
+              <span className="hide-mobile">Rules</span>
+            </button>
+
+            {/* 3D Stream Bookshelf */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBookshelfModal(true);
+              }}
+              className="btn-secondary"
+              title="3D Stream Bookshelf & Trophy Showcase Studio"
+            >
+              <Library size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Shelf</span>
+            </button>
+
+            {/* Sub Milestones */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSubMilestonesModal(true);
+              }}
+              className="btn-secondary"
+              title="Subscriber Loyalty Tenure & Reading Streaks"
+            >
+              <Crown size={16} color="#ffd700" />
+              <span className="hide-mobile">Streaks</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -1271,6 +1334,38 @@ export const StreamPage: React.FC = () => {
       {showStreamDeckModal && (
         <StreamDeckShortcutsModal
           onClose={() => setShowStreamDeckModal(false)}
+        />
+      )}
+
+      {/* VOD Clip Editor & Shorts Trimmer */}
+      {showClipEditorModal && (
+        <ClipEditorStudioModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowClipEditorModal(false)}
+        />
+      )}
+
+      {/* Channel Rules & Spoiler Agreement Gate */}
+      {showChannelRulesModal && (
+        <ChannelRulesGateModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowChannelRulesModal(false)}
+        />
+      )}
+
+      {/* 3D Stream Bookshelf Showcase */}
+      {showBookshelfModal && (
+        <BookshelfCustomizerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowBookshelfModal(false)}
+        />
+      )}
+
+      {/* Subscriber Loyalty Tenure & Streaks */}
+      {showSubMilestonesModal && (
+        <SubMilestonesModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSubMilestonesModal(false)}
         />
       )}
 
