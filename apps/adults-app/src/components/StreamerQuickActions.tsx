@@ -83,7 +83,9 @@ import {
   Cpu,
   BookA,
   Tablet,
-  Rss
+  Rss,
+  Landmark,
+  Code2
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -250,6 +252,11 @@ import { LivingRoomTvAppModal } from './LivingRoomTvAppModal';
 import { EInkCompanionExtensionModal } from './EInkCompanionExtensionModal';
 import { DiscordRichPresenceModal } from './DiscordRichPresenceModal';
 import { PodcastRssPublisherModal } from './PodcastRssPublisherModal';
+import { LibbyLibraryCardModal } from './LibbyLibraryCardModal';
+import { GuardianAntiHarassmentModal } from './GuardianAntiHarassmentModal';
+import { GoldenQuillAwardsModal } from './GoldenQuillAwardsModal';
+import { SquadReadingRelayModal } from './SquadReadingRelayModal';
+import { DeveloperWebhooksHubModal } from './DeveloperWebhooksHubModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -430,6 +437,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showEInkCompanionModal, setShowEInkCompanionModal] = useState(false);
   const [showDiscordRpcModal, setShowDiscordRpcModal] = useState(false);
   const [showPodcastRssModal, setShowPodcastRssModal] = useState(false);
+  const [showLibbyModal, setShowLibbyModal] = useState(false);
+  const [showGuardianModal, setShowGuardianModal] = useState(false);
+  const [showGoldenQuillModal, setShowGoldenQuillModal] = useState(false);
+  const [showSquadRelayModal, setShowSquadRelayModal] = useState(false);
+  const [showWebhooksHubModal, setShowWebhooksHubModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -443,6 +455,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Public Library Card & Libby */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowLibbyModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Public Library Card (OverDrive / Libby) Integration"
+        >
+          <Landmark size={18} />
+          <span>Libby Library</span>
+        </button>
+
+        {/* Guardian Anti-Harassment Shield */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowGuardianModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Anti-Harassment Shadow-Banning & Guardian Shield"
+        >
+          <ShieldAlert size={18} />
+          <span>Guardian</span>
+        </button>
+
+        {/* Golden Quill Gala Awards */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowGoldenQuillModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Annual ReadaBook Awards & The Golden Quill Gala"
+        >
+          <Trophy size={18} />
+          <span>Golden Quill</span>
+        </button>
+
+        {/* Squad Reading Relay */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSquadRelayModal(true);
+          }}
+          className="btn-quick-action action-primary"
+          title="Multi-Streamer Relay Book Clubs (Squad Reading)"
+        >
+          <Users size={18} />
+          <span>Squad Relay</span>
+        </button>
+
+        {/* Open API & Webhooks Hub */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowWebhooksHubModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="ReadaBook Open API & Developer Webhooks Hub"
+        >
+          <Code2 size={18} />
+          <span>Webhooks API</span>
+        </button>
         {/* Mobile Companion Remote */}
         <button
           onClick={() => {
@@ -3739,6 +3815,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <PodcastRssPublisherModal
           streamerName={streamerName}
           onClose={() => setShowPodcastRssModal(false)}
+        />
+      )}
+
+      {showLibbyModal && (
+        <LibbyLibraryCardModal
+          streamerName={streamerName}
+          onClose={() => setShowLibbyModal(false)}
+        />
+      )}
+
+      {showGuardianModal && (
+        <GuardianAntiHarassmentModal
+          streamerName={streamerName}
+          onClose={() => setShowGuardianModal(false)}
+        />
+      )}
+
+      {showGoldenQuillModal && (
+        <GoldenQuillAwardsModal
+          streamerName={streamerName}
+          onClose={() => setShowGoldenQuillModal(false)}
+        />
+      )}
+
+      {showSquadRelayModal && (
+        <SquadReadingRelayModal
+          streamerName={streamerName}
+          onClose={() => setShowSquadRelayModal(false)}
+        />
+      )}
+
+      {showWebhooksHubModal && (
+        <DeveloperWebhooksHubModal
+          streamerName={streamerName}
+          onClose={() => setShowWebhooksHubModal(false)}
         />
       )}
     </div>

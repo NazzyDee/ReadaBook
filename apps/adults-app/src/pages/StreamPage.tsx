@@ -154,6 +154,11 @@ import { LivingRoomTvAppModal } from '../components/LivingRoomTvAppModal';
 import { EInkCompanionExtensionModal } from '../components/EInkCompanionExtensionModal';
 import { DiscordRichPresenceModal } from '../components/DiscordRichPresenceModal';
 import { PodcastRssPublisherModal } from '../components/PodcastRssPublisherModal';
+import { LibbyLibraryCardModal } from '../components/LibbyLibraryCardModal';
+import { GuardianAntiHarassmentModal } from '../components/GuardianAntiHarassmentModal';
+import { GoldenQuillAwardsModal } from '../components/GoldenQuillAwardsModal';
+import { SquadReadingRelayModal } from '../components/SquadReadingRelayModal';
+import { DeveloperWebhooksHubModal } from '../components/DeveloperWebhooksHubModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -246,7 +251,9 @@ import {
   BookA,
   Tablet,
   Tv,
-  Rss
+  Rss,
+  Landmark,
+  Code2
 } from 'lucide-react';
 
 interface StreamData {
@@ -456,6 +463,11 @@ export const StreamPage: React.FC = () => {
   const [showEInkCompanionModal, setShowEInkCompanionModal] = useState(false);
   const [showDiscordRpcModal, setShowDiscordRpcModal] = useState(false);
   const [showPodcastRssModal, setShowPodcastRssModal] = useState(false);
+  const [showLibbyModal, setShowLibbyModal] = useState(false);
+  const [showGuardianModal, setShowGuardianModal] = useState(false);
+  const [showGoldenQuillModal, setShowGoldenQuillModal] = useState(false);
+  const [showSquadRelayModal, setShowSquadRelayModal] = useState(false);
+  const [showWebhooksHubModal, setShowWebhooksHubModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -2676,6 +2688,71 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Podcast RSS</span>
             </button>
 
+            {/* Public Library Card & Libby */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowLibbyModal(true);
+              }}
+              className="btn-secondary"
+              title="Public Library Card (OverDrive / Libby) Integration"
+            >
+              <Landmark size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Libby Library</span>
+            </button>
+
+            {/* Guardian Anti-Harassment Shield */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowGuardianModal(true);
+              }}
+              className="btn-secondary"
+              title="Anti-Harassment Shadow-Banning & Guardian Shield"
+            >
+              <ShieldAlert size={16} color="#ff3b3b" />
+              <span className="hide-mobile">Guardian</span>
+            </button>
+
+            {/* Golden Quill Gala Awards */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowGoldenQuillModal(true);
+              }}
+              className="btn-secondary"
+              title="Annual ReadaBook Awards & The Golden Quill Gala"
+            >
+              <Trophy size={16} color="#ffd700" />
+              <span className="hide-mobile">Golden Quill</span>
+            </button>
+
+            {/* Squad Reading Relay */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSquadRelayModal(true);
+              }}
+              className="btn-secondary"
+              title="Multi-Streamer Relay Book Clubs (Squad Reading)"
+            >
+              <Users size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Squad Relay</span>
+            </button>
+
+            {/* Open API & Webhooks Hub */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowWebhooksHubModal(true);
+              }}
+              className="btn-secondary"
+              title="ReadaBook Open API & Developer Webhooks Hub"
+            >
+              <Code2 size={16} color="#00ff88" />
+              <span className="hide-mobile">Webhooks API</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -4012,6 +4089,46 @@ export const StreamPage: React.FC = () => {
         <PodcastRssPublisherModal
           streamerName={stream.streamerName}
           onClose={() => setShowPodcastRssModal(false)}
+        />
+      )}
+
+      {/* Public Library Card & Libby */}
+      {showLibbyModal && (
+        <LibbyLibraryCardModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowLibbyModal(false)}
+        />
+      )}
+
+      {/* Guardian Anti-Harassment Shield */}
+      {showGuardianModal && (
+        <GuardianAntiHarassmentModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowGuardianModal(false)}
+        />
+      )}
+
+      {/* Golden Quill Gala Awards */}
+      {showGoldenQuillModal && (
+        <GoldenQuillAwardsModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowGoldenQuillModal(false)}
+        />
+      )}
+
+      {/* Squad Reading Relay */}
+      {showSquadRelayModal && (
+        <SquadReadingRelayModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSquadRelayModal(false)}
+        />
+      )}
+
+      {/* Open API & Webhooks Hub */}
+      {showWebhooksHubModal && (
+        <DeveloperWebhooksHubModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowWebhooksHubModal(false)}
         />
       )}
 
