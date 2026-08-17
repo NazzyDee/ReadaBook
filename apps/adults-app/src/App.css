@@ -46923,6 +46923,1064 @@
   color: var(--text-muted);
 }
 
+/* ================= BOOKSHOP.ORG & INDIE BOOKSTORE AFFILIATE SPLIT ================= */
+.indie-store-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.indie-store-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.indie-store-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-teal);
+  letter-spacing: 0.08em;
+}
+
+.indie-store-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.indie-store-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid var(--accent-teal);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .indie-store-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.store-crest-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.store-split-tag {
+  font-size: 0.52rem;
+  font-weight: 900;
+  color: #00ff88;
+}
+
+.indie-store-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.store-location-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.city-pill {
+  background: var(--accent-teal);
+  color: #000;
+  font-size: 0.55rem;
+  font-weight: 900;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.copies-sold-pill {
+  font-size: 0.6rem;
+  color: #ffd700;
+}
+
+.indie-store-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 2px 0 0 0;
+}
+
+.featured-book-name {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.commission-total-sub {
+  font-size: 0.65rem;
+  color: #00ff88;
+  font-weight: 800;
+}
+
+.btn-order-indie {
+  background: linear-gradient(135deg, #00ff88, #00b4d8);
+  color: #000;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.indie-stores-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .indie-stores-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.indie-store-tile {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.indie-store-tile.selected {
+  border-color: var(--accent-teal);
+}
+
+.store-tile-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.store-tile-top strong {
+  font-size: 0.75rem;
+  color: #fff;
+}
+
+.store-split-badge {
+  font-size: 0.58rem;
+  color: #00ff88;
+  font-weight: 800;
+}
+
+.store-location-sub {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.store-featured-sub {
+  font-size: 0.62rem;
+  color: var(--accent-teal);
+}
+
+.indie-store-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-indie-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= BRAND DEALS MARKETPLACE ================= */
+.brand-deals-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.brand-deals-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.brand-deals-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.08em;
+}
+
+.brand-deals-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.brand-deal-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid #ffd700;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .brand-deal-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.deal-payout-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.payout-num {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #00ff88;
+  font-family: monospace;
+}
+
+.payout-sub {
+  font-size: 0.52rem;
+  font-weight: 900;
+  color: var(--text-muted);
+}
+
+.brand-deal-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.deal-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deal-category-pill {
+  background: #ffd700;
+  color: #000;
+  font-size: 0.55rem;
+  font-weight: 900;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.deal-status-pill {
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: #00ff88;
+}
+
+.brand-deal-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 2px 0 0 0;
+}
+
+.deal-objective-text {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.deliverables-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 4px 0;
+}
+
+.deliverables-checklist strong {
+  font-size: 0.65rem;
+  color: #fff;
+}
+
+.deliverable-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.btn-accept-deal {
+  background: linear-gradient(135deg, #ffd700, #ff9e00);
+  color: #000;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.on-air-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  color: #00ff88;
+  margin-top: 4px;
+}
+
+.brand-deals-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .brand-deals-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.brand-deal-tile {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-deal-tile.selected {
+  border-color: #ffd700;
+}
+
+.deal-tile-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.deal-tile-top strong {
+  font-size: 0.75rem;
+  color: #fff;
+}
+
+.deal-price-badge {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #00ff88;
+  font-family: monospace;
+}
+
+.deal-cat-sub {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.deal-status-sub {
+  font-size: 0.58rem;
+  color: #ffd700;
+}
+
+.brand-deals-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-deals-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= VIP LIVE Q&A STAGE TICKETS ================= */
+.vip-ticket-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.vip-ticket-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.vip-ticket-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  letter-spacing: 0.08em;
+}
+
+.vip-ticket-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.vip-event-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid var(--accent-secondary);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .vip-event-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.ticket-visual-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.event-exclusive-tag {
+  font-size: 0.55rem;
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.total-rev-sub {
+  font-size: 0.65rem;
+  color: #00ff88;
+  font-family: monospace;
+}
+
+.vip-event-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-date-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  color: #00ff88;
+}
+
+.vip-event-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 2px 0 0 0;
+}
+
+.guest-author-name {
+  font-size: 0.75rem;
+  color: #ffd700;
+  margin: 0;
+}
+
+.event-perks-brief {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.vip-tiers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .vip-tiers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vip-tier-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.tier-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tier-header-row strong {
+  font-size: 0.78rem;
+  color: #fff;
+}
+
+.tier-price-tag {
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #ffd700;
+  font-family: monospace;
+}
+
+.tier-perks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.perk-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.tier-card-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 8px;
+}
+
+.tickets-remaining-sub {
+  font-size: 0.58rem;
+  color: var(--text-muted);
+}
+
+.btn-buy-vip-ticket {
+  background: linear-gradient(135deg, #7209b7, #00b4d8);
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.vip-ticket-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-ticket-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= CUSTOM HARDCOVER BINDERY STUDIO ================= */
+.hardcover-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.hardcover-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.hardcover-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #00ff88;
+  letter-spacing: 0.08em;
+}
+
+.hardcover-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.hardcover-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid #00ff88;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .hardcover-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.book-3d-render-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  min-width: 150px;
+}
+
+.book-cover-mockup {
+  width: 130px;
+  height: 180px;
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: -10px 10px 30px rgba(0, 0, 0, 0.8);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.book-cover-mockup.midnight_italian_leather { background: #1a1a24; border: 2px solid #3d3d52; }
+.book-cover-mockup.emerald_buckram_cloth { background: #062b19; border: 2px solid #0d5e38; }
+.book-cover-mockup.royal_purple_velvet { background: #280838; border: 2px solid #58167a; }
+
+.foil-title-emboss.foil_24k_gold strong { color: #ffd700; text-shadow: 0 0 6px rgba(255, 215, 0, 0.6); }
+.foil-title-emboss.foil_holographic_silver strong { color: #e0f2fe; text-shadow: 0 0 6px rgba(224, 242, 254, 0.6); }
+.foil-title-emboss.foil_rose_copper strong { color: #fb7185; text-shadow: 0 0 6px rgba(251, 113, 133, 0.6); }
+
+.foil-title-emboss strong {
+  font-size: 0.72rem;
+  display: block;
+}
+
+.author-sub {
+  font-size: 0.5rem;
+  color: var(--text-muted);
+}
+
+.price-tag-est {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #00ff88;
+  font-family: monospace;
+}
+
+.hardcover-controls-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hardcover-controls-meta h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.input-custom-title {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  width: 100%;
+}
+
+.options-selectors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .options-selectors-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.select-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.select-box label {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.select-box select {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+}
+
+.btn-order-hardcover {
+  background: linear-gradient(135deg, #00ff88, #00b4d8);
+  color: #000;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.hardcover-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-bindery-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= AUTHOR ROYALTY & PLR DASHBOARD ================= */
+.royalty-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.royalty-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.royalty-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  letter-spacing: 0.08em;
+}
+
+.royalty-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.royalty-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid var(--accent-primary);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .royalty-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.royalty-stat-dial {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  min-width: 160px;
+}
+
+.total-royalty-amount {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #00ff88;
+  font-family: monospace;
+}
+
+.royalty-label {
+  font-size: 0.52rem;
+  font-weight: 900;
+  color: var(--text-muted);
+}
+
+.royalty-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.author-isbn-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.72rem;
+  color: #fff;
+}
+
+.isbn-pill {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  font-size: 0.58rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: #ffd700;
+}
+
+.royalty-breakdown-row {
+  display: flex;
+  gap: 12px;
+  margin: 2px 0;
+}
+
+.breakdown-chip {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.breakdown-chip span {
+  font-size: 0.52rem;
+  color: var(--text-muted);
+}
+
+.breakdown-chip strong {
+  font-size: 0.78rem;
+  color: #00ff88;
+  font-family: monospace;
+}
+
+.btn-export-statement {
+  background: linear-gradient(135deg, #4361ee, #3a0ca3);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.royalty-streams-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.royalty-streams-list h4 {
+  font-size: 0.85rem;
+  color: #fff;
+  margin: 0;
+}
+
+.royalty-stream-row {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stream-info-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.stream-info-col strong {
+  font-size: 0.78rem;
+  color: #fff;
+}
+
+.stream-info-col span {
+  font-size: 0.58rem;
+  color: var(--text-muted);
+}
+
+.stream-amount-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stream-accrued {
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #00ff88;
+  font-family: monospace;
+}
+
+.last-payout-sub {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+}
+
+.royalty-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-royalty-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+
 
 
 

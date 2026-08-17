@@ -77,7 +77,9 @@ import {
   DollarSign,
   Feather,
   Key,
-  Package
+  Package,
+  Store,
+  Ticket
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -224,6 +226,11 @@ import { DigitalBookSigningModal } from './DigitalBookSigningModal';
 import { ChapterEarlyAccessModal } from './ChapterEarlyAccessModal';
 import { BlindDateUnboxingModal } from './BlindDateUnboxingModal';
 import { CreatorStripePayoutsModal } from './CreatorStripePayoutsModal';
+import { IndieBookshopAffiliateModal } from './IndieBookshopAffiliateModal';
+import { BookClubBrandDealsModal } from './BookClubBrandDealsModal';
+import { VipTicketedEventsModal } from './VipTicketedEventsModal';
+import { CustomHardcoverStudioModal } from './CustomHardcoverStudioModal';
+import { AuthorRoyaltyLendingModal } from './AuthorRoyaltyLendingModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -384,6 +391,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showEarlyAccessModal, setShowEarlyAccessModal] = useState(false);
   const [showBlindDateModal, setShowBlindDateModal] = useState(false);
   const [showStripeDirectPayoutsModal, setShowStripeDirectPayoutsModal] = useState(false);
+  const [showIndieBookshopModal, setShowIndieBookshopModal] = useState(false);
+  const [showBrandDealsModal, setShowBrandDealsModal] = useState(false);
+  const [showVipTicketsModal, setShowVipTicketsModal] = useState(false);
+  const [showHardcoverStudioModal, setShowHardcoverStudioModal] = useState(false);
+  const [showAuthorRoyaltyModal, setShowAuthorRoyaltyModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -397,6 +409,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Indie Bookshop Affiliate Split */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowIndieBookshopModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Affiliate Bookshop.org & Indie Bookstore Split"
+        >
+          <Store size={18} />
+          <span>Indie Shops</span>
+        </button>
+
+        {/* Brand Deals Sponsorships */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBrandDealsModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Sponsored Book Club Brand Deals Marketplace"
+        >
+          <Briefcase size={18} />
+          <span>Brand Deals</span>
+        </button>
+
+        {/* VIP Ticketed Events */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowVipTicketsModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="VIP Live Q&A Stage Tickets & Backstage Passes"
+        >
+          <Ticket size={18} />
+          <span>VIP Passes</span>
+        </button>
+
+        {/* Custom Hardcover Bindery Studio */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowHardcoverStudioModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Custom Hardcover Slipcase & Foil Printing Studio"
+        >
+          <BookOpen size={18} />
+          <span>Bindery Studio</span>
+        </button>
+
+        {/* Author Royalty & PLR Ledger */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowAuthorRoyaltyModal(true);
+          }}
+          className="btn-quick-action action-primary"
+          title="Author Royalty & Public Lending Rights Dashboard"
+        >
+          <BarChart3 size={18} />
+          <span>Royalty PLR</span>
+        </button>
         {/* Live Crowdfunding Overlay */}
         <button
           onClick={() => {
@@ -3297,6 +3373,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <CreatorStripePayoutsModal
           streamerName={streamerName}
           onClose={() => setShowStripeDirectPayoutsModal(false)}
+        />
+      )}
+
+      {showIndieBookshopModal && (
+        <IndieBookshopAffiliateModal
+          streamerName={streamerName}
+          onClose={() => setShowIndieBookshopModal(false)}
+        />
+      )}
+
+      {showBrandDealsModal && (
+        <BookClubBrandDealsModal
+          streamerName={streamerName}
+          onClose={() => setShowBrandDealsModal(false)}
+        />
+      )}
+
+      {showVipTicketsModal && (
+        <VipTicketedEventsModal
+          streamerName={streamerName}
+          onClose={() => setShowVipTicketsModal(false)}
+        />
+      )}
+
+      {showHardcoverStudioModal && (
+        <CustomHardcoverStudioModal
+          streamerName={streamerName}
+          onClose={() => setShowHardcoverStudioModal(false)}
+        />
+      )}
+
+      {showAuthorRoyaltyModal && (
+        <AuthorRoyaltyLendingModal
+          streamerName={streamerName}
+          onClose={() => setShowAuthorRoyaltyModal(false)}
         />
       )}
     </div>

@@ -134,6 +134,11 @@ import { DigitalBookSigningModal } from '../components/DigitalBookSigningModal';
 import { ChapterEarlyAccessModal } from '../components/ChapterEarlyAccessModal';
 import { BlindDateUnboxingModal } from '../components/BlindDateUnboxingModal';
 import { CreatorStripePayoutsModal } from '../components/CreatorStripePayoutsModal';
+import { IndieBookshopAffiliateModal } from '../components/IndieBookshopAffiliateModal';
+import { BookClubBrandDealsModal } from '../components/BookClubBrandDealsModal';
+import { VipTicketedEventsModal } from '../components/VipTicketedEventsModal';
+import { CustomHardcoverStudioModal } from '../components/CustomHardcoverStudioModal';
+import { AuthorRoyaltyLendingModal } from '../components/AuthorRoyaltyLendingModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -217,7 +222,11 @@ import {
   DollarSign,
   Feather,
   Key,
-  Package
+  Package,
+  Store,
+  Briefcase,
+  Ticket,
+  BarChart3
 } from 'lucide-react';
 
 interface StreamData {
@@ -407,6 +416,11 @@ export const StreamPage: React.FC = () => {
   const [showEarlyAccessModal, setShowEarlyAccessModal] = useState(false);
   const [showBlindDateModal, setShowBlindDateModal] = useState(false);
   const [showStripeDirectPayoutsModal, setShowStripeDirectPayoutsModal] = useState(false);
+  const [showIndieBookshopModal, setShowIndieBookshopModal] = useState(false);
+  const [showBrandDealsModal, setShowBrandDealsModal] = useState(false);
+  const [showVipTicketsModal, setShowVipTicketsModal] = useState(false);
+  const [showHardcoverStudioModal, setShowHardcoverStudioModal] = useState(false);
+  const [showAuthorRoyaltyModal, setShowAuthorRoyaltyModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -2366,6 +2380,71 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Stripe Payouts</span>
             </button>
 
+            {/* Indie Bookshop Affiliate Split */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowIndieBookshopModal(true);
+              }}
+              className="btn-secondary"
+              title="Affiliate Bookshop.org & Indie Bookstore Split"
+            >
+              <Store size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Indie Shops</span>
+            </button>
+
+            {/* Brand Deals Sponsorships */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBrandDealsModal(true);
+              }}
+              className="btn-secondary"
+              title="Sponsored Book Club Brand Deals Marketplace"
+            >
+              <Briefcase size={16} color="#ffd700" />
+              <span className="hide-mobile">Brand Deals</span>
+            </button>
+
+            {/* VIP Ticketed Events */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowVipTicketsModal(true);
+              }}
+              className="btn-secondary"
+              title="VIP Live Q&A Stage Tickets & Backstage Passes"
+            >
+              <Ticket size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">VIP Passes</span>
+            </button>
+
+            {/* Custom Hardcover Bindery Studio */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowHardcoverStudioModal(true);
+              }}
+              className="btn-secondary"
+              title="Custom Hardcover Slipcase & Foil Printing Studio"
+            >
+              <BookOpen size={16} color="#00ff88" />
+              <span className="hide-mobile">Bindery Studio</span>
+            </button>
+
+            {/* Author Royalty & PLR Ledger */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowAuthorRoyaltyModal(true);
+              }}
+              className="btn-secondary"
+              title="Author Royalty & Public Lending Rights Dashboard"
+            >
+              <BarChart3 size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Royalty PLR</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -3542,6 +3621,46 @@ export const StreamPage: React.FC = () => {
         <CreatorStripePayoutsModal
           streamerName={stream.streamerName}
           onClose={() => setShowStripeDirectPayoutsModal(false)}
+        />
+      )}
+
+      {/* Indie Bookshop Affiliate Split */}
+      {showIndieBookshopModal && (
+        <IndieBookshopAffiliateModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowIndieBookshopModal(false)}
+        />
+      )}
+
+      {/* Brand Deals Sponsorships */}
+      {showBrandDealsModal && (
+        <BookClubBrandDealsModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowBrandDealsModal(false)}
+        />
+      )}
+
+      {/* VIP Ticketed Events */}
+      {showVipTicketsModal && (
+        <VipTicketedEventsModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowVipTicketsModal(false)}
+        />
+      )}
+
+      {/* Custom Hardcover Bindery Studio */}
+      {showHardcoverStudioModal && (
+        <CustomHardcoverStudioModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowHardcoverStudioModal(false)}
+        />
+      )}
+
+      {/* Author Royalty & PLR Ledger */}
+      {showAuthorRoyaltyModal && (
+        <AuthorRoyaltyLendingModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowAuthorRoyaltyModal(false)}
         />
       )}
 
