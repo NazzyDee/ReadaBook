@@ -79,7 +79,8 @@ import {
   Key,
   Package,
   Store,
-  Ticket
+  Ticket,
+  Cpu
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -231,6 +232,11 @@ import { BookClubBrandDealsModal } from './BookClubBrandDealsModal';
 import { VipTicketedEventsModal } from './VipTicketedEventsModal';
 import { CustomHardcoverStudioModal } from './CustomHardcoverStudioModal';
 import { AuthorRoyaltyLendingModal } from './AuthorRoyaltyLendingModal';
+import { AiVoiceClonerModal } from './AiVoiceClonerModal';
+import { LiveLanguageDubbingModal } from './LiveLanguageDubbingModal';
+import { DyslexiaAdaptiveReaderModal } from './DyslexiaAdaptiveReaderModal';
+import { WhispersyncStreamBridgeModal } from './WhispersyncStreamBridgeModal';
+import { AiSceneIllustratorModal } from './AiSceneIllustratorModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -396,6 +402,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showVipTicketsModal, setShowVipTicketsModal] = useState(false);
   const [showHardcoverStudioModal, setShowHardcoverStudioModal] = useState(false);
   const [showAuthorRoyaltyModal, setShowAuthorRoyaltyModal] = useState(false);
+  const [showAiVoiceClonerModal, setShowAiVoiceClonerModal] = useState(false);
+  const [showDubbingModal, setShowDubbingModal] = useState(false);
+  const [showDyslexiaModal, setShowDyslexiaModal] = useState(false);
+  const [showWhispersyncModal, setShowWhispersyncModal] = useState(false);
+  const [showIllustratorModal, setShowIllustratorModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -409,6 +420,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* AI Character Voice Cloner */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowAiVoiceClonerModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="AI Character Voice Cloner & Dynamic NPC Dialogue"
+        >
+          <Cpu size={18} />
+          <span>Voice Cloner</span>
+        </button>
+
+        {/* Multi-Language Dubbing & Subtitles */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowDubbingModal(true);
+          }}
+          className="btn-quick-action action-primary"
+          title="Real-Time Multi-Language Audio Dubbing & Subtitles"
+        >
+          <Globe size={18} />
+          <span>Live Dubbing</span>
+        </button>
+
+        {/* Dyslexia Adaptive Reader */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowDyslexiaModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Dyslexia & High-Contrast Adaptive E-Reader Overlay"
+        >
+          <Eye size={18} />
+          <span>Accessibility</span>
+        </button>
+
+        {/* Whispersync Audio-to-Page Sync */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowWhispersyncModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Smart Audio-to-Page Sync (Whispersync for Streams)"
+        >
+          <Zap size={18} />
+          <span>Whispersync</span>
+        </button>
+
+        {/* AI Scene Illustrator & Moodboard */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowIllustratorModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="AI Scene Illustrator & Visual Scene Moodboard"
+        >
+          <Palette size={18} />
+          <span>Scene Art</span>
+        </button>
         {/* Indie Bookshop Affiliate Split */}
         <button
           onClick={() => {
@@ -3408,6 +3483,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <AuthorRoyaltyLendingModal
           streamerName={streamerName}
           onClose={() => setShowAuthorRoyaltyModal(false)}
+        />
+      )}
+
+      {showAiVoiceClonerModal && (
+        <AiVoiceClonerModal
+          streamerName={streamerName}
+          onClose={() => setShowAiVoiceClonerModal(false)}
+        />
+      )}
+
+      {showDubbingModal && (
+        <LiveLanguageDubbingModal
+          streamerName={streamerName}
+          onClose={() => setShowDubbingModal(false)}
+        />
+      )}
+
+      {showDyslexiaModal && (
+        <DyslexiaAdaptiveReaderModal
+          streamerName={streamerName}
+          onClose={() => setShowDyslexiaModal(false)}
+        />
+      )}
+
+      {showWhispersyncModal && (
+        <WhispersyncStreamBridgeModal
+          streamerName={streamerName}
+          onClose={() => setShowWhispersyncModal(false)}
+        />
+      )}
+
+      {showIllustratorModal && (
+        <AiSceneIllustratorModal
+          streamerName={streamerName}
+          onClose={() => setShowIllustratorModal(false)}
         />
       )}
     </div>

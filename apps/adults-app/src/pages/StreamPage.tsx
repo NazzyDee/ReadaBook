@@ -139,6 +139,11 @@ import { BookClubBrandDealsModal } from '../components/BookClubBrandDealsModal';
 import { VipTicketedEventsModal } from '../components/VipTicketedEventsModal';
 import { CustomHardcoverStudioModal } from '../components/CustomHardcoverStudioModal';
 import { AuthorRoyaltyLendingModal } from '../components/AuthorRoyaltyLendingModal';
+import { AiVoiceClonerModal } from '../components/AiVoiceClonerModal';
+import { LiveLanguageDubbingModal } from '../components/LiveLanguageDubbingModal';
+import { DyslexiaAdaptiveReaderModal } from '../components/DyslexiaAdaptiveReaderModal';
+import { WhispersyncStreamBridgeModal } from '../components/WhispersyncStreamBridgeModal';
+import { AiSceneIllustratorModal } from '../components/AiSceneIllustratorModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -226,7 +231,8 @@ import {
   Store,
   Briefcase,
   Ticket,
-  BarChart3
+  BarChart3,
+  Cpu
 } from 'lucide-react';
 
 interface StreamData {
@@ -421,6 +427,11 @@ export const StreamPage: React.FC = () => {
   const [showVipTicketsModal, setShowVipTicketsModal] = useState(false);
   const [showHardcoverStudioModal, setShowHardcoverStudioModal] = useState(false);
   const [showAuthorRoyaltyModal, setShowAuthorRoyaltyModal] = useState(false);
+  const [showAiVoiceClonerModal, setShowAiVoiceClonerModal] = useState(false);
+  const [showDubbingModal, setShowDubbingModal] = useState(false);
+  const [showDyslexiaModal, setShowDyslexiaModal] = useState(false);
+  const [showWhispersyncModal, setShowWhispersyncModal] = useState(false);
+  const [showIllustratorModal, setShowIllustratorModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -2445,6 +2456,71 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Royalty PLR</span>
             </button>
 
+            {/* AI Character Voice Cloner */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowAiVoiceClonerModal(true);
+              }}
+              className="btn-secondary"
+              title="AI Character Voice Cloner & Dynamic NPC Dialogue"
+            >
+              <Cpu size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Voice Cloner</span>
+            </button>
+
+            {/* Multi-Language Dubbing & Subtitles */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowDubbingModal(true);
+              }}
+              className="btn-secondary"
+              title="Real-Time Multi-Language Audio Dubbing & Subtitles"
+            >
+              <Globe size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Live Dubbing</span>
+            </button>
+
+            {/* Dyslexia Adaptive Reader */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowDyslexiaModal(true);
+              }}
+              className="btn-secondary"
+              title="Dyslexia & High-Contrast Adaptive E-Reader Overlay"
+            >
+              <Eye size={16} color="#00ff88" />
+              <span className="hide-mobile">Accessibility</span>
+            </button>
+
+            {/* Whispersync Audio-to-Page Sync */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowWhispersyncModal(true);
+              }}
+              className="btn-secondary"
+              title="Smart Audio-to-Page Sync (Whispersync for Streams)"
+            >
+              <Zap size={16} color="#ffd700" />
+              <span className="hide-mobile">Whispersync</span>
+            </button>
+
+            {/* AI Scene Illustrator & Moodboard */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowIllustratorModal(true);
+              }}
+              className="btn-secondary"
+              title="AI Scene Illustrator & Visual Scene Moodboard"
+            >
+              <Palette size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Scene Art</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -3661,6 +3737,46 @@ export const StreamPage: React.FC = () => {
         <AuthorRoyaltyLendingModal
           streamerName={stream.streamerName}
           onClose={() => setShowAuthorRoyaltyModal(false)}
+        />
+      )}
+
+      {/* AI Character Voice Cloner */}
+      {showAiVoiceClonerModal && (
+        <AiVoiceClonerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowAiVoiceClonerModal(false)}
+        />
+      )}
+
+      {/* Multi-Language Dubbing & Subtitles */}
+      {showDubbingModal && (
+        <LiveLanguageDubbingModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowDubbingModal(false)}
+        />
+      )}
+
+      {/* Dyslexia Adaptive Reader */}
+      {showDyslexiaModal && (
+        <DyslexiaAdaptiveReaderModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowDyslexiaModal(false)}
+        />
+      )}
+
+      {/* Whispersync Audio-to-Page Sync */}
+      {showWhispersyncModal && (
+        <WhispersyncStreamBridgeModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowWhispersyncModal(false)}
+        />
+      )}
+
+      {/* AI Scene Illustrator & Moodboard */}
+      {showIllustratorModal && (
+        <AiSceneIllustratorModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowIllustratorModal(false)}
         />
       )}
 
