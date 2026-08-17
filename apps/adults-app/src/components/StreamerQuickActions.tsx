@@ -87,7 +87,10 @@ import {
   Landmark,
   Code2,
   Timer,
-  Mic2
+  Mic2,
+  Scroll,
+  Flag,
+  Wand2
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -264,6 +267,11 @@ import { TriviaBattleRoyaleModal } from './TriviaBattleRoyaleModal';
 import { ReadingSpeedrunSplitsModal } from './ReadingSpeedrunSplitsModal';
 import { ColdReadTournamentModal } from './ColdReadTournamentModal';
 import { FantasyBookDraftModal } from './FantasyBookDraftModal';
+import { WorldBossRaidModal } from './WorldBossRaidModal';
+import { GuildHouseArchitectModal } from './GuildHouseArchitectModal';
+import { ReadingBattlePassModal } from './ReadingBattlePassModal';
+import { FactionAlignmentModal } from './FactionAlignmentModal';
+import { EnchantedCraftingModal } from './EnchantedCraftingModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -454,6 +462,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showSpeedrunModal, setShowSpeedrunModal] = useState(false);
   const [showColdReadModal, setShowColdReadModal] = useState(false);
   const [showFantasyDraftModal, setShowFantasyDraftModal] = useState(false);
+  const [showWorldBossModal, setShowWorldBossModal] = useState(false);
+  const [showGuildArchitectModal, setShowGuildArchitectModal] = useState(false);
+  const [showBattlePassModal, setShowBattlePassModal] = useState(false);
+  const [showFactionModal, setShowFactionModal] = useState(false);
+  const [showCraftingModal, setShowCraftingModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -467,6 +480,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* World Boss Raid */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowWorldBossModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="World Boss Raids: Defeat the Shadow Wyrm by Reading Pages"
+        >
+          <Flame size={18} />
+          <span>Boss Raid</span>
+        </button>
+
+        {/* Guild House Architect */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowGuildArchitectModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Guild House Architect: Custom 3D Guild Library Decorator"
+        >
+          <Castle size={18} />
+          <span>Guild Architect</span>
+        </button>
+
+        {/* Reading Battle Pass */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBattlePassModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Daily Scribe Bounties & Reading Battle Pass (Tome of Seasons)"
+        >
+          <Scroll size={18} />
+          <span>Battle Pass</span>
+        </button>
+
+        {/* Faction Alignment */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowFactionModal(true);
+          }}
+          className="btn-quick-action action-primary"
+          title="Faction Alignment: Scholomance vs. Inkwardens vs. Silverquill"
+        >
+          <Flag size={18} />
+          <span>Faction Wars</span>
+        </button>
+
+        {/* Enchanted Crafting */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCraftingModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Reader Inventory & Enchanted Artifact Crafting"
+        >
+          <Wand2 size={18} />
+          <span>Alchemy Craft</span>
+        </button>
         {/* Annotation Showdown */}
         <button
           onClick={() => {
@@ -3961,6 +4038,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <FantasyBookDraftModal
           streamerName={streamerName}
           onClose={() => setShowFantasyDraftModal(false)}
+        />
+      )}
+
+      {showWorldBossModal && (
+        <WorldBossRaidModal
+          streamerName={streamerName}
+          onClose={() => setShowWorldBossModal(false)}
+        />
+      )}
+
+      {showGuildArchitectModal && (
+        <GuildHouseArchitectModal
+          streamerName={streamerName}
+          onClose={() => setShowGuildArchitectModal(false)}
+        />
+      )}
+
+      {showBattlePassModal && (
+        <ReadingBattlePassModal
+          streamerName={streamerName}
+          onClose={() => setShowBattlePassModal(false)}
+        />
+      )}
+
+      {showFactionModal && (
+        <FactionAlignmentModal
+          streamerName={streamerName}
+          onClose={() => setShowFactionModal(false)}
+        />
+      )}
+
+      {showCraftingModal && (
+        <EnchantedCraftingModal
+          streamerName={streamerName}
+          onClose={() => setShowCraftingModal(false)}
         />
       )}
     </div>

@@ -164,6 +164,11 @@ import { TriviaBattleRoyaleModal } from '../components/TriviaBattleRoyaleModal';
 import { ReadingSpeedrunSplitsModal } from '../components/ReadingSpeedrunSplitsModal';
 import { ColdReadTournamentModal } from '../components/ColdReadTournamentModal';
 import { FantasyBookDraftModal } from '../components/FantasyBookDraftModal';
+import { WorldBossRaidModal } from '../components/WorldBossRaidModal';
+import { GuildHouseArchitectModal } from '../components/GuildHouseArchitectModal';
+import { ReadingBattlePassModal } from '../components/ReadingBattlePassModal';
+import { FactionAlignmentModal } from '../components/FactionAlignmentModal';
+import { EnchantedCraftingModal } from '../components/EnchantedCraftingModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -260,7 +265,10 @@ import {
   Landmark,
   Code2,
   Timer,
-  Mic2
+  Mic2,
+  Scroll,
+  Flag,
+  Wand2
 } from 'lucide-react';
 
 interface StreamData {
@@ -480,6 +488,11 @@ export const StreamPage: React.FC = () => {
   const [showSpeedrunModal, setShowSpeedrunModal] = useState(false);
   const [showColdReadModal, setShowColdReadModal] = useState(false);
   const [showFantasyDraftModal, setShowFantasyDraftModal] = useState(false);
+  const [showWorldBossModal, setShowWorldBossModal] = useState(false);
+  const [showGuildArchitectModal, setShowGuildArchitectModal] = useState(false);
+  const [showBattlePassModal, setShowBattlePassModal] = useState(false);
+  const [showFactionModal, setShowFactionModal] = useState(false);
+  const [showCraftingModal, setShowCraftingModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -2830,6 +2843,71 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Fantasy Draft</span>
             </button>
 
+            {/* World Boss Raid */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowWorldBossModal(true);
+              }}
+              className="btn-secondary"
+              title="World Boss Raids: Defeat the Shadow Wyrm by Reading Pages"
+            >
+              <Flame size={16} color="#ff3b3b" />
+              <span className="hide-mobile">Boss Raid</span>
+            </button>
+
+            {/* Guild House Architect */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowGuildArchitectModal(true);
+              }}
+              className="btn-secondary"
+              title="Guild House Architect: Custom 3D Guild Library Decorator"
+            >
+              <Castle size={16} color="#ffd700" />
+              <span className="hide-mobile">Guild Architect</span>
+            </button>
+
+            {/* Reading Battle Pass */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBattlePassModal(true);
+              }}
+              className="btn-secondary"
+              title="Daily Scribe Bounties & Reading Battle Pass (Tome of Seasons)"
+            >
+              <Scroll size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Battle Pass</span>
+            </button>
+
+            {/* Faction Alignment */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowFactionModal(true);
+              }}
+              className="btn-secondary"
+              title="Faction Alignment: Scholomance vs. Inkwardens vs. Silverquill"
+            >
+              <Flag size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Faction Wars</span>
+            </button>
+
+            {/* Enchanted Crafting */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowCraftingModal(true);
+              }}
+              className="btn-secondary"
+              title="Reader Inventory & Enchanted Artifact Crafting"
+            >
+              <Wand2 size={16} color="#ffd700" />
+              <span className="hide-mobile">Alchemy Craft</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -4246,6 +4324,46 @@ export const StreamPage: React.FC = () => {
         <FantasyBookDraftModal
           streamerName={stream.streamerName}
           onClose={() => setShowFantasyDraftModal(false)}
+        />
+      )}
+
+      {/* World Boss Raid */}
+      {showWorldBossModal && (
+        <WorldBossRaidModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowWorldBossModal(false)}
+        />
+      )}
+
+      {/* Guild House Architect */}
+      {showGuildArchitectModal && (
+        <GuildHouseArchitectModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowGuildArchitectModal(false)}
+        />
+      )}
+
+      {/* Reading Battle Pass */}
+      {showBattlePassModal && (
+        <ReadingBattlePassModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowBattlePassModal(false)}
+        />
+      )}
+
+      {/* Faction Alignment */}
+      {showFactionModal && (
+        <FactionAlignmentModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowFactionModal(false)}
+        />
+      )}
+
+      {/* Enchanted Crafting */}
+      {showCraftingModal && (
+        <EnchantedCraftingModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowCraftingModal(false)}
         />
       )}
 

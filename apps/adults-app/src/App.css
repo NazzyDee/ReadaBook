@@ -52711,6 +52711,1039 @@
   color: var(--text-muted);
 }
 
+/* ================= WORLD BOSS RAID ================= */
+.boss-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 880px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.boss-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.boss-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ff3b3b;
+  letter-spacing: 0.08em;
+}
+
+.boss-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.boss-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid #ff3b3b;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .boss-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.dragon-head-dial {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.boss-level-tag {
+  font-size: 0.52rem;
+  font-weight: 900;
+  color: #ff3b3b;
+}
+
+.boss-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.boss-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.boss-hp-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.boss-hp-track {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.boss-hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff3b3b, #ff7b00);
+  transition: width 0.3s ease;
+}
+
+.hp-numbers-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+}
+
+.hp-left {
+  color: #ff3b3b;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pages-attack-tag {
+  color: #00ff88;
+  font-weight: 800;
+}
+
+.boss-spells-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.boss-spells-list h4 {
+  font-size: 0.85rem;
+  color: #fff;
+  margin: 0;
+}
+
+.spells-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.spell-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spell-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.spell-info strong {
+  font-size: 0.78rem;
+  color: #fff;
+}
+
+.dmg-sub {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.btn-cast-spell {
+  background: linear-gradient(135deg, #ff3b3b, #d90429);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.boss-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-boss-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= GUILD HOUSE ARCHITECT ================= */
+.guild-architect-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 880px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.guild-architect-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.guild-architect-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.08em;
+}
+
+.guild-architect-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.guild-architect-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid #ffd700;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .guild-architect-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.castle-dial-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.prestige-score-num {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #ffd700;
+  font-family: monospace;
+}
+
+.prestige-sub-label {
+  font-size: 0.52rem;
+  font-weight: 900;
+  color: var(--text-muted);
+}
+
+.guild-architect-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.guild-architect-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.guild-architect-explainer {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.furniture-catalog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.furniture-catalog-list h4 {
+  font-size: 0.85rem;
+  color: #fff;
+  margin: 0;
+}
+
+.furniture-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.furn-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.furn-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.furn-info strong {
+  font-size: 0.78rem;
+  color: #fff;
+}
+
+.furn-sub {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.placed-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 255, 136, 0.15);
+  color: #00ff88;
+  font-size: 0.58rem;
+  font-weight: 900;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.btn-buy-furn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #ffd700;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.guild-architect-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-guild-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= READING BATTLE PASS ================= */
+.battlepass-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 880px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.battlepass-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.battlepass-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-teal);
+  letter-spacing: 0.08em;
+}
+
+.battlepass-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.battlepass-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid var(--accent-teal);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .battlepass-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.tier-level-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.tier-num-text {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #ffd700;
+}
+
+.days-left-tag {
+  font-size: 0.52rem;
+  font-weight: 900;
+  color: #00ff88;
+}
+
+.battlepass-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.battlepass-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.xp-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.xp-bar-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff88, #4361ee);
+  transition: width 0.3s ease;
+}
+
+.xp-sub-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.tier-rewards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tier-rewards-list h4 {
+  font-size: 0.85rem;
+  color: #fff;
+  margin: 0;
+}
+
+.tier-reward-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tier-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tier-badge-ph {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #ffd700;
+  font-weight: 900;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tier-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tier-type-pill {
+  font-size: 0.52rem;
+  font-weight: 900;
+  color: var(--accent-teal);
+}
+
+.tier-info strong {
+  font-size: 0.78rem;
+  color: #fff;
+}
+
+.tier-sub {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+}
+
+.claimed-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 255, 136, 0.15);
+  color: #00ff88;
+  font-size: 0.58rem;
+  font-weight: 900;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.btn-claim-reward {
+  background: linear-gradient(135deg, #00ff88, #4361ee);
+  color: #000;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.locked-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.58rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.battlepass-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-battlepass-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= FACTION ALIGNMENT ================= */
+.faction-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 880px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.faction-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.faction-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  letter-spacing: 0.08em;
+}
+
+.faction-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.faction-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid var(--accent-primary);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .faction-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.banner-icon-dial {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.war-status-tag {
+  font-size: 0.52rem;
+  font-weight: 900;
+  background: var(--accent-primary);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.faction-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.faction-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.faction-explainer {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.factions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faction-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-left: 5px solid var(--accent-primary);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.faction-card.aligned {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.fac-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fac-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fac-title-row strong {
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.fac-control-pill {
+  font-size: 0.65rem;
+  font-weight: 900;
+}
+
+.fac-motto {
+  font-size: 0.68rem;
+  color: #ffd700;
+  margin: 0;
+}
+
+.fac-desc {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.fac-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.members-count {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.btn-pledge-fac {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btn-pledge-fac.aligned {
+  background: #00ff88;
+  color: #000;
+  border: none;
+}
+
+.faction-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-faction-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* ================= ENCHANTED CRAFTING ================= */
+.crafting-modal-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 880px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+}
+
+.crafting-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--spacing-md);
+}
+
+.crafting-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.08em;
+}
+
+.crafting-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 0 0;
+}
+
+.crafting-hero-banner {
+  background: var(--bg-panel);
+  border: 2px solid #ffd700;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .crafting-hero-banner {
+    flex-direction: column;
+  }
+}
+
+.alchemy-dial-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+
+.recipes-count-tag {
+  font-size: 0.52rem;
+  font-weight: 900;
+  background: #ffd700;
+  color: #000;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.crafting-hero-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.crafting-hero-meta h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.crafting-explainer {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.recipes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.recipes-list h4 {
+  font-size: 0.85rem;
+  color: #fff;
+  margin: 0;
+}
+
+.recipe-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.recipe-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.recipe-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.recipe-info strong {
+  font-size: 0.78rem;
+  color: #fff;
+}
+
+.buff-desc {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.materials-req-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.mat-chip {
+  font-size: 0.55rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.mat-chip.has-enough {
+  background: rgba(0, 255, 136, 0.15);
+  color: #00ff88;
+}
+
+.mat-chip.missing {
+  background: rgba(255, 59, 59, 0.15);
+  color: #ff3b3b;
+}
+
+.btn-craft-artifact {
+  background: linear-gradient(135deg, #ffd700, #ff9e00);
+  color: #000;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.missing-mats-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.58rem;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.crafting-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 12px;
+}
+
+.footer-crafting-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+
 
 
 
