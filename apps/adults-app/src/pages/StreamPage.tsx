@@ -159,6 +159,11 @@ import { GuardianAntiHarassmentModal } from '../components/GuardianAntiHarassmen
 import { GoldenQuillAwardsModal } from '../components/GoldenQuillAwardsModal';
 import { SquadReadingRelayModal } from '../components/SquadReadingRelayModal';
 import { DeveloperWebhooksHubModal } from '../components/DeveloperWebhooksHubModal';
+import { AnnotationShowdownModal } from '../components/AnnotationShowdownModal';
+import { TriviaBattleRoyaleModal } from '../components/TriviaBattleRoyaleModal';
+import { ReadingSpeedrunSplitsModal } from '../components/ReadingSpeedrunSplitsModal';
+import { ColdReadTournamentModal } from '../components/ColdReadTournamentModal';
+import { FantasyBookDraftModal } from '../components/FantasyBookDraftModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -253,7 +258,9 @@ import {
   Tv,
   Rss,
   Landmark,
-  Code2
+  Code2,
+  Timer,
+  Mic2
 } from 'lucide-react';
 
 interface StreamData {
@@ -468,6 +475,11 @@ export const StreamPage: React.FC = () => {
   const [showGoldenQuillModal, setShowGoldenQuillModal] = useState(false);
   const [showSquadRelayModal, setShowSquadRelayModal] = useState(false);
   const [showWebhooksHubModal, setShowWebhooksHubModal] = useState(false);
+  const [showShowdownModal, setShowShowdownModal] = useState(false);
+  const [showTriviaRoyaleModal, setShowTriviaRoyaleModal] = useState(false);
+  const [showSpeedrunModal, setShowSpeedrunModal] = useState(false);
+  const [showColdReadModal, setShowColdReadModal] = useState(false);
+  const [showFantasyDraftModal, setShowFantasyDraftModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -2753,6 +2765,71 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Webhooks API</span>
             </button>
 
+            {/* Annotation Showdown */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowShowdownModal(true);
+              }}
+              className="btn-secondary"
+              title="Speed-Annotating & Close-Reading Battles (Annotation Showdown)"
+            >
+              <Zap size={16} color="#ffd700" />
+              <span className="hide-mobile">Annotation 1v1</span>
+            </button>
+
+            {/* Trivia Battle Royale */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowTriviaRoyaleModal(true);
+              }}
+              className="btn-secondary"
+              title="1,000-Player Literary Trivia Battle Royale"
+            >
+              <Trophy size={16} color="#ff3b3b" />
+              <span className="hide-mobile">Trivia Royale</span>
+            </button>
+
+            {/* Speedrun Splits */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowSpeedrunModal(true);
+              }}
+              className="btn-secondary"
+              title="Reading Speedrun Leaderboards & Any% Chapter Splits"
+            >
+              <Timer size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Speedrun Splits</span>
+            </button>
+
+            {/* Cold-Read Tournament */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowColdReadModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Dramatic Cold-Read Audition Tournaments"
+            >
+              <Mic2 size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Cold-Read</span>
+            </button>
+
+            {/* Fantasy Literary Draft */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowFantasyDraftModal(true);
+              }}
+              className="btn-secondary"
+              title="Fantasy Literary Draft & Book Club Fantasy Leagues"
+            >
+              <BarChart3 size={16} color="#00ff88" />
+              <span className="hide-mobile">Fantasy Draft</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -4129,6 +4206,46 @@ export const StreamPage: React.FC = () => {
         <DeveloperWebhooksHubModal
           streamerName={stream.streamerName}
           onClose={() => setShowWebhooksHubModal(false)}
+        />
+      )}
+
+      {/* Annotation Showdown */}
+      {showShowdownModal && (
+        <AnnotationShowdownModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowShowdownModal(false)}
+        />
+      )}
+
+      {/* Trivia Battle Royale */}
+      {showTriviaRoyaleModal && (
+        <TriviaBattleRoyaleModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowTriviaRoyaleModal(false)}
+        />
+      )}
+
+      {/* Speedrun Splits */}
+      {showSpeedrunModal && (
+        <ReadingSpeedrunSplitsModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowSpeedrunModal(false)}
+        />
+      )}
+
+      {/* Cold-Read Tournament */}
+      {showColdReadModal && (
+        <ColdReadTournamentModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowColdReadModal(false)}
+        />
+      )}
+
+      {/* Fantasy Literary Draft */}
+      {showFantasyDraftModal && (
+        <FantasyBookDraftModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowFantasyDraftModal(false)}
         />
       )}
 

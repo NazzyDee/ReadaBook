@@ -85,7 +85,9 @@ import {
   Tablet,
   Rss,
   Landmark,
-  Code2
+  Code2,
+  Timer,
+  Mic2
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -257,6 +259,11 @@ import { GuardianAntiHarassmentModal } from './GuardianAntiHarassmentModal';
 import { GoldenQuillAwardsModal } from './GoldenQuillAwardsModal';
 import { SquadReadingRelayModal } from './SquadReadingRelayModal';
 import { DeveloperWebhooksHubModal } from './DeveloperWebhooksHubModal';
+import { AnnotationShowdownModal } from './AnnotationShowdownModal';
+import { TriviaBattleRoyaleModal } from './TriviaBattleRoyaleModal';
+import { ReadingSpeedrunSplitsModal } from './ReadingSpeedrunSplitsModal';
+import { ColdReadTournamentModal } from './ColdReadTournamentModal';
+import { FantasyBookDraftModal } from './FantasyBookDraftModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -442,6 +449,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showGoldenQuillModal, setShowGoldenQuillModal] = useState(false);
   const [showSquadRelayModal, setShowSquadRelayModal] = useState(false);
   const [showWebhooksHubModal, setShowWebhooksHubModal] = useState(false);
+  const [showShowdownModal, setShowShowdownModal] = useState(false);
+  const [showTriviaRoyaleModal, setShowTriviaRoyaleModal] = useState(false);
+  const [showSpeedrunModal, setShowSpeedrunModal] = useState(false);
+  const [showColdReadModal, setShowColdReadModal] = useState(false);
+  const [showFantasyDraftModal, setShowFantasyDraftModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -455,6 +467,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Annotation Showdown */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowShowdownModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Speed-Annotating & Close-Reading Battles (Annotation Showdown)"
+        >
+          <Zap size={18} />
+          <span>Annotation 1v1</span>
+        </button>
+
+        {/* Trivia Battle Royale */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowTriviaRoyaleModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="1,000-Player Literary Trivia Battle Royale"
+        >
+          <Trophy size={18} />
+          <span>Trivia Royale</span>
+        </button>
+
+        {/* Speedrun Splits */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowSpeedrunModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Reading Speedrun Leaderboards & Any% Chapter Splits"
+        >
+          <Timer size={18} />
+          <span>Speedrun Splits</span>
+        </button>
+
+        {/* Cold-Read Tournament */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowColdReadModal(true);
+          }}
+          className="btn-quick-action action-primary"
+          title="Live Dramatic Cold-Read Audition Tournaments"
+        >
+          <Mic2 size={18} />
+          <span>Cold-Read Auditions</span>
+        </button>
+
+        {/* Fantasy Literary Draft */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowFantasyDraftModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Fantasy Literary Draft & Book Club Fantasy Leagues"
+        >
+          <BarChart3 size={18} />
+          <span>Fantasy Draft</span>
+        </button>
         {/* Public Library Card & Libby */}
         <button
           onClick={() => {
@@ -3850,6 +3926,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <DeveloperWebhooksHubModal
           streamerName={streamerName}
           onClose={() => setShowWebhooksHubModal(false)}
+        />
+      )}
+
+      {showShowdownModal && (
+        <AnnotationShowdownModal
+          streamerName={streamerName}
+          onClose={() => setShowShowdownModal(false)}
+        />
+      )}
+
+      {showTriviaRoyaleModal && (
+        <TriviaBattleRoyaleModal
+          streamerName={streamerName}
+          onClose={() => setShowTriviaRoyaleModal(false)}
+        />
+      )}
+
+      {showSpeedrunModal && (
+        <ReadingSpeedrunSplitsModal
+          streamerName={streamerName}
+          onClose={() => setShowSpeedrunModal(false)}
+        />
+      )}
+
+      {showColdReadModal && (
+        <ColdReadTournamentModal
+          streamerName={streamerName}
+          onClose={() => setShowColdReadModal(false)}
+        />
+      )}
+
+      {showFantasyDraftModal && (
+        <FantasyBookDraftModal
+          streamerName={streamerName}
+          onClose={() => setShowFantasyDraftModal(false)}
         />
       )}
     </div>
