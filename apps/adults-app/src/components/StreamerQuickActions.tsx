@@ -80,7 +80,8 @@ import {
   Package,
   Store,
   Ticket,
-  Cpu
+  Cpu,
+  BookA
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -237,6 +238,11 @@ import { LiveLanguageDubbingModal } from './LiveLanguageDubbingModal';
 import { DyslexiaAdaptiveReaderModal } from './DyslexiaAdaptiveReaderModal';
 import { WhispersyncStreamBridgeModal } from './WhispersyncStreamBridgeModal';
 import { AiSceneIllustratorModal } from './AiSceneIllustratorModal';
+import { AiAmbientComposerModal } from './AiAmbientComposerModal';
+import { AiChapterCatchupModal } from './AiChapterCatchupModal';
+import { AudioDescriptionEngineModal } from './AudioDescriptionEngineModal';
+import { FantasyLexiconTooltipModal } from './FantasyLexiconTooltipModal';
+import { PlotTensionHeartbeatModal } from './PlotTensionHeartbeatModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -407,6 +413,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showDyslexiaModal, setShowDyslexiaModal] = useState(false);
   const [showWhispersyncModal, setShowWhispersyncModal] = useState(false);
   const [showIllustratorModal, setShowIllustratorModal] = useState(false);
+  const [showAmbientComposerModal, setShowAmbientComposerModal] = useState(false);
+  const [showChapterCatchupModal, setShowChapterCatchupModal] = useState(false);
+  const [showAudioDescModal, setShowAudioDescModal] = useState(false);
+  const [showFantasyLexiconModal, setShowFantasyLexiconModal] = useState(false);
+  const [showPlotTensionModal, setShowPlotTensionModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -420,6 +431,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Ambient Soundscape AI Composer */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowAmbientComposerModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Ambient Soundscape AI Composer"
+        >
+          <Music size={18} />
+          <span>Soundscape</span>
+        </button>
+
+        {/* AI Chapter Catchup Summarizer */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowChapterCatchupModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="AI Live Chapter Summarizer & What Did I Miss?"
+        >
+          <FileText size={18} />
+          <span>Catch-Up</span>
+        </button>
+
+        {/* Screen Reader & Audio Description */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowAudioDescModal(true);
+          }}
+          className="btn-quick-action action-primary"
+          title="Screen Reader & Audio Description Engine"
+        >
+          <Volume2 size={18} />
+          <span>Audio Desc</span>
+        </button>
+
+        {/* Real-Time Pronunciation & Fantasy Lexicon */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowFantasyLexiconModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Real-Time Pronunciation Guide & Fantasy Lexicon"
+        >
+          <BookA size={18} />
+          <span>Lexicon</span>
+        </button>
+
+        {/* Narrative Tension & Plot Heartbeat */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowPlotTensionModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Narrative Tension & Plot Heartbeat Monitor"
+        >
+          <Activity size={18} />
+          <span>Tension ECG</span>
+        </button>
         {/* AI Character Voice Cloner */}
         <button
           onClick={() => {
@@ -3518,6 +3593,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <AiSceneIllustratorModal
           streamerName={streamerName}
           onClose={() => setShowIllustratorModal(false)}
+        />
+      )}
+
+      {showAmbientComposerModal && (
+        <AiAmbientComposerModal
+          streamerName={streamerName}
+          onClose={() => setShowAmbientComposerModal(false)}
+        />
+      )}
+
+      {showChapterCatchupModal && (
+        <AiChapterCatchupModal
+          streamerName={streamerName}
+          onClose={() => setShowChapterCatchupModal(false)}
+        />
+      )}
+
+      {showAudioDescModal && (
+        <AudioDescriptionEngineModal
+          streamerName={streamerName}
+          onClose={() => setShowAudioDescModal(false)}
+        />
+      )}
+
+      {showFantasyLexiconModal && (
+        <FantasyLexiconTooltipModal
+          streamerName={streamerName}
+          onClose={() => setShowFantasyLexiconModal(false)}
+        />
+      )}
+
+      {showPlotTensionModal && (
+        <PlotTensionHeartbeatModal
+          streamerName={streamerName}
+          onClose={() => setShowPlotTensionModal(false)}
         />
       )}
     </div>

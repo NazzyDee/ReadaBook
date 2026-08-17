@@ -144,6 +144,11 @@ import { LiveLanguageDubbingModal } from '../components/LiveLanguageDubbingModal
 import { DyslexiaAdaptiveReaderModal } from '../components/DyslexiaAdaptiveReaderModal';
 import { WhispersyncStreamBridgeModal } from '../components/WhispersyncStreamBridgeModal';
 import { AiSceneIllustratorModal } from '../components/AiSceneIllustratorModal';
+import { AiAmbientComposerModal } from '../components/AiAmbientComposerModal';
+import { AiChapterCatchupModal } from '../components/AiChapterCatchupModal';
+import { AudioDescriptionEngineModal } from '../components/AudioDescriptionEngineModal';
+import { FantasyLexiconTooltipModal } from '../components/FantasyLexiconTooltipModal';
+import { PlotTensionHeartbeatModal } from '../components/PlotTensionHeartbeatModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -232,7 +237,8 @@ import {
   Briefcase,
   Ticket,
   BarChart3,
-  Cpu
+  Cpu,
+  BookA
 } from 'lucide-react';
 
 interface StreamData {
@@ -432,6 +438,11 @@ export const StreamPage: React.FC = () => {
   const [showDyslexiaModal, setShowDyslexiaModal] = useState(false);
   const [showWhispersyncModal, setShowWhispersyncModal] = useState(false);
   const [showIllustratorModal, setShowIllustratorModal] = useState(false);
+  const [showAmbientComposerModal, setShowAmbientComposerModal] = useState(false);
+  const [showChapterCatchupModal, setShowChapterCatchupModal] = useState(false);
+  const [showAudioDescModal, setShowAudioDescModal] = useState(false);
+  const [showFantasyLexiconModal, setShowFantasyLexiconModal] = useState(false);
+  const [showPlotTensionModal, setShowPlotTensionModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -2521,6 +2532,71 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Scene Art</span>
             </button>
 
+            {/* Ambient Soundscape AI Composer */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowAmbientComposerModal(true);
+              }}
+              className="btn-secondary"
+              title="Ambient Soundscape AI Composer"
+            >
+              <Music size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Soundscape</span>
+            </button>
+
+            {/* AI Chapter Catchup Summarizer */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowChapterCatchupModal(true);
+              }}
+              className="btn-secondary"
+              title="AI Live Chapter Summarizer & What Did I Miss?"
+            >
+              <FileText size={16} color="#ffd700" />
+              <span className="hide-mobile">Catch-Up</span>
+            </button>
+
+            {/* Screen Reader & Audio Description */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowAudioDescModal(true);
+              }}
+              className="btn-secondary"
+              title="Screen Reader & Audio Description Engine"
+            >
+              <Volume2 size={16} color="var(--accent-primary)" />
+              <span className="hide-mobile">Audio Desc</span>
+            </button>
+
+            {/* Real-Time Pronunciation & Fantasy Lexicon */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowFantasyLexiconModal(true);
+              }}
+              className="btn-secondary"
+              title="Real-Time Pronunciation Guide & Fantasy Lexicon"
+            >
+              <BookA size={16} color="#00ff88" />
+              <span className="hide-mobile">Lexicon</span>
+            </button>
+
+            {/* Narrative Tension & Plot Heartbeat */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowPlotTensionModal(true);
+              }}
+              className="btn-secondary"
+              title="Narrative Tension & Plot Heartbeat Monitor"
+            >
+              <Activity size={16} color="#ff3b3b" />
+              <span className="hide-mobile">Tension ECG</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -3777,6 +3853,46 @@ export const StreamPage: React.FC = () => {
         <AiSceneIllustratorModal
           streamerName={stream.streamerName}
           onClose={() => setShowIllustratorModal(false)}
+        />
+      )}
+
+      {/* Ambient Soundscape AI Composer */}
+      {showAmbientComposerModal && (
+        <AiAmbientComposerModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowAmbientComposerModal(false)}
+        />
+      )}
+
+      {/* AI Chapter Catchup Summarizer */}
+      {showChapterCatchupModal && (
+        <AiChapterCatchupModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowChapterCatchupModal(false)}
+        />
+      )}
+
+      {/* Screen Reader & Audio Description */}
+      {showAudioDescModal && (
+        <AudioDescriptionEngineModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowAudioDescModal(false)}
+        />
+      )}
+
+      {/* Real-Time Pronunciation & Fantasy Lexicon */}
+      {showFantasyLexiconModal && (
+        <FantasyLexiconTooltipModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowFantasyLexiconModal(false)}
+        />
+      )}
+
+      {/* Narrative Tension & Plot Heartbeat */}
+      {showPlotTensionModal && (
+        <PlotTensionHeartbeatModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowPlotTensionModal(false)}
         />
       )}
 
