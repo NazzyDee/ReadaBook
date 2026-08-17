@@ -73,7 +73,11 @@ import {
   Globe,
   HelpCircle,
   Heart,
-  Scale
+  Scale,
+  DollarSign,
+  Feather,
+  Key,
+  Package
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -215,6 +219,11 @@ import { BookwormFamiliarModal } from './BookwormFamiliarModal';
 import { TriviaArcheryRangeModal } from './TriviaArcheryRangeModal';
 import { LoreCanonTribunalModal } from './LoreCanonTribunalModal';
 import { GoldLeafVolcanoModal } from './GoldLeafVolcanoModal';
+import { LiveCrowdfundingOverlayModal } from './LiveCrowdfundingOverlayModal';
+import { DigitalBookSigningModal } from './DigitalBookSigningModal';
+import { ChapterEarlyAccessModal } from './ChapterEarlyAccessModal';
+import { BlindDateUnboxingModal } from './BlindDateUnboxingModal';
+import { CreatorStripePayoutsModal } from './CreatorStripePayoutsModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -370,6 +379,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showArcheryModal, setShowArcheryModal] = useState(false);
   const [showTribunalModal, setShowTribunalModal] = useState(false);
   const [showVolcanoModal, setShowVolcanoModal] = useState(false);
+  const [showCrowdfundingModal, setShowCrowdfundingModal] = useState(false);
+  const [showBookSigningModal, setShowBookSigningModal] = useState(false);
+  const [showEarlyAccessModal, setShowEarlyAccessModal] = useState(false);
+  const [showBlindDateModal, setShowBlindDateModal] = useState(false);
+  const [showStripeDirectPayoutsModal, setShowStripeDirectPayoutsModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -383,6 +397,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Live Crowdfunding Overlay */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowCrowdfundingModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="Kickstarter / BackerKit Live Crowdfunding Overlay"
+        >
+          <DollarSign size={18} />
+          <span>Crowdfund</span>
+        </button>
+
+        {/* Digital Book Signing */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBookSigningModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Live Digital Book Signing & Personalized NFT/Wax Seals"
+        >
+          <Feather size={18} />
+          <span>Signing Desk</span>
+        </button>
+
+        {/* Early Access Chapter Drops */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowEarlyAccessModal(true);
+          }}
+          className="btn-quick-action action-purple"
+          title="Pay-What-You-Want Chapter Drops & Early Access Keys"
+        >
+          <Key size={18} />
+          <span>Early Drops</span>
+        </button>
+
+        {/* Blind Date Book Unboxing */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowBlindDateModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Mystery Blind Date with a Book Unboxing Queue"
+        >
+          <Package size={18} />
+          <span>Blind Date</span>
+        </button>
+
+        {/* Creator Stripe Direct Payouts */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowStripeDirectPayoutsModal(true);
+          }}
+          className="btn-quick-action action-danger"
+          title="Sparks Multi-Currency Direct Stripe Payout Dashboard"
+        >
+          <DollarSign size={18} />
+          <span>Stripe Payouts</span>
+        </button>
         {/* Live Chapter Crossword & Wordle */}
         <button
           onClick={() => {
@@ -3184,6 +3262,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <GoldLeafVolcanoModal
           streamerName={streamerName}
           onClose={() => setShowVolcanoModal(false)}
+        />
+      )}
+
+      {showCrowdfundingModal && (
+        <LiveCrowdfundingOverlayModal
+          streamerName={streamerName}
+          onClose={() => setShowCrowdfundingModal(false)}
+        />
+      )}
+
+      {showBookSigningModal && (
+        <DigitalBookSigningModal
+          streamerName={streamerName}
+          onClose={() => setShowBookSigningModal(false)}
+        />
+      )}
+
+      {showEarlyAccessModal && (
+        <ChapterEarlyAccessModal
+          streamerName={streamerName}
+          onClose={() => setShowEarlyAccessModal(false)}
+        />
+      )}
+
+      {showBlindDateModal && (
+        <BlindDateUnboxingModal
+          streamerName={streamerName}
+          onClose={() => setShowBlindDateModal(false)}
+        />
+      )}
+
+      {showStripeDirectPayoutsModal && (
+        <CreatorStripePayoutsModal
+          streamerName={streamerName}
+          onClose={() => setShowStripeDirectPayoutsModal(false)}
         />
       )}
     </div>

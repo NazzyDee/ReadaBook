@@ -129,6 +129,11 @@ import { BookwormFamiliarModal } from '../components/BookwormFamiliarModal';
 import { TriviaArcheryRangeModal } from '../components/TriviaArcheryRangeModal';
 import { LoreCanonTribunalModal } from '../components/LoreCanonTribunalModal';
 import { GoldLeafVolcanoModal } from '../components/GoldLeafVolcanoModal';
+import { LiveCrowdfundingOverlayModal } from '../components/LiveCrowdfundingOverlayModal';
+import { DigitalBookSigningModal } from '../components/DigitalBookSigningModal';
+import { ChapterEarlyAccessModal } from '../components/ChapterEarlyAccessModal';
+import { BlindDateUnboxingModal } from '../components/BlindDateUnboxingModal';
+import { CreatorStripePayoutsModal } from '../components/CreatorStripePayoutsModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -208,7 +213,11 @@ import {
   Globe,
   Layers,
   HelpCircle,
-  Scale
+  Scale,
+  DollarSign,
+  Feather,
+  Key,
+  Package
 } from 'lucide-react';
 
 interface StreamData {
@@ -393,6 +402,11 @@ export const StreamPage: React.FC = () => {
   const [showArcheryModal, setShowArcheryModal] = useState(false);
   const [showTribunalModal, setShowTribunalModal] = useState(false);
   const [showVolcanoModal, setShowVolcanoModal] = useState(false);
+  const [showCrowdfundingModal, setShowCrowdfundingModal] = useState(false);
+  const [showBookSigningModal, setShowBookSigningModal] = useState(false);
+  const [showEarlyAccessModal, setShowEarlyAccessModal] = useState(false);
+  const [showBlindDateModal, setShowBlindDateModal] = useState(false);
+  const [showStripeDirectPayoutsModal, setShowStripeDirectPayoutsModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -2287,6 +2301,71 @@ export const StreamPage: React.FC = () => {
               <span className="hide-mobile">Volcano</span>
             </button>
 
+            {/* Live Crowdfunding Overlay */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowCrowdfundingModal(true);
+              }}
+              className="btn-secondary"
+              title="Kickstarter / BackerKit Live Crowdfunding Overlay"
+            >
+              <DollarSign size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Crowdfund</span>
+            </button>
+
+            {/* Digital Book Signing */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBookSigningModal(true);
+              }}
+              className="btn-secondary"
+              title="Live Digital Book Signing & Personalized NFT/Wax Seals"
+            >
+              <Feather size={16} color="#ffd700" />
+              <span className="hide-mobile">Signing Desk</span>
+            </button>
+
+            {/* Early Access Chapter Drops */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowEarlyAccessModal(true);
+              }}
+              className="btn-secondary"
+              title="Pay-What-You-Want Chapter Drops & Early Access Keys"
+            >
+              <Key size={16} color="var(--accent-secondary)" />
+              <span className="hide-mobile">Early Drops</span>
+            </button>
+
+            {/* Blind Date Book Unboxing */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowBlindDateModal(true);
+              }}
+              className="btn-secondary"
+              title="Mystery Blind Date with a Book Unboxing Queue"
+            >
+              <Package size={16} color="#00ff88" />
+              <span className="hide-mobile">Blind Date</span>
+            </button>
+
+            {/* Creator Stripe Direct Payouts */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowStripeDirectPayoutsModal(true);
+              }}
+              className="btn-secondary"
+              title="Sparks Multi-Currency Direct Stripe Payout Dashboard"
+            >
+              <DollarSign size={16} color="var(--accent-danger)" />
+              <span className="hide-mobile">Stripe Payouts</span>
+            </button>
+
             {/* CYOA Branching Vote Button */}
             <button
               onClick={() => {
@@ -3423,6 +3502,46 @@ export const StreamPage: React.FC = () => {
         <GoldLeafVolcanoModal
           streamerName={stream.streamerName}
           onClose={() => setShowVolcanoModal(false)}
+        />
+      )}
+
+      {/* Live Crowdfunding Overlay */}
+      {showCrowdfundingModal && (
+        <LiveCrowdfundingOverlayModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowCrowdfundingModal(false)}
+        />
+      )}
+
+      {/* Digital Book Signing */}
+      {showBookSigningModal && (
+        <DigitalBookSigningModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowBookSigningModal(false)}
+        />
+      )}
+
+      {/* Early Access Chapter Drops */}
+      {showEarlyAccessModal && (
+        <ChapterEarlyAccessModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowEarlyAccessModal(false)}
+        />
+      )}
+
+      {/* Blind Date Book Unboxing */}
+      {showBlindDateModal && (
+        <BlindDateUnboxingModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowBlindDateModal(false)}
+        />
+      )}
+
+      {/* Creator Stripe Direct Payouts */}
+      {showStripeDirectPayoutsModal && (
+        <CreatorStripePayoutsModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowStripeDirectPayoutsModal(false)}
         />
       )}
 
