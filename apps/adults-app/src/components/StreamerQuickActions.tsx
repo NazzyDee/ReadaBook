@@ -81,7 +81,9 @@ import {
   Store,
   Ticket,
   Cpu,
-  BookA
+  BookA,
+  Tablet,
+  Rss
 } from 'lucide-react';
 import { RaidModal } from './RaidModal';
 import { ChatPollModal, type PollData } from './ChatPollModal';
@@ -243,6 +245,11 @@ import { AiChapterCatchupModal } from './AiChapterCatchupModal';
 import { AudioDescriptionEngineModal } from './AudioDescriptionEngineModal';
 import { FantasyLexiconTooltipModal } from './FantasyLexiconTooltipModal';
 import { PlotTensionHeartbeatModal } from './PlotTensionHeartbeatModal';
+import { MobileCompanionAppModal } from './MobileCompanionAppModal';
+import { LivingRoomTvAppModal } from './LivingRoomTvAppModal';
+import { EInkCompanionExtensionModal } from './EInkCompanionExtensionModal';
+import { DiscordRichPresenceModal } from './DiscordRichPresenceModal';
+import { PodcastRssPublisherModal } from './PodcastRssPublisherModal';
 import { soundFX } from '../lib/soundFx';
 
 interface StreamerQuickActionsProps {
@@ -418,6 +425,11 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
   const [showAudioDescModal, setShowAudioDescModal] = useState(false);
   const [showFantasyLexiconModal, setShowFantasyLexiconModal] = useState(false);
   const [showPlotTensionModal, setShowPlotTensionModal] = useState(false);
+  const [showMobileRemoteModal, setShowMobileRemoteModal] = useState(false);
+  const [showLivingRoomTvModal, setShowLivingRoomTvModal] = useState(false);
+  const [showEInkCompanionModal, setShowEInkCompanionModal] = useState(false);
+  const [showDiscordRpcModal, setShowDiscordRpcModal] = useState(false);
+  const [showPodcastRssModal, setShowPodcastRssModal] = useState(false);
   const [isFoleyEnabled, setIsFoleyEnabled] = useState(true);
 
   return (
@@ -431,6 +443,70 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
       </div>
 
       <div className="quick-actions-buttons-grid">
+        {/* Mobile Companion Remote */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowMobileRemoteModal(true);
+          }}
+          className="btn-quick-action action-teal"
+          title="ReadaBook Mobile Companion App Remote"
+        >
+          <Smartphone size={18} />
+          <span>Phone Remote</span>
+        </button>
+
+        {/* Living Room TV Hub */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowLivingRoomTvModal(true);
+          }}
+          className="btn-quick-action action-gold"
+          title="Apple TV & Android TV 4K Living Room Hub"
+        >
+          <Tv size={18} />
+          <span>TV Hub</span>
+        </button>
+
+        {/* E-Ink Companion */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowEInkCompanionModal(true);
+          }}
+          className="btn-quick-action action-secondary"
+          title="Kindle & Kobo E-Ink Companion Browser Extension"
+        >
+          <Tablet size={18} />
+          <span>E-Ink Sync</span>
+        </button>
+
+        {/* Discord Rich Presence */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowDiscordRpcModal(true);
+          }}
+          className="btn-quick-action action-primary"
+          title="Discord & Matrix Rich Presence Sync"
+        >
+          <MessageSquare size={18} />
+          <span>Discord RPC</span>
+        </button>
+
+        {/* Spotify / Apple Podcasts RSS */}
+        <button
+          onClick={() => {
+            soundFX.playPop();
+            setShowPodcastRssModal(true);
+          }}
+          className="btn-quick-action action-orange"
+          title="Spotify & Apple Podcasts RSS Auto-Publisher"
+        >
+          <Rss size={18} />
+          <span>Podcast RSS</span>
+        </button>
         {/* Ambient Soundscape AI Composer */}
         <button
           onClick={() => {
@@ -3628,6 +3704,41 @@ export const StreamerQuickActions: React.FC<StreamerQuickActionsProps> = ({
         <PlotTensionHeartbeatModal
           streamerName={streamerName}
           onClose={() => setShowPlotTensionModal(false)}
+        />
+      )}
+
+      {showMobileRemoteModal && (
+        <MobileCompanionAppModal
+          streamerName={streamerName}
+          onClose={() => setShowMobileRemoteModal(false)}
+        />
+      )}
+
+      {showLivingRoomTvModal && (
+        <LivingRoomTvAppModal
+          streamerName={streamerName}
+          onClose={() => setShowLivingRoomTvModal(false)}
+        />
+      )}
+
+      {showEInkCompanionModal && (
+        <EInkCompanionExtensionModal
+          streamerName={streamerName}
+          onClose={() => setShowEInkCompanionModal(false)}
+        />
+      )}
+
+      {showDiscordRpcModal && (
+        <DiscordRichPresenceModal
+          streamerName={streamerName}
+          onClose={() => setShowDiscordRpcModal(false)}
+        />
+      )}
+
+      {showPodcastRssModal && (
+        <PodcastRssPublisherModal
+          streamerName={streamerName}
+          onClose={() => setShowPodcastRssModal(false)}
         />
       )}
     </div>

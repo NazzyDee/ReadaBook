@@ -149,6 +149,11 @@ import { AiChapterCatchupModal } from '../components/AiChapterCatchupModal';
 import { AudioDescriptionEngineModal } from '../components/AudioDescriptionEngineModal';
 import { FantasyLexiconTooltipModal } from '../components/FantasyLexiconTooltipModal';
 import { PlotTensionHeartbeatModal } from '../components/PlotTensionHeartbeatModal';
+import { MobileCompanionAppModal } from '../components/MobileCompanionAppModal';
+import { LivingRoomTvAppModal } from '../components/LivingRoomTvAppModal';
+import { EInkCompanionExtensionModal } from '../components/EInkCompanionExtensionModal';
+import { DiscordRichPresenceModal } from '../components/DiscordRichPresenceModal';
+import { PodcastRssPublisherModal } from '../components/PodcastRssPublisherModal';
 import { StreamInfoModal } from '../components/StreamInfoModal';
 import { RaidBanner } from '../components/RaidBanner';
 import { MiniPlayer } from '../components/MiniPlayer';
@@ -238,7 +243,10 @@ import {
   Ticket,
   BarChart3,
   Cpu,
-  BookA
+  BookA,
+  Tablet,
+  Tv,
+  Rss
 } from 'lucide-react';
 
 interface StreamData {
@@ -443,6 +451,11 @@ export const StreamPage: React.FC = () => {
   const [showAudioDescModal, setShowAudioDescModal] = useState(false);
   const [showFantasyLexiconModal, setShowFantasyLexiconModal] = useState(false);
   const [showPlotTensionModal, setShowPlotTensionModal] = useState(false);
+  const [showMobileRemoteModal, setShowMobileRemoteModal] = useState(false);
+  const [showLivingRoomTvModal, setShowLivingRoomTvModal] = useState(false);
+  const [showEInkCompanionModal, setShowEInkCompanionModal] = useState(false);
+  const [showDiscordRpcModal, setShowDiscordRpcModal] = useState(false);
+  const [showPodcastRssModal, setShowPodcastRssModal] = useState(false);
   const [sprintCompletedTarget, setSprintCompletedTarget] = useState<number | null>(null);
   const [activeCheerAnimation, setActiveCheerAnimation] = useState<any | null>(null);
   const [incomingRaid, setIncomingRaid] = useState<{ raiderName: string; raiderAvatar: string; readerCount: number } | null>(null);
@@ -2585,6 +2598,7 @@ export const StreamPage: React.FC = () => {
             </button>
 
             {/* Narrative Tension & Plot Heartbeat */}
+            {/* Narrative Tension & Plot Heartbeat */}
             <button
               onClick={() => {
                 soundFX.playPop();
@@ -2595,6 +2609,71 @@ export const StreamPage: React.FC = () => {
             >
               <Activity size={16} color="#ff3b3b" />
               <span className="hide-mobile">Tension ECG</span>
+            </button>
+
+            {/* Mobile Companion Remote */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowMobileRemoteModal(true);
+              }}
+              className="btn-secondary"
+              title="ReadaBook Mobile Companion App Remote"
+            >
+              <Smartphone size={16} color="var(--accent-teal)" />
+              <span className="hide-mobile">Phone Remote</span>
+            </button>
+
+            {/* Living Room TV Hub */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowLivingRoomTvModal(true);
+              }}
+              className="btn-secondary"
+              title="Apple TV & Android TV 4K Living Room Hub"
+            >
+              <Tv size={16} color="#ffd700" />
+              <span className="hide-mobile">TV Hub</span>
+            </button>
+
+            {/* E-Ink Companion */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowEInkCompanionModal(true);
+              }}
+              className="btn-secondary"
+              title="Kindle & Kobo E-Ink Companion Browser Extension"
+            >
+              <Tablet size={16} color="#ffffff" />
+              <span className="hide-mobile">E-Ink Sync</span>
+            </button>
+
+            {/* Discord Rich Presence */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowDiscordRpcModal(true);
+              }}
+              className="btn-secondary"
+              title="Discord & Matrix Rich Presence Sync"
+            >
+              <MessageSquare size={16} color="#5865F2" />
+              <span className="hide-mobile">Discord RPC</span>
+            </button>
+
+            {/* Spotify / Apple Podcasts RSS */}
+            <button
+              onClick={() => {
+                soundFX.playPop();
+                setShowPodcastRssModal(true);
+              }}
+              className="btn-secondary"
+              title="Spotify & Apple Podcasts RSS Auto-Publisher"
+            >
+              <Rss size={16} color="#ff9e00" />
+              <span className="hide-mobile">Podcast RSS</span>
             </button>
 
             {/* CYOA Branching Vote Button */}
@@ -3893,6 +3972,46 @@ export const StreamPage: React.FC = () => {
         <PlotTensionHeartbeatModal
           streamerName={stream.streamerName}
           onClose={() => setShowPlotTensionModal(false)}
+        />
+      )}
+
+      {/* Mobile Companion Remote */}
+      {showMobileRemoteModal && (
+        <MobileCompanionAppModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowMobileRemoteModal(false)}
+        />
+      )}
+
+      {/* Living Room TV Hub */}
+      {showLivingRoomTvModal && (
+        <LivingRoomTvAppModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowLivingRoomTvModal(false)}
+        />
+      )}
+
+      {/* E-Ink Companion */}
+      {showEInkCompanionModal && (
+        <EInkCompanionExtensionModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowEInkCompanionModal(false)}
+        />
+      )}
+
+      {/* Discord Rich Presence */}
+      {showDiscordRpcModal && (
+        <DiscordRichPresenceModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowDiscordRpcModal(false)}
+        />
+      )}
+
+      {/* Spotify / Apple Podcasts RSS */}
+      {showPodcastRssModal && (
+        <PodcastRssPublisherModal
+          streamerName={stream.streamerName}
+          onClose={() => setShowPodcastRssModal(false)}
         />
       )}
 
